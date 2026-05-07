@@ -1,8 +1,5 @@
 # React-PDF Project — Claude Code Instructions
 
-## Project Overview
-This is a `@react-pdf/renderer` ebook project. It generates a professional PDF from React/TSX components using the `tsx` runtime.
-
 ## Commands
 - **Build PDF:** `pnpm build` (runs `tsx src/build.tsx`, outputs to `output/ebook.pdf`)
 - **Export PNGs:** `pnpm export` (runs `scripts/export-pages.sh`, outputs to `output/pages/`)
@@ -29,7 +26,7 @@ This is a `@react-pdf/renderer` ebook project. It generates a professional PDF f
 | `STYLE.md` | Complete visual style guide |
 
 ## Component API Quick Reference
-```
+```tsx
 <ContentPage sectionTitle="Title">       — Standard page wrapper with header/footer
 <ChapterTitle number="01" title="..." subtitle="..." />  — Full-page chapter divider
 <SectionHeading>Title</SectionHeading>   — Gold bar + h2 heading

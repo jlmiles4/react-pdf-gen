@@ -13,9 +13,9 @@ These templates are the executable version of the ebook. Each file is a self-con
 
 ## The CLAUDE.md File
 
-Drop `CLAUDE.md` into your project root. Claude Code reads this file automatically and follows the rules — correct imports, design tokens, wrap={false}, no Helvetica, no emoji. It turns Claude from a generic code generator into a react-pdf specialist.
+Drop `CLAUDE.md.template` into your project root as `CLAUDE.md`. Claude Code reads this file automatically and follows the rules — correct imports, design tokens, wrap={false}, no Helvetica, no emoji. It turns Claude from a generic code generator into a react-pdf specialist.
 
-**To customize:** Open `CLAUDE.md`, replace the placeholder values (`[YOUR-PROJECT]`, `[your-font]`, etc.) with your actual project details.
+**To customize:** Open it, replace the placeholder values (`[YOUR-PROJECT]`, `[your-font]`, etc.) with your actual project details.
 
 ## The Source Code
 
@@ -35,7 +35,7 @@ Run `pnpm install && pnpm build` to generate the PDF yourself. Run `pnpm pipelin
 
 | File | When to Use |
 |------|-------------|
-| `CLAUDE.md` | Drop into any react-pdf project root for AI assistance |
+| `CLAUDE.md.template` | Drop into any react-pdf project root (as `CLAUDE.md`) for AI assistance |
 | `01-project-setup.md` | Starting a new react-pdf project from scratch |
 | `02-design-tokens.md` | Creating your centralized theme/token system |
 | `03-components.md` | Building reusable components (pages, callouts, tables, icons) |
