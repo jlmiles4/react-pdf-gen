@@ -1,12 +1,12 @@
 /**
  * Document — Root assembly file
  *
- * Imports all 13 page components and assembles them into a single Document
+ * Imports all 14 page components and assembles them into a single Document
  * with metadata (title, author, subject, keywords). This is the only file
  * that knows about all pages — each page is self-contained.
  *
  * Page order: Cover → TOC → Ch01-Ch11 (11 chapters) → Conclusion
- * Total: ~65 rendered pages
+ * Total: 68 rendered pages
  */
 import React from 'react';
 import { Document } from '@react-pdf/renderer';

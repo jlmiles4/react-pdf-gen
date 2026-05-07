@@ -1,0 +1,74 @@
+# Architecture overview
+
+The project renders one PDF (`output/ebook.pdf`) from a tree of React components. Three layers:
+
+1. **Pages** (`src/pages/`) — one file per page, named `PageNN-ChNN-Topic.tsx`. Each exports a single React component that returns a `<ChapterTitle>` plus one or more `<ContentPage>` blocks.
+2. **Components** (`src/components/`) — the building blocks every page composes: `ContentPage`, `ChapterTitle`, `SectionHeading`, `SectionBanner`, `TipBox`/`WarningBox`/`InfoBox`, `CodeBlock`, `BulletList`, `Table`, `Header`, `Footer`, `Icons`. See [components reference](../reference/components.md).
+3. **Styles** (`src/styles/`) — `theme.ts` holds design tokens (colors, fonts, typography, spacing, page geometry, syntax colors, borders); `shared.ts` is a `StyleSheet.create()` instance every page imports. See [design system](design-system.md).
+
+`src/Document.tsx` is the only file that knows about all pages — it imports each page component and renders them inside a single `<Document>`. Adding a page means editing `Document.tsx` once.
+
+## Data flow
+
+```
+src/build.tsx
+  └─ imports './fonts'                   (Font.register — must run before render)
+  └─ imports './Document'                (EbookDocument)
+       └─ imports each src/pages/PageNN-*.tsx
+              └─ each page imports from src/components/ and src/styles/
+
+ReactPDF.render(<EbookDocument/>, 'output/ebook.pdf')
+  └─ writes PDF to disk, logs size + elapsed ms
+
+scripts/export-pages.sh
+  └─ pdftoppm -png -r 200 output/ebook.pdf output/pages/page
+```
+
+## Page anatomy
+
+A typical chapter file ([example](../../src/pages/Page03-Ch01-Introduction.tsx)) looks like:
+
+```tsx
+const Ch01Intro: React.FC = () => (
+  <>
+    <ChapterTitle number="01" title="..." subtitle="..." />
+    <ContentPage sectionTitle="Introduction">
+      <SectionHeading>What This Book Is</SectionHeading>
+      <Text style={styles.body}>...</Text>
+      <BulletList items={[...]} />
+      <TipBox>...</TipBox>
+    </ContentPage>
+  </>
+);
+```
+
+`<ChapterTitle>` is a full-bleed dark-navy `<Page>` with no header/footer. `<ContentPage>` is a LETTER `<Page>` with `wrap`, a fixed `<Header>`, and a fixed `<Footer>`. A chapter can contain multiple `<ContentPage>` blocks if its content spans more than one page.
+
+## What lives where
+
+| Concern | File |
+|---|---|
+| Page list / order | `src/Document.tsx` |
+| Build entry | `src/build.tsx` |
+| Font registration | `src/fonts.ts` |
+| Design tokens | `src/styles/theme.ts` |
+| Shared styles | `src/styles/shared.ts` |
+| Page wrapper | `src/components/ContentPage.tsx` |
+| Header / footer | `src/components/Header.tsx`, `Footer.tsx` |
+| Syntax highlighting | `src/utils/syntaxHighlight.ts` |
+| PNG export | `scripts/export-pages.sh` |
+
+The `content/chapters/*.md`, `reference/`, `prompts/`, and `templates/` folders are authoring inputs — none are read at build time.
+
+## Authoring inputs vs. build inputs
+
+These four folders look similar (all markdown, all unread by `build.tsx`) but they exist for different reasons:
+
+| Folder | Audience | Contents | Read by |
+|---|---|---|---|
+| `content/chapters/` | The author drafting prose | One markdown file per chapter, in narrative form | A human, then re-typed into TSX page components |
+| `reference/` | An AI agent helping the author | Long-form research notes (react-pdf API, AI patterns, design) | An AI when prompted with extra context |
+| `prompts/` | The author + AI working on *this* project | Project-specific prompts referencing Inter and the conventions of this repo | An AI when scaffolding new pages here |
+| `templates/` | A reader of the published ebook | Generalized prompts (`YourFont`, `[YOUR-PROJECT]`) plus a project-instructions template and a starter `README.md` | A reader scaffolding their own project |
+
+If you're editing this project, prefer `prompts/`. If you're shipping a new revision of the starter pack, edit `templates/`. The two diverge intentionally — don't try to deduplicate them.

@@ -35,7 +35,7 @@ const Ch03Architecture: React.FC = () => (
         The most common react-pdf mistake is putting everything in one file. Your entire 30-page document lives in a single 2,000-line component. You paste it into an AI prompt. The AI edits page 12 and accidentally breaks the styling on page 4.
       </Text>
       <Text style={styles.body}>
-        This happens because AI models have limited effective attention within large contexts. Even with 200k token context windows, the model pays less attention to content in the middle of a large file. A monolithic document file is the worst possible structure for AI-assisted editing.
+        Big files also strain AI attention — Chapter 5 covers the token math in detail. The structural fix in this chapter is what stops the cross-page breakage even before tokens enter the picture.
       </Text>
 
       <SectionHeading>The File-Per-Page Pattern</SectionHeading>

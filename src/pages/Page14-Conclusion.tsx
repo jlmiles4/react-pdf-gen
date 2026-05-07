@@ -8,8 +8,10 @@
  * Renders: 1 page
  */
 import React from 'react';
-import { Page, View, Text, StyleSheet, Svg, Circle, Line } from '@react-pdf/renderer';
+import { Page, View, Text, StyleSheet } from '@react-pdf/renderer';
 import { colors, fonts, spacing, page, borders, fontScale, typography } from '../styles/theme';
+import AccentBar from '../components/AccentBar';
+import CoverDecor from '../components/CoverDecor';
 
 const s = StyleSheet.create({
   page: {
@@ -25,19 +27,12 @@ const s = StyleSheet.create({
     height: page.topBarHeight,
     backgroundColor: colors.accent[500],
   },
-  accentLine: {
-    width: 64,
-    height: 4,
-    backgroundColor: colors.accent[500],
-    borderRadius: spacing.xxs,
-    marginBottom: spacing.xl,
-  },
   heading: {
     fontSize: fontScale.pageTitle,
     fontFamily: fonts.heading,
     fontWeight: 700 as const,
     color: colors.white,
-    lineHeight: 1.15,
+    lineHeight: typography.h1.lineHeight,
     marginBottom: spacing.md,
   },
   headingAccent: {
@@ -49,7 +44,7 @@ const s = StyleSheet.create({
     fontFamily: fonts.body,
     fontWeight: 400 as const,
     color: colors.neutral[300],
-    lineHeight: 1.6,
+    lineHeight: typography.body.lineHeight,
     marginBottom: spacing.xl,
     maxWidth: 400,
   },
@@ -64,7 +59,7 @@ const s = StyleSheet.create({
     fontFamily: fonts.heading,
     fontWeight: 700 as const,
     color: colors.accent[500],
-    width: 24,
+    width: spacing.xl,
   },
   takeawayText: {
     flex: 1,
@@ -72,7 +67,7 @@ const s = StyleSheet.create({
     fontFamily: fonts.body,
     fontWeight: 400 as const,
     color: colors.neutral[200],
-    lineHeight: 1.5,
+    lineHeight: typography.bodySmall.lineHeight,
   },
   divider: {
     width: 48,
@@ -80,14 +75,14 @@ const s = StyleSheet.create({
     backgroundColor: colors.accent[500],
     opacity: 0.4,
     marginVertical: spacing.lg,
-    borderRadius: spacing.micro,
+    borderRadius: borders.radius.xs,
   },
   ctaText: {
     fontSize: typography.h4.fontSize,
     fontFamily: fonts.body,
     fontWeight: 400 as const,
     color: colors.neutral[300],
-    lineHeight: 1.6,
+    lineHeight: typography.body.lineHeight,
     marginBottom: spacing.lg,
     maxWidth: 420,
   },
@@ -111,14 +106,6 @@ const s = StyleSheet.create({
     fontWeight: 400 as const,
     color: colors.neutral[500],
   },
-  decorContainer: {
-    position: 'absolute',
-    right: 40,
-    bottom: 60,
-    width: 160,
-    height: 160,
-    opacity: 0.06,
-  },
 });
 
 const takeaways = [
@@ -133,7 +120,7 @@ const takeaways = [
 const Page14Conclusion: React.FC = () => (
   <Page size="LETTER" style={s.page}>
     <View style={s.topBar} />
-    <View style={s.accentLine} />
+    <AccentBar size="xl" mb={spacing.xl} />
     <Text style={s.heading}>
       Now{'\n'}
       <Text style={s.headingAccent}>Ship It.</Text>
@@ -161,12 +148,7 @@ const Page14Conclusion: React.FC = () => (
       <Text style={s.ctaBold}>landonmiles.com</Text>
     </Text>
 
-    <Svg style={s.decorContainer} viewBox="0 0 160 160">
-      <Circle cx="80" cy="80" r="70" stroke={colors.accent[500]} strokeWidth={1.5} fill="none" />
-      <Circle cx="80" cy="80" r="45" stroke={colors.accent[500]} strokeWidth={1} fill="none" />
-      <Line x1="10" y1="80" x2="150" y2="80" stroke={colors.accent[500]} strokeWidth={0.5} />
-      <Line x1="80" y1="10" x2="80" y2="150" stroke={colors.accent[500]} strokeWidth={0.5} />
-    </Svg>
+    <CoverDecor opacity={0.06} />
     <View style={s.bottomInfo}>
       <Text style={s.bottomText}>landonmiles.com</Text>
       <Text style={s.bottomText}>React-PDF + AI</Text>

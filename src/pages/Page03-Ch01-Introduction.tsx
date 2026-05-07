@@ -29,16 +29,10 @@ const Ch01Intro: React.FC = () => (
     <ContentPage sectionTitle="Introduction">
       <SectionHeading>What This Book Is</SectionHeading>
       <Text style={styles.body}>
-        This is a practical guide for developers who use AI coding agents – Claude Code, Cursor, Copilot, or similar tools – to generate PDF documents with @react-pdf/renderer.
+        A practical guide for developers using AI coding agents – Claude Code, Cursor, Copilot – to generate PDFs with @react-pdf/renderer. You know React. What you may not know is how to structure a react-pdf project so AI produces premium output instead of generic templates. That gap is what this book closes.
       </Text>
       <Text style={styles.body}>
-        You already know how to build. You probably know React. What you may not know is how to structure a react-pdf project so that AI agents produce consistently premium output instead of generic-looking templates.
-      </Text>
-      <Text style={styles.body}>
-        That's the gap this book fills.
-      </Text>
-      <Text style={styles.body}>
-        Every page you're reading was built with react-pdf using these patterns. The source code is included — the theme file, component library, build scripts, and reference docs aren't hypothetical examples. They're the actual tools that produced this document.
+        Every page you're reading was built with these patterns. The theme file, component library, build scripts, and reference docs are the actual tools that produced this document — not hypothetical examples.
       </Text>
 
       <SectionBanner

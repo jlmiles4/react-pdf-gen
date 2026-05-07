@@ -159,3 +159,19 @@ export const fontScale = {
   navSmall: 7.5,
   micro: 7,
 } as const;
+
+/** Horizontal accent bar dimensions (width × height in points) for hero decor. */
+export const accentBar = {
+  sm: { width: 32, height: 3 },   // SectionBanner
+  md: { width: 48, height: 3 },   // TOC heading
+  lg: { width: 60, height: 4 },   // ChapterTitle
+  xl: { width: 64, height: 4 },   // Cover / Conclusion hero
+} as const;
+
+/** Letter spacing tokens for uppercase / tracked-out text. */
+export const letterSpacing = {
+  tight: 1,
+  normal: 1.2,
+  wide: 1.5,
+  wider: 2.5,
+} as const;

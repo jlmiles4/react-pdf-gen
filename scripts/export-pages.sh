@@ -7,7 +7,7 @@ set -e
 
 PDF_FILE="output/ebook.pdf"
 PNG_DIR="output/pages"
-DPI="${1:-150}"
+DPI="${1:-200}"
 
 if [ ! -f "$PDF_FILE" ]; then
   echo "Error: $PDF_FILE not found. Run 'pnpm build' first."

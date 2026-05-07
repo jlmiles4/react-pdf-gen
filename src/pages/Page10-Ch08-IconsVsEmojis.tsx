@@ -120,35 +120,29 @@ const Ch08Icons: React.FC = () => (
       </View>
 
       <Text style={styles.body}>
-        These icons are defined as react-pdf Svg components using Path data from the Lucide icon library (MIT license). They take size and color props, making them fully customizable.
+        These icons come from Lucide via the react-icons package (MIT license). A small adapter rewrites react-icons' browser SVG output as @react-pdf/renderer Svg/Path nodes — so size, color, and stroke all stay under your control.
       </Text>
 
-      <SectionHeading>Building an Icon Component</SectionHeading>
+      <SectionHeading>The react-icons Adapter</SectionHeading>
       <Text style={styles.body}>
-        The pattern is straightforward: wrap SVG path data in a reusable component.
+        react-icons returns plain HTML &lt;svg&gt;/&lt;path&gt; elements, which react-pdf can't render. The adapter walks the icon's React tree once and rebuilds it with react-pdf primitives, normalizing currentColor and string-typed numerics along the way.
       </Text>
-      <CodeBlock language="tsx">{`import { Svg, Path } from '@react-pdf/renderer';
+      <CodeBlock language="tsx">{`import { Svg, Path, Circle, Line } from '@react-pdf/renderer';
+import type { IconType } from 'react-icons';
 
-interface IconProps {
-  size?: number;
-  color?: string;
-}
+const TAG_MAP = { svg: Svg, path: Path,
+  circle: Circle, line: Line /* ...etc */ };
 
-// Get path data from Lucide, Heroicons, or Feather
-export const CheckIcon = ({
-  size = 16, color = '#2D8B4E'
-}: IconProps) => (
-  <Svg width={size} height={size} viewBox="0 0 24 24">
-    <Path
-      d="M20 6L9 17l-5-5"
-      stroke={color}
-      strokeWidth={2.5}
-      fill="none"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </Svg>
-);`}</CodeBlock>
+const Icon = ({ icon, size = 16, color }) => {
+  // react-icons component returns <IconBase attr={...}>
+  const root = icon({});
+  const { attr, children } = root.props;
+  return (
+    <Svg width={size} height={size} {...normalize(attr, color)}>
+      {convertChildren(children, color)}
+    </Svg>
+  );
+};`}</CodeBlock>
 
       <SectionHeading>Using Icons in Context</SectionHeading>
       <Text style={styles.body}>
@@ -185,14 +179,26 @@ export const CheckIcon = ({
         Internal team documents, quick prototypes, or documents where your brand literally uses emoji as part of its identity. For anything client-facing or paid – use SVG icons.
       </TipBox>
 
-      <SectionHeading>Building Your Icon Library</SectionHeading>
+      <SectionHeading>Skip the Path Data — Use react-icons</SectionHeading>
       <Text style={styles.body}>
-        Create a single Icons.tsx file with all the icons your document needs. You'll probably start with five and end up with fifteen -- that's fine, the library grows with your project. Most ebooks need 8-12 icons at most: check, x, info, warning, arrow, and a few domain-specific ones. Get the SVG path data from lucide.dev -- every icon is MIT licensed and copies directly into react-pdf Svg components.
+        The book's source ships an Icon adapter that takes any react-icons IconType and renders it through @react-pdf/renderer's Svg primitives. You get 50,000+ vetted icons (Lucide, Heroicons, Feather, Tabler, Font Awesome) with one import — no path-string copying, no SVG hand-tuning.
+      </Text>
+      <CodeBlock language="tsx">{`import { LuCheck, LuTriangleAlert } from 'react-icons/lu';
+import Icon from './components/Icon';
+
+<Icon icon={LuCheck} size={14} color={colors.success} />
+<Icon icon={LuTriangleAlert} size={16} color={colors.warning} />`}</CodeBlock>
+      <Text style={styles.body}>
+        Re-export the icons your document actually uses from a single Icons.tsx so prompts stay short. Keep that re-export file under ~12 icons; ad-hoc <Text style={styles.bold}>react-icons/lu</Text> imports are fine for one-off uses.
       </Text>
 
-      <SectionHeading>Icon Sizing Guidelines</SectionHeading>
+      <WarningBox label="Path Data Quality">
+        Not every icon library renders cleanly. Stick to stroke-based sets (Lucide, Feather, Heroicons-outline). Avoid icons that rely on filters, masks, or clipPath — react-pdf's SVG renderer skips those features silently.
+      </WarningBox>
+
+      <SectionHeading>Sizing Cheat Sheet</SectionHeading>
       <Text style={styles.body}>
-        Match icon sizes to the text they accompany. Oversized icons next to small text looks amateur. Undersized icons disappear.
+        Match icons to the text they sit next to. Oversized icons next to small text looks amateur; undersized icons disappear.
       </Text>
       <Table
         headers={['Context', 'Icon Size', 'Text Size']}
@@ -206,30 +212,7 @@ export const CheckIcon = ({
         columnWidths={['40%', '30%', '30%']}
       />
 
-      <WarningBox label="Path Data Quality">
-        Not all icon libraries export clean SVG paths. Test each icon in react-pdf before committing it – some paths use features like clipPath or mask that react-pdf's SVG renderer doesn't support. Stick to simple Path elements with stroke or fill.
-      </WarningBox>
-
-      <SectionHeading>Icon Sources for React-PDF</SectionHeading>
-      <BulletList items={[
-        'Lucide (lucide.dev) – clean, consistent 24x24 grid, MIT licensed. Best overall choice.',
-        'Heroicons (heroicons.com) – by the Tailwind team, two styles (outline/solid), MIT licensed.',
-        'Feather Icons (feathericons.com) – lightweight, stroke-based, MIT licensed.',
-        'Tabler Icons (tabler-icons.io) – 4,000+ icons, consistent stroke width, MIT licensed.',
-      ]} />
-      <Text style={styles.body}>
-        For any source, the workflow is the same: find the icon, copy its SVG path data, paste it into a react-pdf Svg/Path component. One file, all your icons, zero runtime dependencies.
-      </Text>
-
-      <TipBox label="The 10-Icon Rule">
-        Start with 10 icons maximum. Add more only when a page genuinely needs one that doesn't exist yet. Icon bloat is real – a 50-icon file costs tokens in every AI prompt that imports it.
-      </TipBox>
-
-      <SectionHeading>From Emojis to Professional Output</SectionHeading>
-      <Text style={styles.body}>
-        This is one of those changes that seems small until you see the before and after. Swap emojis for SVG icons and your document stops looking like a group chat and starts looking like something someone designed on purpose.
-      </Text>
-
+      <SectionHeading>Emoji vs Icon, Side by Side</SectionHeading>
       <Table
         headers={['Property', 'Emoji', 'SVG Icon']}
         rows={[
@@ -244,9 +227,9 @@ export const CheckIcon = ({
         columnWidths={['25%', '35%', '40%']}
       />
 
-      <Text style={styles.body}>
-        The effort is minimal: one Icons.tsx file, a handful of Lucide path strings, and consistent sizing rules. Every callout box, status indicator, and visual marker in your PDF benefits immediately.
-      </Text>
+      <TipBox label="The 10-Icon Rule">
+        Re-export at most 10 icons from your project's Icons.tsx. Anything more bloats every prompt that imports it. If a page needs a one-off, import directly from <Text style={styles.bold}>react-icons/lu</Text> at the call site instead.
+      </TipBox>
     </ContentPage>
   </>
 );

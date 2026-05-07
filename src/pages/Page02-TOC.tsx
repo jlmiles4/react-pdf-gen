@@ -9,8 +9,9 @@
  */
 import React from 'react';
 import { Page, View, Text, StyleSheet } from '@react-pdf/renderer';
-import { colors, fonts, spacing, page, borders, typography, fontScale } from '../styles/theme';
+import { colors, fonts, spacing, page, borders, typography, fontScale, letterSpacing } from '../styles/theme';
 import Footer from '../components/Footer';
+import AccentBar from '../components/AccentBar';
 
 const groups = [
   {
@@ -64,13 +65,6 @@ const s = StyleSheet.create({
     color: colors.primary[800],
     marginBottom: spacing.xs,
   },
-  accentBar: {
-    width: 48,
-    height: 3,
-    backgroundColor: colors.accent[500],
-    borderRadius: borders.radius.xs,
-    marginBottom: spacing.md,
-  },
   groupContainer: {
     marginBottom: spacing.sm,
   },
@@ -90,7 +84,7 @@ const s = StyleSheet.create({
     fontFamily: fonts.bodyBold,
     fontWeight: 600 as const,
     color: colors.white,
-    letterSpacing: 1.2,
+    letterSpacing: letterSpacing.normal,
   },
   entry: {
     flexDirection: 'row',
@@ -130,7 +124,7 @@ const s = StyleSheet.create({
 const Page02TOC: React.FC = () => (
   <Page size="LETTER" style={s.page}>
     <Text style={s.heading}>Contents</Text>
-    <View style={s.accentBar} />
+    <AccentBar size="md" />
     {groups.map((group) => (
       <View key={group.label} style={s.groupContainer}>
         <View style={s.groupLabelRow}>

@@ -77,10 +77,9 @@ const Ch06AvoidingSlop: React.FC = () => (
         'Default Helvetica everywhere – no typographic personality',
         'Inconsistent font sizes – 14pt here, 16pt there, no clear hierarchy',
         'Cramped margins – content pushed to the edges with no breathing room',
-        'Random colors – the AI picked #333, #666, #007bff from different templates',
-        'No visual hierarchy – body text and headings are nearly the same size',
+        'Random colors – #333, #666, #007bff borrowed from different templates',
+        'No visual hierarchy – body text and headings nearly the same size',
         'Walls of text – no callout boxes, no bullet lists, no visual breaks',
-        'Emojis as design elements – unprofessional and inconsistent',
         'Lorem ipsum remnants – placeholder text the AI forgot to replace',
       ]} />
 
@@ -157,44 +156,12 @@ const Ch06AvoidingSlop: React.FC = () => (
 
     {/* --- Page 4: Prompt Templates & Patterns --- */}
     <ContentPage sectionTitle="Avoiding AI Slop">
-      <SectionHeading>The Quality Signals</SectionHeading>
+      <SectionHeading>Prompt Templates That Prevent Slop</SectionHeading>
       <Text style={styles.body}>
-        Here's what separates premium from slop. Every item is specific and checkable:
-      </Text>
-      <BulletList items={[
-        'At least 3 distinct text sizes used intentionally (heading, body, caption)',
-        'Color used for meaning: primary for headings, accent for emphasis, neutral for body',
-        'Consistent component patterns: every callout looks the same, every table looks the same',
-        'Whitespace used as a design element, not wasted space',
-        'No orphaned single lines at the top or bottom of a page',
-        'Every page could stand alone and look intentionally designed',
-      ]} />
-
-      <SectionHeading>Anti-Slop Prompt Template</SectionHeading>
-      <Text style={styles.body}>
-        Use this prompt structure when asking AI to generate or edit a page. It front-loads the design constraints so the AI can't improvise:
-      </Text>
-      <CodeBlock language="text">{`Create [page type] using these constraints:
-- Import styles from '../styles/shared'
-- Import tokens from '../styles/theme'
-- Use ContentPage wrapper with sectionTitle="[section]"
-- Headings: styles.h2 (20pt, primary[800])
-- Body: styles.body (11pt, neutral[800])
-- Include at least one: CodeBlock, BulletList, or TipBox
-- Match spacing and density of [existing page file]
-- No inline styles – use local StyleSheet.create()
-- No emojis – use Icons from '../components/Icons'`}</CodeBlock>
-
-      <TipBox label="The Copy-Paste Test">
-        Take your prompt template and paste it into a new AI session with no prior context. If the AI produces a page that matches your existing pages on the first try, your prompt is good enough.
-      </TipBox>
-
-      <SectionHeading>Prompting Patterns for PDF Generation</SectionHeading>
-      <Text style={styles.body}>
-        The prompts that produce the best react-pdf output follow repeatable structures. These templates encode the constraints and context that prevent slop before it starts.
+        The prompts that produce premium react-pdf output share one trait: they front-load constraints so the AI can't improvise. Each template below is copy-paste ready — fill the bracketed slots and run it.
       </Text>
 
-      <Text style={styles.h3}>Prompt Template: New Page</Text>
+      <Text style={styles.h3}>New Page</Text>
       <CodeBlock language="">{`Build a new ContentPage for [TOPIC].
 
 Reference: src/pages/[EXISTING_PAGE].tsx for structure.
@@ -208,7 +175,7 @@ Requirements:
 - wrap={false} on elements that must not split across pages
 - No Helvetica, no emoji, no hardcoded colors`}</CodeBlock>
 
-      <Text style={styles.h3}>Prompt Template: Layout Fix</Text>
+      <Text style={styles.h3}>Layout Fix</Text>
       <CodeBlock language="">{`Fix the layout issue on [PAGE_FILE].
 
 Problem: [WHAT YOU SEE — orphaned heading, split callout, etc.]
@@ -223,6 +190,14 @@ Constraints:
       <TipBox label="The Negative Constraint Pattern">
         Three or four negative constraints ("no Helvetica," "no emoji," "no hardcoded colors") consistently produce cleaner output than twice as many positive instructions. LLMs predict the most likely next token — negative constraints override bad defaults and close escape hatches the AI would otherwise use.
       </TipBox>
+
+      <SectionHeading>The Copy-Paste Test</SectionHeading>
+      <Text style={styles.body}>
+        Open a fresh AI session with no prior context. Paste only your template plus the file references it points to. If the first generated page matches your existing pages, your prompt is good enough. If not, the gap reveals which constraint is missing.
+      </Text>
+      <Text style={styles.body}>
+        For the full quality bar these prompts target — typography, color, layout, structure, components — see Chapter 10's premium checklist. This chapter eliminates the most common drafting mistakes; that chapter defines the finish line.
+      </Text>
     </ContentPage>
   </>
 );

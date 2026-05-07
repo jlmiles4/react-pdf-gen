@@ -237,8 +237,8 @@ const Invoice = ({ data }: { data: InvoiceData }) => {
           \`$\${i.price.toFixed(2)}\`, \`$\${(i.qty*i.price).toFixed(2)}\`])}
         columnWidths={['50%','15%','15%','20%']} />
       <View style={{ alignItems: 'flex-end', marginTop: spacing.sm }}>
-        <Text style={styles.body}>Subtotal: $\${subtotal.toFixed(2)}</Text>
-        <Text style={styles.h3}>Total: $\${(subtotal+tax).toFixed(2)}</Text>
+        <Text style={styles.body}>Subtotal: \${subtotal.toFixed(2)}</Text>
+        <Text style={styles.h3}>Total: \${(subtotal+tax).toFixed(2)}</Text>
       </View>
     </Page>
   );
@@ -249,7 +249,10 @@ const Invoice = ({ data }: { data: InvoiceData }) => {
     <ContentPage sectionTitle="Premium Deliverables & Recipes">
       <SectionHeading>Recipe: Data-Driven Pages</SectionHeading>
       <Text style={styles.body}>
-        Most useful PDFs are generated from data, not static content. The pattern is simple: pass a typed data array, .map() over it, render one page per item. Conditional rendering controls which sections appear. Each page is a pure function of its data — change the data and the PDF updates automatically. This pattern works cleanly for 5-20 pages; for 50+ pages with images, monitor Node.js memory usage (see Chapter 11). TypeScript interfaces are the contract between your data source and your layout — define the shape once, and both the fetching code and the rendering code agree on the structure.
+        Most useful PDFs are generated from data, not static content. The pattern: pass a typed array, .map() to render one page per item, use conditional rendering to control which sections appear. Each page becomes a pure function of its data — change the input and the PDF rebuilds.
+      </Text>
+      <Text style={styles.body}>
+        TypeScript interfaces are the contract between your data source and your layout: define the shape once, and both the fetching code and the rendering code agree. The pattern works cleanly for 5-20 pages; past 50 pages with images, watch Node.js heap usage (Chapter 11 covers the fix).
       </Text>
       <CodeBlock language="tsx">{`interface Section {
   title: string;

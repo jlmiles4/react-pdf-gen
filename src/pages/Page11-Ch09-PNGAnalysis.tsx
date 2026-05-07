@@ -170,9 +170,9 @@ const Ch09PNGAnalysis: React.FC = () => (
         Here's what matters: AI catches relative problems, not absolute ones. It'll tell you "this heading looks different from that heading" but not "this margin is exactly 24px." Use it for what it's good at — alignment, spacing rhythm, visual hierarchy, broken elements — and verify exact values in your code.
       </Text>
 
-      <SectionHeading>Effective Review Prompts</SectionHeading>
+      <SectionHeading>Three Review Prompts That Work</SectionHeading>
       <Text style={styles.body}>
-        Generic prompts get generic responses. Instead of "does this look good?", ask about one specific quality at a time. Here are three prompts that consistently produce actionable feedback:
+        Chapter 6 covered prompts that <Text style={styles.bold}>generate</Text> pages. These are different — they ask AI to <Text style={styles.bold}>review</Text> a page that already exists. "Does this look good?" gets you "looks good." Single-axis prompts get you specifics:
       </Text>
       <CodeBlock language="text">{`SPACING: "Look at this PDF page. Are the vertical gaps
 between sections consistent? Are any two adjacent
@@ -189,7 +189,7 @@ margins the same? Do the callout boxes use the same
 styling? Flag any inconsistencies between the pages."`}</CodeBlock>
 
       <Text style={styles.body}>
-        Two to three render-review-fix cycles is all it takes to go from rough draft to polished output. The next chapter gives you the checklist to measure that quality against — every item concrete, every item verifiable.
+        Two or three render-review-fix cycles is all it takes to go from rough draft to polished output. Chapter 10 gives you the checklist to measure each cycle against.
       </Text>
     </ContentPage>
   </>

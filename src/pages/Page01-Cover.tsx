@@ -8,8 +8,10 @@
  * Renders: 1 page
  */
 import React from 'react';
-import { Page, View, Text, StyleSheet, Svg, Circle, Line } from '@react-pdf/renderer';
-import { colors, fonts, spacing, page, borders, fontScale, typography } from '../styles/theme';
+import { Page, View, Text, StyleSheet } from '@react-pdf/renderer';
+import { colors, fonts, spacing, page, fontScale, typography, letterSpacing } from '../styles/theme';
+import AccentBar from '../components/AccentBar';
+import CoverDecor from '../components/CoverDecor';
 
 const s = StyleSheet.create({
   page: {
@@ -25,19 +27,12 @@ const s = StyleSheet.create({
     height: page.topBarHeight,
     backgroundColor: colors.accent[500],
   },
-  accentLine: {
-    width: 64,
-    height: 4,
-    backgroundColor: colors.accent[500],
-    borderRadius: spacing.xxs,
-    marginBottom: spacing.xl,
-  },
   title: {
     fontSize: fontScale.coverTitle,
     fontFamily: fonts.heading,
     fontWeight: 700 as const,
     color: colors.white,
-    lineHeight: 1.1,
+    lineHeight: typography.display.lineHeight,
     marginBottom: spacing.md,
   },
   titleAccent: {
@@ -51,7 +46,7 @@ const s = StyleSheet.create({
     fontFamily: fonts.body,
     fontWeight: 400 as const,
     color: colors.neutral[300],
-    lineHeight: 1.5,
+    lineHeight: typography.bodySmall.lineHeight,
     marginBottom: spacing.xxxl,
     maxWidth: 360,
   },
@@ -60,16 +55,8 @@ const s = StyleSheet.create({
     fontFamily: fonts.body,
     fontWeight: 400 as const,
     color: colors.neutral[400],
-    letterSpacing: 1.5,
+    letterSpacing: letterSpacing.wide,
     textTransform: 'uppercase',
-  },
-  decorContainer: {
-    position: 'absolute',
-    right: 40,
-    bottom: 60,
-    width: 160,
-    height: 160,
-    opacity: 0.08,
   },
   bottomInfo: {
     position: 'absolute',
@@ -91,7 +78,7 @@ const s = StyleSheet.create({
 const Page01Cover: React.FC = () => (
   <Page size="LETTER" style={s.page}>
     <View style={s.topBar} />
-    <View style={s.accentLine} />
+    <AccentBar size="xl" mb={spacing.xl} />
     <Text style={s.title}>
       React-PDF{'\n'}
       <Text style={s.titleAccent}>+ AI</Text>
@@ -101,12 +88,7 @@ const Page01Cover: React.FC = () => (
       Practical patterns for developers who ship.
     </Text>
     <Text style={s.author}>Landon Miles</Text>
-    <Svg style={s.decorContainer} viewBox="0 0 160 160">
-      <Circle cx="80" cy="80" r="70" stroke={colors.accent[500]} strokeWidth={1.5} fill="none" />
-      <Circle cx="80" cy="80" r="45" stroke={colors.accent[500]} strokeWidth={1} fill="none" />
-      <Line x1="10" y1="80" x2="150" y2="80" stroke={colors.accent[500]} strokeWidth={0.5} />
-      <Line x1="80" y1="10" x2="80" y2="150" stroke={colors.accent[500]} strokeWidth={0.5} />
-    </Svg>
+    <CoverDecor />
     <View style={s.bottomInfo}>
       <Text style={s.bottomText}>landonmiles.com</Text>
       <Text style={s.bottomText}>2026</Text>

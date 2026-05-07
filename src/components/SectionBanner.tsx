@@ -9,7 +9,8 @@
  */
 import React from 'react';
 import { View, Text, StyleSheet } from '@react-pdf/renderer';
-import { colors, fonts, spacing, borders, fontScale } from '../styles/theme';
+import { colors, fonts, spacing, borders, fontScale, typography } from '../styles/theme';
+import AccentBar from './AccentBar';
 
 interface SectionBannerProps {
   title: string;
@@ -25,13 +26,6 @@ const s = StyleSheet.create({
     marginBottom: spacing.md,
     marginTop: spacing.sm,
   },
-  accentBar: {
-    width: 32,
-    height: 3,
-    backgroundColor: colors.accent[500],
-    borderRadius: borders.radius.xs,
-    marginBottom: spacing.sm,
-  },
   title: {
     fontSize: fontScale.sectionTitle,
     fontFamily: fonts.heading,
@@ -44,13 +38,13 @@ const s = StyleSheet.create({
     fontFamily: fonts.body,
     fontWeight: 400 as const,
     color: colors.neutral[300],
-    lineHeight: 1.5,
+    lineHeight: typography.bodySmall.lineHeight,
   },
 });
 
 const SectionBanner: React.FC<SectionBannerProps> = ({ title, subtitle }) => (
   <View wrap={false} style={s.container}>
-    <View style={s.accentBar} />
+    <AccentBar size="sm" mb={spacing.sm} />
     <Text style={s.title}>{title}</Text>
     {subtitle && <Text style={s.subtitle}>{subtitle}</Text>}
   </View>

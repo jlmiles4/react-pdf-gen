@@ -1,0 +1,149 @@
+# Theme tokens
+
+All values come from [`src/styles/theme.ts`](../../src/styles/theme.ts). Sizes are in PDF points (1pt = 1/72 inch).
+
+## Colors
+
+### `colors.primary` — deep navy
+
+| Token | Hex | Common use |
+|---|---|---|
+| `900` | `#0B1426` | Code block background |
+| `800` | `#121F3D` | Chapter title page, table header, `SectionBanner` |
+| `700` | `#1A2D54` | h3, accent contexts |
+| `600` | `#243B6B` | |
+| `500` | `#2E4A82` | Primary brand |
+| `400` | `#4A6BA5` | |
+| `300` | `#6E8DC4` | Chapter subtitle, JSX tag syntax |
+| `200` | `#9BB3DB` | Code punctuation |
+| `100` | `#C8D6ED` | |
+| `50` | `#EDF1F8` | `InfoBox` background |
+
+### `colors.accent` — warm gold/amber
+
+| Token | Hex | Common use |
+|---|---|---|
+| `900` | `#7A4F00` | |
+| `800` | `#9C6500` | |
+| `700` | `#BE7B00` | `TipBox` label text |
+| `600` | `#D98E00` | `warning` semantic |
+| `500` | `#F0A000` | Accent bars, bullet dots, `TipBox` border |
+| `400` | `#F5B733` | Cover title accent, code labels, syntax keywords |
+| `300` | `#F8CB66` | Number literals |
+| `200` | `#FBDF99` | |
+| `100` | `#FDF0CC` | |
+| `50` | `#FEF8E6` | `TipBox` background |
+
+### `colors.neutral` — slate grays
+
+| Token | Hex | Common use |
+|---|---|---|
+| `900` | `#1A1A2E` | Page default text |
+| `800` | `#2D2D44` | Body text |
+| `700` | `#45455E` | h4 |
+| `600` | `#5E5E77` | `bodySmall` |
+| `500` | `#7A7A91` | Page numbers, header text, code comments |
+| `400` | `#9696AA` | |
+| `300` | `#B2B2C2` | Chapter subtitles |
+| `200` | `#D0D0DB` | Borders, dividers, default code text |
+| `100` | `#E8E8EF` | Table row borders |
+| `50` | `#F5F5F8` | Alternating table rows |
+
+### Semantic
+
+| Name | Hex |
+|---|---|
+| `success` | `#2D8B4E` |
+| `successLight` | `#F0F9F4` |
+| `warning` | `#D98E00` |
+| `warningLight` | `#FEF8E6` |
+| `error` | `#C43333` |
+| `errorLight` | `#FEF3F3` |
+| `info` | `#2E6BB5` |
+| `infoLight` | `#EDF1F8` |
+| `white` | `#FFFFFF` |
+| `black` | `#0B1426` |
+
+## Typography
+
+`typography.*` entries are full style objects — `{ fontSize, fontFamily, fontWeight, lineHeight }`.
+
+| Token | Size | Weight | Line height | Use |
+|---|---|---|---|---|
+| `display` | 36 | 700 | 1.1 | Cover title |
+| `h1` | 26 | 700 | 1.2 | Page-level (rare) |
+| `h2` | 20 | 600 | 1.25 | Section headings |
+| `h3` | 16 | 600 | 1.3 | Sub-section |
+| `h4` | 13 | 600 | 1.35 | Labels, callout titles |
+| `body` | 11 | 400 | 1.6 | Reading text |
+| `bodySmall` | 9.5 | 400 | 1.5 | Tables, secondary |
+| `caption` | 8.5 | 400 | 1.4 | Footer, fine print |
+| `code` | 9 | 400 | 1.5 | Code blocks (Courier) |
+| `codeSmall` | 8 | 400 | 1.4 | Inline code labels |
+
+`fontScale.*` holds the chrome sizes that don't fit the body scale: `coverTitle: 42`, `pageTitle: 32`, `sectionTitle: 18`, `subtitle: 15`, `contentTitle: 14`, `label: 12`, `bodyMedium: 10.5`, `labelSmall: 10`, `navSmall: 7.5`, `micro: 7`.
+
+`fonts.*` values: `heading`, `headingLight`, `body`, `bodyBold` are all the string `'Inter'`. `mono` is `'Courier'`, `monoBold` is `'Courier-Bold'`. The bold/heading distinction comes from `fontWeight`, not the family name.
+
+## Spacing
+
+4pt grid, with sub-grid micros for fine adjustment.
+
+| Token | Value |
+|---|---|
+| `micro` | 1 |
+| `xxs` | 2 |
+| `xs` | 4 |
+| `sm` | 8 |
+| `md` | 12 |
+| `lg` | 16 |
+| `xl` | 24 |
+| `xxl` | 32 |
+| `xxxl` | 48 |
+
+## Page geometry
+
+LETTER, in points.
+
+| Field | Value |
+|---|---|
+| `width` | 612 |
+| `height` | 792 |
+| `margin.top` | 60 |
+| `margin.bottom` | 60 |
+| `margin.left` | 54 |
+| `margin.right` | 54 |
+| `coverMargin.horizontal` | 72 |
+| `coverMargin.bottom` | 36 |
+| `headerHeight` | 40 |
+| `footerHeight` | 36 |
+| `topBarHeight` | 6 |
+| `chapterPaddingExtra` | 20 |
+| `contentWidth` | 504 (612 − 54 − 54) |
+| `contentHeight` | 672 (792 − 60 − 60) |
+
+## Borders
+
+| Field | Value |
+|---|---|
+| `thin` | 0.5 |
+| `medium` | 1 |
+| `thick` | 2 |
+| `radius.xs` | 1.5 |
+| `radius.sm` | 3 |
+| `radius.md` | 6 |
+| `radius.lg` | 10 |
+
+## Syntax highlighting
+
+`syntax.*` colors are tuned for the `primary[900]` (`#0B1426`) code-block background:
+
+| Token | Hex | Use |
+|---|---|---|
+| `keyword` | `#F5B733` | Reserved words |
+| `string` | `#7EC89F` | String literals |
+| `comment` | `#7A7A91` | Comments |
+| `tag` | `#6E8DC4` | JSX/HTML tags |
+| `number` | `#F8CB66` | Number literals |
+| `punctuation` | `#9BB3DB` | Brackets, operators |
+| `default` | `#D0D0DB` | Base code text |

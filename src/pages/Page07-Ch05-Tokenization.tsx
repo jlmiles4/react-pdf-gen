@@ -123,19 +123,16 @@ Instruction:
         For each AI edit session, aim for this budget: theme (400) + components (300) + target page (400) + instructions (200) = 1,300 tokens. That leaves the AI 98% of its context window for reasoning and generating output.
       </TipBox>
 
-      <SectionHeading>Try It Yourself</SectionHeading>
+      <SectionHeading>Measure Your Own Files</SectionHeading>
       <Text style={styles.body}>
-        Theory is useful. Numbers you've measured yourself are better. Here's a quick exercise to make token budgets concrete for your project:
+        Estimates lie. Real numbers don't. Run this in your project root for a per-file token estimate (4 chars ≈ 1 token):
       </Text>
-      <BulletList items={[
-        'Find your largest source file. Run "wc -c" on it and divide by 3.3 to estimate tokens. If it\'s over 1,000 tokens, that\'s a candidate for splitting.',
-        'Count the files an AI needs to edit one page: theme.ts + shared components + the page itself + your instructions. Add up the estimated tokens. Is the total under 2,000?',
-        'Try the prompt sizing template from this chapter with your actual project files. Paste the context into your AI tool and ask it to generate a new page. Did it use the right design tokens?',
-        'If it didn\'t, check what was missing from the context — that gap is what causes slop in practice.',
-      ]} />
-
+      <CodeBlock language="bash">{`# Approximate token count per .tsx file, largest first
+find src -name '*.tsx' -exec wc -c {} + \\
+  | awk '{ printf "%6d tokens  %s\\n", $1/4, $2 }' \\
+  | sort -rn | head -20`}</CodeBlock>
       <Text style={styles.body}>
-        The compound effect is significant: a project where each page file is 400 tokens means the AI can read the complete context for any edit in under 1,500 tokens. That's less than 1% of most model context windows. The remaining 99% is available for reasoning, generating code that matches your patterns, and iterating.
+        Anything over 1,500 tokens is a split candidate. Then sum the files an AI actually needs for one edit (theme + components + target page + instructions). If that total stays under 2,000, you're inside the high-attention zone of every modern model — leaving 95%+ of the context window for reasoning and generation.
       </Text>
     </ContentPage>
   </>
