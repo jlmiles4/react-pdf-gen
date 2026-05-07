@@ -1,0 +1,50 @@
+# [YOUR-PROJECT] — Claude Code Instructions
+
+## Project Overview
+This is a `@react-pdf/renderer` project that generates [DESCRIBE YOUR DOCUMENT: e.g., client reports, ebooks, invoices, proposals].
+
+## Commands
+- **Build PDF:** `pnpm build`
+- **Export PNGs:** `pnpm export`
+- **Full pipeline:** `pnpm pipeline` (build + export)
+
+## Architecture Rules
+1. **One file per page.** Each page is a separate component in `src/pages/`. Named `Page##-Name.tsx`.
+2. **Design tokens only.** Never hardcode colors, fonts, or spacing. Import from `src/styles/theme.ts`.
+3. **Shared components.** Use existing components from `src/components/` — never recreate patterns inline.
+4. **No default fonts.** All text uses [your-font] font. Always pair `fontFamily` with explicit `fontWeight` (400, 500, 600, or 700).
+5. **No emoji.** Use SVG icons from `src/components/Icons.tsx`.
+6. **wrap={false}** on any element that must not split across pages: callout boxes, code blocks, table rows, cards, bullet items.
+7. **minPresenceAhead={40}** on section headings to prevent orphaned headings at page bottom.
+
+## Key Files
+| File | Purpose |
+|------|---------|
+| `src/styles/theme.ts` | Design tokens (colors, fonts, spacing, borders, page) |
+| `src/styles/shared.ts` | Shared StyleSheet used by all pages |
+| `src/fonts.ts` | Font registration |
+| `src/Document.tsx` | Root Document component, assembles all pages |
+| `src/build.tsx` | Build script |
+
+## Component API Quick Reference
+```tsx
+<ContentPage sectionTitle="Title">       — Standard page wrapper with header/footer
+<SectionHeading>Title</SectionHeading>   — Accent bar + h2 heading
+<CodeBlock language="tsx">{code}</CodeBlock>   — Dark code block
+<BulletList items={['item1', 'item2']} />     — Bullet list with accent dots
+<Table headers={[...]} rows={[[...]]} columnWidths={['30%','70%']} />
+<TipBox label="Label">text</TipBox>           — Callout box (also: WarningBox, InfoBox)
+```
+
+## When Adding a New Page
+1. Create `src/pages/Page##-Name.tsx`
+2. Import from `../styles/shared`, `../styles/theme`, and relevant components
+3. Register in `src/Document.tsx`
+4. Build and visually verify: `pnpm pipeline`
+
+## Quality Checks After Any Change
+- Run `pnpm pipeline` and review PNG output for:
+  - No orphaned headings at page bottom
+  - No split callout boxes or code blocks
+  - No orphaned bullet dots
+  - Consistent spacing between sections

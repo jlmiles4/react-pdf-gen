@@ -1,0 +1,27 @@
+{
+  "name": "react-pdf-gen",
+  "version": "1.0.0",
+  "description": "React-PDF + AI: The Builder's Guide to Premium PDF Generation",
+  "main": "src/build.tsx",
+  "scripts": {
+    "build": "tsx src/build.tsx",
+    "export": "bash scripts/export-pages.sh",
+    "dev": "tsx watch src/build.tsx",
+    "pipeline": "tsx src/build.tsx && bash scripts/export-pages.sh"
+  },
+  "keywords": ["react-pdf", "pdf", "ai", "ebook"],
+  "author": "Landon Miles",
+  "license": "MIT",
+  "packageManager": "pnpm@10.29.1",
+  "dependencies": {
+    "@react-pdf/renderer": "^4.3.2",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  },
+  "devDependencies": {
+    "@types/node": "^25.2.2",
+    "@types/react": "^19.2.13",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}

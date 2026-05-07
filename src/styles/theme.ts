@@ -1,0 +1,161 @@
+/**
+ * Design tokens for the React-PDF + AI ebook.
+ * Every color, font size, and spacing value in the book comes from here.
+ * This is the single source of truth for visual consistency.
+ */
+
+export const colors = {
+  // Primary: deep navy – authority, trust, professionalism
+  primary: {
+    900: '#0B1426',
+    800: '#121F3D',
+    700: '#1A2D54',
+    600: '#243B6B',
+    500: '#2E4A82',
+    400: '#4A6BA5',
+    300: '#6E8DC4',
+    200: '#9BB3DB',
+    100: '#C8D6ED',
+    50: '#EDF1F8',
+  },
+  // Accent: warm amber/gold – energy, premium feel
+  accent: {
+    900: '#7A4F00',
+    800: '#9C6500',
+    700: '#BE7B00',
+    600: '#D98E00',
+    500: '#F0A000',
+    400: '#F5B733',
+    300: '#F8CB66',
+    200: '#FBDF99',
+    100: '#FDF0CC',
+    50: '#FEF8E6',
+  },
+  // Neutral: slate grays
+  neutral: {
+    900: '#1A1A2E',
+    800: '#2D2D44',
+    700: '#45455E',
+    600: '#5E5E77',
+    500: '#7A7A91',
+    400: '#9696AA',
+    300: '#B2B2C2',
+    200: '#D0D0DB',
+    100: '#E8E8EF',
+    50: '#F5F5F8',
+  },
+  // Semantic
+  success: '#2D8B4E',
+  successLight: '#F0F9F4',
+  warning: '#D98E00',
+  warningLight: '#FEF8E6',
+  error: '#C43333',
+  errorLight: '#FEF3F3',
+  info: '#2E6BB5',
+  infoLight: '#EDF1F8',
+  // Base
+  white: '#FFFFFF',
+  black: '#0B1426',
+} as const;
+
+export const fonts = {
+  heading: 'Inter',
+  headingLight: 'Inter',
+  body: 'Inter',
+  bodyBold: 'Inter',
+  mono: 'Courier',
+  monoBold: 'Courier-Bold',
+} as const;
+
+export const typography = {
+  // Display – cover page, chapter titles
+  display: { fontSize: 36, fontFamily: fonts.heading, fontWeight: 700 as const, lineHeight: 1.1 },
+  // H1 – section headers
+  h1: { fontSize: 26, fontFamily: fonts.heading, fontWeight: 700 as const, lineHeight: 1.2 },
+  // H2 – subsection headers
+  h2: { fontSize: 20, fontFamily: fonts.heading, fontWeight: 600 as const, lineHeight: 1.25 },
+  // H3 – minor headers
+  h3: { fontSize: 16, fontFamily: fonts.heading, fontWeight: 600 as const, lineHeight: 1.3 },
+  // H4 – label-level headers
+  h4: { fontSize: 13, fontFamily: fonts.bodyBold, fontWeight: 600 as const, lineHeight: 1.35 },
+  // Body – main reading text
+  body: { fontSize: 11, fontFamily: fonts.body, fontWeight: 400 as const, lineHeight: 1.6 },
+  // Body small
+  bodySmall: { fontSize: 9.5, fontFamily: fonts.body, fontWeight: 400 as const, lineHeight: 1.5 },
+  // Caption
+  caption: { fontSize: 8.5, fontFamily: fonts.body, fontWeight: 400 as const, lineHeight: 1.4 },
+  // Code
+  code: { fontSize: 9, fontFamily: fonts.mono, fontWeight: 400 as const, lineHeight: 1.5 },
+  // Code small
+  codeSmall: { fontSize: 8, fontFamily: fonts.mono, fontWeight: 400 as const, lineHeight: 1.4 },
+} as const;
+
+export const spacing = {
+  micro: 1,
+  xxs: 2,
+  xs: 4,
+  sm: 8,
+  md: 12,
+  lg: 16,
+  xl: 24,
+  xxl: 32,
+  xxxl: 48,
+} as const;
+
+export const page = {
+  width: 612,   // LETTER width in points
+  height: 792,  // LETTER height in points
+  margin: {
+    top: 60,
+    bottom: 60,
+    left: 54,
+    right: 54,
+  },
+  coverMargin: {
+    horizontal: 72,
+    bottom: 36,
+  },
+  headerHeight: 40,
+  footerHeight: 36,
+  topBarHeight: 6,
+  chapterPaddingExtra: 20,
+  contentWidth: 612 - 54 - 54, // 504pt
+  contentHeight: 792 - 60 - 60, // 672pt
+} as const;
+
+// Syntax highlighting — designed for readability on primary[900] background
+export const syntax = {
+  keyword: '#F5B733',   // accent[400] — gold for reserved words
+  string: '#7EC89F',    // soft green — readable on dark navy
+  comment: '#7A7A91',   // neutral[500] — muted for comments
+  tag: '#6E8DC4',       // primary[300] — light blue for JSX/HTML tags
+  number: '#F8CB66',    // accent[300] — warm gold for literals
+  punctuation: '#9BB3DB', // primary[200] — subtle for brackets/operators
+  default: '#D0D0DB',   // neutral[200] — base code text
+} as const;
+
+export const borders = {
+  thin: 0.5,
+  medium: 1,
+  thick: 2,
+  radius: {
+    xs: 1.5,
+    sm: 3,
+    md: 6,
+    lg: 10,
+  },
+} as const;
+
+/** Font sizes for infrastructure elements outside the content typography scale */
+export const fontScale = {
+  coverTitle: 42,
+  pageTitle: 32,
+  sectionTitle: 18,
+  subtitle: 15,
+  contentTitle: 14,
+  label: 12,
+  bodyMedium: 10.5,
+  labelSmall: 10,
+  navSmall: 7.5,
+  micro: 7,
+} as const;
