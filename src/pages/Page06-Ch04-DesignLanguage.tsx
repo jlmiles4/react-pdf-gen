@@ -1,3 +1,4 @@
+// Group: DESIGN SYSTEM
 /**
  * Chapter 04 — Specifying a Design Language
  *
@@ -13,7 +14,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from '@react-pdf/renderer';
 import { styles } from '../styles/shared';
-import { colors, spacing, fonts, borders, typography, fontScale } from '../styles/theme';
+import { colors, spacing, fonts, borders, typography, fontScale, fontWeight } from '../styles/theme';
 import ContentPage from '../components/ContentPage';
 import ChapterTitle from '../components/ChapterTitle';
 import CodeBlock from '../components/CodeBlock';
@@ -29,18 +30,18 @@ const local = StyleSheet.create({
     gap: spacing.sm,
   },
   swatch: {
-    width: 48,
-    height: 48,
+    width: spacing.xxxl,
+    height: spacing.xxxl,
     borderRadius: borders.radius.md,
   },
   swatchLabel: {
     fontSize: fontScale.micro,
     fontFamily: fonts.mono,
-    fontWeight: 400 as const,
+    fontWeight: fontWeight.regular,
     color: colors.neutral[600],
     marginTop: spacing.xs,
     textAlign: 'center',
-    width: 48,
+    width: spacing.xxxl,
   },
   swatchGroup: {
     alignItems: 'center',
@@ -54,15 +55,15 @@ const local = StyleSheet.create({
     borderBottomColor: colors.neutral[100],
   },
   scaleLabel: {
-    width: 70,
+    width: spacing.xxxl + spacing.xl, // 72pt
     fontSize: typography.code.fontSize,
     fontFamily: fonts.mono,
-    fontWeight: 400 as const,
+    fontWeight: fontWeight.regular,
     color: colors.neutral[500],
   },
   scaleSize: {
     marginBottom: 0,
-    width: 50,
+    width: spacing.xxxl + spacing.xs, // 52pt
   },
   scaleUse: {
     flex: 1,

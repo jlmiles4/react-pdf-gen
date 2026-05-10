@@ -67,27 +67,42 @@ export const fonts = {
   monoBold: 'Courier-Bold',
 } as const;
 
+/** Font weights matching the registered Inter weights in fonts.ts. */
+export const fontWeight = {
+  regular: 400,
+  semibold: 600,
+  bold: 700,
+} as const;
+
+/** Line-height multipliers for text outside the typography presets. */
+export const lineHeight = {
+  tight: 1.2,
+  snug: 1.4,
+  normal: 1.5,
+  relaxed: 1.6,
+} as const;
+
 export const typography = {
   // Display – cover page, chapter titles
-  display: { fontSize: 36, fontFamily: fonts.heading, fontWeight: 700 as const, lineHeight: 1.1 },
+  display: { fontSize: 36, fontFamily: fonts.heading, fontWeight: fontWeight.bold, lineHeight: 1.1 },
   // H1 – section headers
-  h1: { fontSize: 26, fontFamily: fonts.heading, fontWeight: 700 as const, lineHeight: 1.2 },
+  h1: { fontSize: 26, fontFamily: fonts.heading, fontWeight: fontWeight.bold, lineHeight: lineHeight.tight },
   // H2 – subsection headers
-  h2: { fontSize: 20, fontFamily: fonts.heading, fontWeight: 600 as const, lineHeight: 1.25 },
+  h2: { fontSize: 20, fontFamily: fonts.heading, fontWeight: fontWeight.semibold, lineHeight: 1.25 },
   // H3 – minor headers
-  h3: { fontSize: 16, fontFamily: fonts.heading, fontWeight: 600 as const, lineHeight: 1.3 },
+  h3: { fontSize: 16, fontFamily: fonts.heading, fontWeight: fontWeight.semibold, lineHeight: 1.3 },
   // H4 – label-level headers
-  h4: { fontSize: 13, fontFamily: fonts.bodyBold, fontWeight: 600 as const, lineHeight: 1.35 },
+  h4: { fontSize: 13, fontFamily: fonts.bodyBold, fontWeight: fontWeight.semibold, lineHeight: 1.35 },
   // Body – main reading text
-  body: { fontSize: 11, fontFamily: fonts.body, fontWeight: 400 as const, lineHeight: 1.6 },
+  body: { fontSize: 11, fontFamily: fonts.body, fontWeight: fontWeight.regular, lineHeight: lineHeight.relaxed },
   // Body small
-  bodySmall: { fontSize: 9.5, fontFamily: fonts.body, fontWeight: 400 as const, lineHeight: 1.5 },
+  bodySmall: { fontSize: 9.5, fontFamily: fonts.body, fontWeight: fontWeight.regular, lineHeight: lineHeight.normal },
   // Caption
-  caption: { fontSize: 8.5, fontFamily: fonts.body, fontWeight: 400 as const, lineHeight: 1.4 },
+  caption: { fontSize: 8.5, fontFamily: fonts.body, fontWeight: fontWeight.regular, lineHeight: lineHeight.snug },
   // Code
-  code: { fontSize: 9, fontFamily: fonts.mono, fontWeight: 400 as const, lineHeight: 1.5 },
+  code: { fontSize: 9, fontFamily: fonts.mono, fontWeight: fontWeight.regular, lineHeight: lineHeight.normal },
   // Code small
-  codeSmall: { fontSize: 8, fontFamily: fonts.mono, fontWeight: 400 as const, lineHeight: 1.4 },
+  codeSmall: { fontSize: 8, fontFamily: fonts.mono, fontWeight: fontWeight.regular, lineHeight: lineHeight.snug },
 } as const;
 
 export const spacing = {
@@ -174,4 +189,37 @@ export const letterSpacing = {
   normal: 1.2,
   wide: 1.5,
   wider: 2.5,
+} as const;
+
+/** Common layout constraints to avoid magic numbers in page components. */
+export const layout = {
+  maxTextWidth: 420,
+  maxHeroWidth: 460,
+  bulletWrapperWidth: 14,
+  bulletDotSize: 6,
+  tocEntryNumWidth: 28,
+  cardShadowOffset: 2,
+  flowStepWidth: 100,
+  dividerHeight: 2,
+  decorMarkSize: 160,   // CoverDecor concentric mark
+  decorRingsSize: 240,  // ChapterTitle decorative rings
+  decorMarkRight: 40,   // CoverDecor default right offset
+  decorMarkBottom: 60,  // CoverDecor default bottom offset
+} as const;
+
+/** Icon sizes for SVG icons rendered via the Icon adapter. */
+export const iconSize = {
+  xs: 10,       // dense inline checklists (Ch09 PNGAnalysis)
+  sm: 12,       // standard inline check/x in body text
+  callout: 13,  // TipBox / WarningBox / InfoBox label icons
+  md: 14,       // recommended adapter size
+  lg: 16,       // adapter default
+  xl: 24,       // showcase / hero icons
+} as const;
+
+/** Opacity tokens for layered decor and de-emphasized accents. */
+export const opacity = {
+  decor: 0.08,        // background SVG flourishes (CoverDecor, ChapterTitle rings)
+  decorSubtle: 0.06,  // a touch dimmer for already-busy dark pages (Conclusion)
+  muted: 0.4,         // de-emphasized accent (Conclusion divider)
 } as const;

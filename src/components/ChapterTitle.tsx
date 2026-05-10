@@ -5,11 +5,11 @@
  * large white title, gray subtitle, and decorative SVG circle in the corner.
  * Renders as its own <Page> — no header or footer.
  *
- * Props: number (string "01"-"11"), title, subtitle (optional)
+ * Props: number (string "01"-"12"), title, subtitle (optional)
  */
 import React from 'react';
 import { Page, Text, StyleSheet, Svg, Circle, G } from '@react-pdf/renderer';
-import { colors, fonts, spacing, page, fontScale, typography, letterSpacing } from '../styles/theme';
+import { colors, fonts, spacing, page, fontScale, typography, letterSpacing, layout, fontWeight, opacity } from '../styles/theme';
 import AccentBar from './AccentBar';
 
 const noHyphenation = (word: string) => [word];
@@ -20,7 +20,7 @@ interface ChapterTitleProps {
   subtitle?: string;
 }
 
-const RINGS_SIZE = 240;
+const RINGS_SIZE = layout.decorRingsSize;
 
 const ctStyles = StyleSheet.create({
   page: {
@@ -32,7 +32,7 @@ const ctStyles = StyleSheet.create({
   chapterLabel: {
     fontSize: fontScale.label,
     fontFamily: fonts.body,
-    fontWeight: 400 as const,
+    fontWeight: fontWeight.regular,
     color: colors.accent[400],
     textTransform: 'uppercase',
     letterSpacing: letterSpacing.wider,
@@ -41,19 +41,19 @@ const ctStyles = StyleSheet.create({
   title: {
     fontSize: fontScale.pageTitle,
     fontFamily: fonts.heading,
-    fontWeight: 700 as const,
+    fontWeight: fontWeight.bold,
     color: colors.white,
     lineHeight: typography.h1.lineHeight,
     marginBottom: spacing.md,
-    maxWidth: 460,
+    maxWidth: layout.maxHeroWidth,
   },
   subtitle: {
     fontSize: typography.h4.fontSize,
     fontFamily: fonts.body,
-    fontWeight: 400 as const,
+    fontWeight: fontWeight.regular,
     color: colors.neutral[300],
     lineHeight: typography.bodySmall.lineHeight,
-    maxWidth: 430,
+    maxWidth: layout.maxTextWidth + spacing.sm, // 428pt approx
   },
   decorRings: {
     position: 'absolute',
@@ -70,8 +70,8 @@ const ChapterTitle: React.FC<ChapterTitleProps> = ({ number, title, subtitle }) 
     <Text style={ctStyles.chapterLabel}>Chapter {number}</Text>
     <Text style={ctStyles.title} hyphenationCallback={noHyphenation}>{title}</Text>
     {subtitle && <Text style={ctStyles.subtitle}>{subtitle}</Text>}
-    <Svg style={ctStyles.decorRings} viewBox="0 0 240 240">
-      <G opacity={0.08}>
+    <Svg style={ctStyles.decorRings} viewBox={`0 0 ${RINGS_SIZE} ${RINGS_SIZE}`}>
+      <G opacity={opacity.decor}>
         <Circle cx="190" cy="190" r="50" stroke={colors.accent[500]} strokeWidth="1.5" fill="none" />
         <Circle cx="190" cy="190" r="90" stroke={colors.accent[500]} strokeWidth="1" fill="none" />
         <Circle cx="190" cy="190" r="135" stroke={colors.accent[500]} strokeWidth="0.75" fill="none" />

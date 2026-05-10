@@ -23,9 +23,9 @@ const KEYWORDS = new Set([
 ]);
 
 // Single combined regex — order matters (first match wins)
-// Groups: 1=comment, 2=string, 3=word (check against keywords), 4=JSX tag, 5=number
+// Groups: 1=comment, 2=string, 3=word, 4=JSX tag, 5=number, 6=punctuation
 const TOKEN_RE =
-  /(\/\/.*$|\/\*[\s\S]*?\*\/)|('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|`(?:[^`\\]|\\.)*`)|(\b[a-zA-Z_$][a-zA-Z0-9_$]*\b)|(<\/?[A-Z][A-Za-z.]*)|(\b\d+\.?\d*\b)/gm;
+  /(\/\/.*$|\/\*[\s\S]*?\*\/)|('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|`(?:[^`\\]|\\.)*`)|(\b[a-zA-Z_$][a-zA-Z0-9_$]*\b)|(<\/?[A-Z][A-Za-z.]*)|(\b\d+\.?\d*\b)|([{}()\[\],.;=+\-*/&|!<>?:]+)/gm;
 
 export function tokenizeLine(line: string): Token[] {
   const tokens: Token[] = [];
@@ -51,6 +51,8 @@ export function tokenizeLine(line: string): Token[] {
       tokens.push({ text: match[0], type: 'tag' });
     } else if (match[5]) {
       tokens.push({ text: match[0], type: 'number' });
+    } else if (match[6]) {
+      tokens.push({ text: match[0], type: 'punctuation' });
     }
 
     lastIndex = match.index + match[0].length;

@@ -1,3 +1,4 @@
+// Group: CRAFT
 /**
  * Chapter 07 — Design Challenges and Solutions
  *
@@ -14,7 +15,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from '@react-pdf/renderer';
 import { styles } from '../styles/shared';
-import { colors, spacing, fonts, borders, fontScale } from '../styles/theme';
+import { colors, spacing, fonts, borders, fontScale, fontWeight, iconSize } from '../styles/theme';
 import ContentPage from '../components/ContentPage';
 import ChapterTitle from '../components/ChapterTitle';
 import CodeBlock from '../components/CodeBlock';
@@ -34,7 +35,7 @@ const local = StyleSheet.create({
   recipeTitle: {
     fontSize: fontScale.contentTitle,
     fontFamily: fonts.bodyBold,
-    fontWeight: 600 as const,
+    fontWeight: fontWeight.semibold,
     color: colors.primary[700],
     marginBottom: spacing.sm,
   },
@@ -74,7 +75,7 @@ const Ch07DesignChallenges: React.FC = () => (
 
       <View wrap={false} style={local.recipeCard}>
         <View style={local.iconRow}>
-          <XIcon size={12} />
+          <XIcon size={iconSize.sm} />
           <Text style={local.recipeTitle}>CSS Grid Layouts</Text>
         </View>
         <Text style={styles.bodySmall}>
@@ -96,7 +97,7 @@ const Ch07DesignChallenges: React.FC = () => (
 
       <View wrap={false} style={local.recipeCard}>
         <View style={local.iconRow}>
-          <XIcon size={12} />
+          <XIcon size={iconSize.sm} />
           <Text style={local.recipeTitle}>Drop Shadows</Text>
         </View>
         <Text style={styles.bodySmall}>
@@ -120,7 +121,7 @@ const Ch07DesignChallenges: React.FC = () => (
 
       <View wrap={false} style={local.recipeCard}>
         <View style={local.iconRow}>
-          <XIcon size={12} />
+          <XIcon size={iconSize.sm} />
           <Text style={local.recipeTitle}>Text Wrapping Around Images</Text>
         </View>
         <Text style={styles.bodySmall}>
@@ -139,7 +140,7 @@ const Ch07DesignChallenges: React.FC = () => (
 
       <View wrap={false} style={local.recipeCard}>
         <View style={local.iconRow}>
-          <XIcon size={12} />
+          <XIcon size={iconSize.sm} />
           <Text style={local.recipeTitle}>Gradient Backgrounds</Text>
         </View>
         <Text style={styles.bodySmall}>
@@ -192,7 +193,7 @@ const Ch07DesignChallenges: React.FC = () => (
 );`}</CodeBlock>
 
       <Text style={styles.body}>
-        Every workaround in this chapter follows the same pattern: the CSS property you want doesn't exist, so you build it from View, Text, and flexbox. That's not a limitation -- it's the entire mental model. Once you stop reaching for web CSS and start thinking in react-pdf primitives, layouts get faster to build, not slower.
+        Every workaround in this chapter follows the same pattern: the CSS property you want doesn't exist, so you build it from View, Text, and flexbox. That's not a limitation -- it's the entire design philosophy. Once you stop reaching for web-centric CSS and start thinking in react-pdf primitives, layouts get faster to build, not slower.
       </Text>
     </ContentPage>
   </>

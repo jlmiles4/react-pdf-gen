@@ -13,10 +13,14 @@ import {
   LuX,
   LuArrowRight,
   LuZap,
+  LuBook,
+  LuCode,
+  LuLayers,
+  LuPalette,
 } from 'react-icons/lu';
 import type { IconType } from 'react-icons';
 import Icon from './Icon';
-import { colors } from '../styles/theme';
+import { colors, iconSize } from '../styles/theme';
 
 interface IconProps {
   size?: number;
@@ -24,7 +28,7 @@ interface IconProps {
 }
 
 const make = (icon: IconType, defaultColor: string) => {
-  const C: React.FC<IconProps> = ({ size = 16, color = defaultColor }) => (
+  const C: React.FC<IconProps> = ({ size = iconSize.lg, color = defaultColor }) => (
     <Icon icon={icon} size={size} color={color} />
   );
   return C;
@@ -36,5 +40,9 @@ export const InfoIcon = make(LuInfo, colors.info);
 export const XIcon = make(LuX, colors.error);
 export const ArrowRightIcon = make(LuArrowRight, colors.primary[500]);
 export const ZapIcon = make(LuZap, colors.accent[500]);
+export const BookIcon = make(LuBook, colors.primary[500]);
+export const CodeIcon = make(LuCode, colors.primary[500]);
+export const LayersIcon = make(LuLayers, colors.primary[500]);
+export const PaletteIcon = make(LuPalette, colors.primary[500]);
 
 export { default as Icon } from './Icon';

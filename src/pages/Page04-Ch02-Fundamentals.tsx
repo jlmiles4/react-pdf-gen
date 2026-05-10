@@ -1,3 +1,4 @@
+// Group: FOUNDATIONS
 /**
  * Chapter 02 — React-PDF Fundamentals
  *
@@ -64,22 +65,22 @@ const MyDoc = () => (
 
       <SectionHeading>The Styling System</SectionHeading>
       <Text style={styles.body}>
-        React-pdf uses JavaScript objects for styles, similar to React Native. No CSS strings, no className props.
+        React-pdf uses JavaScript objects for styles, similar to React Native. No CSS strings, no className props. Always reference your theme tokens to ensure consistency.
       </Text>
       <CodeBlock language="tsx">{`import { StyleSheet } from '@react-pdf/renderer';
+import { colors, spacing, typography } from '../styles/theme';
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    padding: 16,
-    backgroundColor: '#F5F5F8',
+    padding: spacing.lg,
+    backgroundColor: colors.neutral[50],
     borderRadius: 6,
   },
   title: {
-    fontSize: 20,
-    fontFamily: 'Helvetica-Bold',
-    color: '#1A2D54',
-    marginBottom: 8,
+    ...typography.h2,
+    color: colors.primary[800],
+    marginBottom: spacing.sm,
   },
 });`}</CodeBlock>
 
@@ -170,7 +171,7 @@ Font.register({
         These fundamentals – the component hierarchy, StyleSheet-based styling, flexbox layout, font registration, and page breaking – are the building blocks. Every page in this book uses them.
       </Text>
       <Text style={styles.body}>
-        The critical mental shift: react-pdf is not CSS. You're working with a layout engine that has strict rules. Once you internalize the constraints – no grid, no inline, no CSS variables – you stop fighting the system and start leveraging its strengths. Flexbox handles 99% of real-world PDF layouts.
+        Internalizing these constraints is the first step toward mastery. Once you stop reaching for web-specific CSS and embrace the react-pdf primitives – no grid, no inline, no CSS variables – you can leverage the engine's predictable layout behavior to build complex, multi-page documents with confidence.
       </Text>
       <Text style={styles.body}>
         The next chapter shows how to organize these building blocks into a project architecture that AI agents can work with efficiently. The goal: a structure where AI can edit one page without reading (or breaking) the rest.

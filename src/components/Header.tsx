@@ -7,7 +7,7 @@
  */
 import React from 'react';
 import { View, Text, StyleSheet } from '@react-pdf/renderer';
-import { colors, fonts, page, borders, fontScale, typography, letterSpacing } from '../styles/theme';
+import { colors, fonts, page, borders, fontScale, typography, letterSpacing, fontWeight } from '../styles/theme';
 
 interface HeaderProps {
   sectionTitle?: string;
@@ -30,7 +30,7 @@ const headerStyles = StyleSheet.create({
   title: {
     fontSize: typography.codeSmall.fontSize,
     fontFamily: fonts.body,
-    fontWeight: 400 as const,
+    fontWeight: fontWeight.regular,
     color: colors.neutral[500],
     textTransform: 'uppercase',
     letterSpacing: letterSpacing.tight,
@@ -38,7 +38,7 @@ const headerStyles = StyleSheet.create({
   bookTitle: {
     fontSize: fontScale.navSmall,
     fontFamily: fonts.body,
-    fontWeight: 400 as const,
+    fontWeight: fontWeight.regular,
     color: colors.neutral[400],
   },
 });

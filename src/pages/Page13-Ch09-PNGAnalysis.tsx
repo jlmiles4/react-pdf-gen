@@ -1,3 +1,4 @@
+// Group: SHIPPING
 /**
  * Chapter 09 — AI Visual Analysis
  *
@@ -15,7 +16,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from '@react-pdf/renderer';
 import { styles } from '../styles/shared';
-import { colors, spacing, fonts, borders, typography, fontScale } from '../styles/theme';
+import { colors, spacing, fonts, borders, typography, fontScale, fontWeight, iconSize, layout } from '../styles/theme';
 import ContentPage from '../components/ContentPage';
 import ChapterTitle from '../components/ChapterTitle';
 import CodeBlock from '../components/CodeBlock';
@@ -35,26 +36,26 @@ const local = StyleSheet.create({
   },
   flowStep: {
     alignItems: 'center',
-    width: 100,
+    width: layout.flowStepWidth,
   },
   flowStepNum: {
     fontSize: typography.h2.fontSize,
     fontFamily: fonts.heading,
-    fontWeight: 700 as const,
+    fontWeight: fontWeight.bold,
     color: colors.accent[500],
     marginBottom: spacing.xs,
   },
   flowStepLabel: {
     fontSize: typography.code.fontSize,
     fontFamily: fonts.bodyBold,
-    fontWeight: 600 as const,
+    fontWeight: fontWeight.semibold,
     color: colors.primary[700],
     textAlign: 'center',
   },
   flowArrow: {
     fontSize: typography.h3.fontSize,
     fontFamily: fonts.body,
-    fontWeight: 400 as const,
+    fontWeight: fontWeight.regular,
     color: colors.neutral[400],
   },
   checklistContainer: {
@@ -144,7 +145,7 @@ const Ch09PNGAnalysis: React.FC = () => (
           'Overall visual hierarchy assessment',
         ].map((item, i) => (
           <View key={i} wrap={false} style={local.checklistRow}>
-            <CheckIcon size={10} color={colors.success} />
+            <CheckIcon size={iconSize.xs} color={colors.success} />
             <Text style={styles.bodySmall}>{item}</Text>
           </View>
         ))}
@@ -160,7 +161,7 @@ const Ch09PNGAnalysis: React.FC = () => (
           'Distinguishing very similar shades',
         ].map((item, i) => (
           <View key={i} wrap={false} style={local.checklistRow}>
-            <XIcon size={10} color={colors.error} />
+            <XIcon size={iconSize.xs} color={colors.error} />
             <Text style={styles.bodySmall}>{item}</Text>
           </View>
         ))}

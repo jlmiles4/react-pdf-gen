@@ -1,0 +1,48 @@
+Third-Party Notices
+
+This repository bundles or depends on the following third-party assets and
+software. Their licenses apply independently of LICENSE / LICENSE-CONTENT.
+
+------------------------------------------------------------------------
+Inter font family
+------------------------------------------------------------------------
+Files:    fonts/Inter-Regular.ttf
+          fonts/Inter-Italic.ttf
+          fonts/Inter-Medium.ttf
+          fonts/Inter-SemiBold.ttf
+          fonts/Inter-SemiBoldItalic.ttf
+          fonts/Inter-Bold.ttf
+          fonts/Inter-BoldItalic.ttf
+Source:   https://github.com/rsms/inter
+License:  SIL Open Font License, Version 1.1
+          https://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL
+
+Copyright (c) 2016-2020 The Inter Project Authors. "Inter" is a trademark of
+Rasmus Andersson.
+
+The Inter font files in fonts/ are redistributed under OFL 1.1. The OFL
+permits embedding in documents (the rendered PDF) without restriction. It
+forbids selling the fonts on their own.
+
+------------------------------------------------------------------------
+@react-pdf/renderer
+------------------------------------------------------------------------
+Source:   https://github.com/diegomura/react-pdf
+License:  MIT
+Used as a runtime dependency to render TSX components to PDF.
+
+------------------------------------------------------------------------
+react-icons
+------------------------------------------------------------------------
+Source:   https://github.com/react-icons/react-icons
+License:  MIT
+Used to source SVG icon definitions; rendered through the in-repo adapter
+src/components/Icon.tsx.
+
+------------------------------------------------------------------------
+Lucide icon set (consumed via react-icons/lu)
+------------------------------------------------------------------------
+Source:   https://github.com/lucide-icons/lucide
+License:  ISC
+Specific icons in use: Check, TriangleAlert, Info, X, ArrowRight, Zap,
+Book, Code, Layers, Palette.

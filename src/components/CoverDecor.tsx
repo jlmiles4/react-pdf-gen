@@ -7,7 +7,7 @@
  */
 import React from 'react';
 import { Svg, Circle, Line, G } from '@react-pdf/renderer';
-import { colors } from '../styles/theme';
+import { colors, layout, opacity as opacityTokens } from '../styles/theme';
 
 interface CoverDecorProps {
   size?: number;
@@ -18,10 +18,10 @@ interface CoverDecorProps {
 }
 
 const CoverDecor: React.FC<CoverDecorProps> = ({
-  size = 160,
-  opacity = 0.08,
-  right = 40,
-  bottom = 60,
+  size = layout.decorMarkSize,
+  opacity = opacityTokens.decor,
+  right = layout.decorMarkRight,
+  bottom = layout.decorMarkBottom,
   color = colors.accent[500],
 }) => (
   <Svg

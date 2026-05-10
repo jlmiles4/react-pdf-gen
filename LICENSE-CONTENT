@@ -1,0 +1,30 @@
+Book Content License — All Rights Reserved
+
+Copyright (c) 2026 Landon Miles. All rights reserved.
+
+This license covers the *book content* of this repository — the prose,
+illustrations, examples, and rendered PDF. Specifically:
+
+  - src/pages/                 (chapter prose and page composition)
+  - content/                   (Markdown source for chapters)
+  - reference/                 (long-form research notes used while authoring)
+  - prompts/                   (project-specific authoring prompts)
+  - STYLE.md
+  - TASK.md
+  - docs/                      (project documentation accompanying the book)
+  - output/ebook.pdf           (the rendered book, when present)
+  - output/pages/*.png         (rendered page images, when present)
+
+No part of these materials may be reproduced, distributed, or transmitted in
+any form or by any means — including photocopying, recording, or other
+electronic or mechanical methods — without the prior written permission of
+the copyright holder, except for brief quotations in critical reviews and
+certain other noncommercial uses permitted by copyright law.
+
+For permission requests, contact the author.
+
+The CODE, build scripts, design tokens, and reusable components in this
+repository are released under the MIT License — see LICENSE. You are free to
+clone the repository, study the code, run the build pipeline, and adapt the
+components for your own projects under the MIT terms. You are NOT free to
+redistribute the book content above.

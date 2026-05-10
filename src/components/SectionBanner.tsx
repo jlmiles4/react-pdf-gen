@@ -9,7 +9,7 @@
  */
 import React from 'react';
 import { View, Text, StyleSheet } from '@react-pdf/renderer';
-import { colors, fonts, spacing, borders, fontScale, typography } from '../styles/theme';
+import { colors, fonts, spacing, borders, fontScale, typography, fontWeight } from '../styles/theme';
 import AccentBar from './AccentBar';
 
 interface SectionBannerProps {
@@ -29,14 +29,14 @@ const s = StyleSheet.create({
   title: {
     fontSize: fontScale.sectionTitle,
     fontFamily: fonts.heading,
-    fontWeight: 700 as const,
+    fontWeight: fontWeight.bold,
     color: colors.white,
     marginBottom: spacing.xs,
   },
   subtitle: {
     fontSize: fontScale.labelSmall,
     fontFamily: fonts.body,
-    fontWeight: 400 as const,
+    fontWeight: fontWeight.regular,
     color: colors.neutral[300],
     lineHeight: typography.bodySmall.lineHeight,
   },

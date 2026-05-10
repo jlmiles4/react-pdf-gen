@@ -25,6 +25,7 @@ import {
   ClipPath,
 } from '@react-pdf/renderer';
 import type { IconType } from 'react-icons';
+import { iconSize } from '../styles/theme';
 
 interface IconProps {
   icon: IconType;
@@ -98,7 +99,7 @@ function convertChildren(
   });
 }
 
-const Icon: React.FC<IconProps> = ({ icon, size = 16, color = 'currentColor' }) => {
+const Icon: React.FC<IconProps> = ({ icon, size = iconSize.lg, color = 'currentColor' }) => {
   const rendered = (icon as (props: object) => React.ReactNode)({});
   if (!React.isValidElement(rendered)) return null;
   const wrapper = rendered as React.ReactElement<{ attr?: Record<string, unknown>; children?: React.ReactNode }>;

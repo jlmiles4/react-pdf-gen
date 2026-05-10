@@ -1,3 +1,4 @@
+// Group: FOUNDATIONS
 /**
  * Chapter 01 — Introduction
  *
@@ -47,7 +48,7 @@ const Ch01Intro: React.FC = () => (
         React-pdf is uniquely suited for AI-assisted development. It uses JSX – which AI models have deep training data on. It uses flexbox for layout – a familiar mental model. It renders server-side, so you can automate the entire pipeline.
       </Text>
       <Text style={styles.body}>
-        But there's a significant difference between what AI produces by default and what looks premium. That difference comes down to specific patterns:
+        However, the default output from an LLM rarely meets professional standards. Bridging that distance requires a specific set of architectural and design patterns:
       </Text>
       <BulletList items={[
         'Project architecture that fits within AI context windows',

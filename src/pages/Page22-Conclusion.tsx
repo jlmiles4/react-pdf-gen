@@ -1,15 +1,15 @@
 /**
- * Page 14 — Conclusion / Back Cover
+ * Page 15 — Conclusion / Back Cover
  *
  * Full-bleed dark navy page matching the cover's visual weight.
- * Six key takeaways referencing specific chapters, next steps call to action,
+ * Seven key takeaways referencing specific chapters, next steps call to action,
  * and author branding. No header or footer — standalone design mirroring the cover.
  *
  * Renders: 1 page
  */
 import React from 'react';
 import { Page, View, Text, StyleSheet } from '@react-pdf/renderer';
-import { colors, fonts, spacing, page, borders, fontScale, typography } from '../styles/theme';
+import { colors, fonts, spacing, page, borders, fontScale, typography, layout, accentBar, fontWeight, opacity } from '../styles/theme';
 import AccentBar from '../components/AccentBar';
 import CoverDecor from '../components/CoverDecor';
 
@@ -30,23 +30,23 @@ const s = StyleSheet.create({
   heading: {
     fontSize: fontScale.pageTitle,
     fontFamily: fonts.heading,
-    fontWeight: 700 as const,
+    fontWeight: fontWeight.bold,
     color: colors.white,
     lineHeight: typography.h1.lineHeight,
     marginBottom: spacing.md,
   },
   headingAccent: {
-    fontWeight: 700 as const,
+    fontWeight: fontWeight.bold,
     color: colors.accent[400],
   },
   subtitle: {
     fontSize: fontScale.contentTitle,
     fontFamily: fonts.body,
-    fontWeight: 400 as const,
+    fontWeight: fontWeight.regular,
     color: colors.neutral[300],
     lineHeight: typography.body.lineHeight,
     marginBottom: spacing.xl,
-    maxWidth: 400,
+    maxWidth: layout.maxTextWidth - spacing.xl, // 396pt approx
   },
   takeawayRow: {
     flexDirection: 'row',
@@ -57,7 +57,7 @@ const s = StyleSheet.create({
   takeawayNum: {
     fontSize: fontScale.sectionTitle,
     fontFamily: fonts.heading,
-    fontWeight: 700 as const,
+    fontWeight: fontWeight.bold,
     color: colors.accent[500],
     width: spacing.xl,
   },
@@ -65,30 +65,30 @@ const s = StyleSheet.create({
     flex: 1,
     fontSize: fontScale.bodyMedium,
     fontFamily: fonts.body,
-    fontWeight: 400 as const,
+    fontWeight: fontWeight.regular,
     color: colors.neutral[200],
     lineHeight: typography.bodySmall.lineHeight,
   },
   divider: {
-    width: 48,
-    height: 2,
+    width: accentBar.md.width,
+    height: layout.dividerHeight,
     backgroundColor: colors.accent[500],
-    opacity: 0.4,
+    opacity: opacity.muted,
     marginVertical: spacing.lg,
     borderRadius: borders.radius.xs,
   },
   ctaText: {
     fontSize: typography.h4.fontSize,
     fontFamily: fonts.body,
-    fontWeight: 400 as const,
+    fontWeight: fontWeight.regular,
     color: colors.neutral[300],
     lineHeight: typography.body.lineHeight,
     marginBottom: spacing.lg,
-    maxWidth: 420,
+    maxWidth: layout.maxTextWidth,
   },
   ctaBold: {
     fontFamily: fonts.bodyBold,
-    fontWeight: 600 as const,
+    fontWeight: fontWeight.semibold,
     color: colors.accent[400],
   },
   bottomInfo: {
@@ -103,7 +103,7 @@ const s = StyleSheet.create({
   bottomText: {
     fontSize: typography.codeSmall.fontSize,
     fontFamily: fonts.body,
-    fontWeight: 400 as const,
+    fontWeight: fontWeight.regular,
     color: colors.neutral[500],
   },
 });
@@ -113,11 +113,12 @@ const takeaways = [
   'Define your design language once — colors, typography, spacing, borders. The theme file enforces consistency so you don\'t have to (Ch 4).',
   'Optimize for token budgets — small, focused files mean small, focused prompts that keep AI in its high-attention zone (Ch 5).',
   'Export to PNG, not PDF — AI vision models see pixels, not PostScript. The QA loop is generate, export, review, fix (Ch 9).',
-  'Use the troubleshooting playbook — most issues trace to three things: missing wrap, missing Text wrappers, or flexDirection defaulting to column (Ch 11).',
   'Iterate past the first draft — premium output takes 2-3 passes. Use the recipes and checklists from Chapter 10 to close the gap.',
+  'Use the troubleshooting playbook — most issues trace to three things: missing wrap, missing Text wrappers, or flexDirection defaulting to column (Ch 11).',
+  'Automate your workflow — use Markdown for content and let the rendering pipeline handle the layout, so you focus on writing (Ch 12).',
 ];
 
-const Page14Conclusion: React.FC = () => (
+const Page20Conclusion: React.FC = () => (
   <Page size="LETTER" style={s.page}>
     <View style={s.topBar} />
     <AccentBar size="xl" mb={spacing.xl} />
@@ -126,7 +127,7 @@ const Page14Conclusion: React.FC = () => (
       <Text style={s.headingAccent}>Ship It.</Text>
     </Text>
     <Text style={s.subtitle}>
-      Eleven chapters, from architecture to troubleshooting. You have the patterns, the source code, and the templates. The gap between "AI-generated PDF" and "premium deliverable" is smaller than you think.
+      Twelve chapters, from architecture to automation. You have the patterns, the source code, and the templates. The distance between a basic AI-generated PDF and a high-end, professional deliverable is shorter than you think.
     </Text>
 
     {takeaways.map((text, i) => (
@@ -148,7 +149,7 @@ const Page14Conclusion: React.FC = () => (
       <Text style={s.ctaBold}>landonmiles.com</Text>
     </Text>
 
-    <CoverDecor opacity={0.06} />
+    <CoverDecor opacity={opacity.decorSubtle} />
     <View style={s.bottomInfo}>
       <Text style={s.bottomText}>landonmiles.com</Text>
       <Text style={s.bottomText}>React-PDF + AI</Text>
@@ -156,4 +157,4 @@ const Page14Conclusion: React.FC = () => (
   </Page>
 );
 
-export default Page14Conclusion;
+export default Page20Conclusion;

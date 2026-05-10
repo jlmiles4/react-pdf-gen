@@ -9,7 +9,7 @@
  */
 import React from 'react';
 import { Page, View, Text, StyleSheet } from '@react-pdf/renderer';
-import { colors, fonts, spacing, page, fontScale, typography, letterSpacing } from '../styles/theme';
+import { colors, fonts, spacing, page, fontScale, typography, letterSpacing, layout, fontWeight } from '../styles/theme';
 import AccentBar from '../components/AccentBar';
 import CoverDecor from '../components/CoverDecor';
 
@@ -30,7 +30,7 @@ const s = StyleSheet.create({
   title: {
     fontSize: fontScale.coverTitle,
     fontFamily: fonts.heading,
-    fontWeight: 700 as const,
+    fontWeight: fontWeight.bold,
     color: colors.white,
     lineHeight: typography.display.lineHeight,
     marginBottom: spacing.md,
@@ -38,22 +38,22 @@ const s = StyleSheet.create({
   titleAccent: {
     fontSize: fontScale.coverTitle,
     fontFamily: fonts.heading,
-    fontWeight: 700 as const,
+    fontWeight: fontWeight.bold,
     color: colors.accent[400],
   },
   subtitle: {
     fontSize: fontScale.subtitle,
     fontFamily: fonts.body,
-    fontWeight: 400 as const,
+    fontWeight: fontWeight.regular,
     color: colors.neutral[300],
     lineHeight: typography.bodySmall.lineHeight,
     marginBottom: spacing.xxxl,
-    maxWidth: 360,
+    maxWidth: layout.maxHeroWidth - spacing.xl - spacing.xxl, // 364pt approx
   },
   author: {
     fontSize: typography.h4.fontSize,
     fontFamily: fonts.body,
-    fontWeight: 400 as const,
+    fontWeight: fontWeight.regular,
     color: colors.neutral[400],
     letterSpacing: letterSpacing.wide,
     textTransform: 'uppercase',
@@ -70,7 +70,7 @@ const s = StyleSheet.create({
   bottomText: {
     fontSize: typography.codeSmall.fontSize,
     fontFamily: fonts.body,
-    fontWeight: 400 as const,
+    fontWeight: fontWeight.regular,
     color: colors.neutral[500],
   },
 });

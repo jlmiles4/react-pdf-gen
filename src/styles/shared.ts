@@ -1,5 +1,5 @@
 import { StyleSheet } from '@react-pdf/renderer';
-import { colors, typography, spacing, page, borders, fonts, fontScale } from './theme';
+import { colors, typography, spacing, page, borders, fonts, fontScale, fontWeight, lineHeight } from './theme';
 
 /**
  * Shared styles used across all pages.
@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
     paddingRight: page.margin.right,
     backgroundColor: colors.white,
     fontFamily: fonts.body,
-    fontWeight: 400 as const,
+    fontWeight: fontWeight.regular,
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
     color: colors.neutral[900],
@@ -22,7 +22,7 @@ export const styles = StyleSheet.create({
   pageNoPadding: {
     backgroundColor: colors.white,
     fontFamily: fonts.body,
-    fontWeight: 400 as const,
+    fontWeight: fontWeight.regular,
     fontSize: typography.body.fontSize,
     color: colors.neutral[900],
   },
@@ -41,14 +41,14 @@ export const styles = StyleSheet.create({
   h2: {
     ...typography.h2,
     color: colors.primary[800],
-    marginBottom: spacing.md,
+    marginBottom: spacing.lg,
     marginTop: spacing.xl,
   },
   h2Container: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: spacing.lg,
-    marginBottom: spacing.sm,
+    marginTop: spacing.xl,
+    marginBottom: spacing.lg,
     gap: spacing.sm,
   },
   h2Accent: {
@@ -88,7 +88,7 @@ export const styles = StyleSheet.create({
   },
   bold: {
     fontFamily: fonts.bodyBold,
-    fontWeight: 600 as const,
+    fontWeight: fontWeight.semibold,
   },
   italic: {
     fontStyle: 'italic',
@@ -232,7 +232,7 @@ export const styles = StyleSheet.create({
   tableHeaderText: {
     ...typography.bodySmall,
     fontFamily: fonts.bodyBold,
-    fontWeight: 600 as const,
+    fontWeight: fontWeight.semibold,
     color: colors.white,
   },
   tableRow: {
@@ -253,6 +253,6 @@ export const styles = StyleSheet.create({
   tableCell: {
     ...typography.bodySmall,
     color: colors.neutral[800],
-    lineHeight: 1.5,
+    lineHeight: lineHeight.normal,
   },
 });

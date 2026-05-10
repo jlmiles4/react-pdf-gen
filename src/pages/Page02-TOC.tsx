@@ -9,47 +9,18 @@
  */
 import React from 'react';
 import { Page, View, Text, StyleSheet } from '@react-pdf/renderer';
-import { colors, fonts, spacing, page, borders, typography, fontScale, letterSpacing } from '../styles/theme';
+import { colors, fonts, spacing, page, borders, typography, fontScale, letterSpacing, layout, fontWeight, lineHeight } from '../styles/theme';
 import Footer from '../components/Footer';
 import AccentBar from '../components/AccentBar';
+import { tocGroups } from '../registry';
 
-const groups = [
-  {
-    label: 'FOUNDATIONS',
-    color: colors.primary[600],
-    chapters: [
-      { num: '01', title: 'Introduction', subtitle: 'Why react-pdf + AI, and who this is for' },
-      { num: '02', title: 'React-PDF Fundamentals', subtitle: 'Components, styling, and the layout system' },
-      { num: '03', title: 'Project Architecture for AI Agents', subtitle: 'File-per-page and modular structure' },
-    ],
-  },
-  {
-    label: 'DESIGN SYSTEM',
-    color: colors.accent[600],
-    chapters: [
-      { num: '04', title: 'Specifying a Design Language', subtitle: 'Tokens, palettes, and typography scales' },
-      { num: '05', title: 'Tokenization and Context Windows', subtitle: 'How LLMs read your code, and how to optimize' },
-      { num: '06', title: 'Avoiding AI Slop', subtitle: 'What makes output look cheap, and how to fix it' },
-    ],
-  },
-  {
-    label: 'CRAFT',
-    color: colors.success,
-    chapters: [
-      { num: '07', title: 'Design Challenges and Solutions', subtitle: 'What works, what breaks, and workarounds' },
-      { num: '08', title: 'Icons over Emojis', subtitle: 'SVG icons for professional PDF output' },
-    ],
-  },
-  {
-    label: 'SHIPPING',
-    color: colors.info,
-    chapters: [
-      { num: '09', title: 'AI Visual Analysis', subtitle: 'PNG export for design QA with AI vision' },
-      { num: '10', title: 'Premium Deliverables & Recipes', subtitle: 'Quality checklist, invoices, data-driven pages, and layout patterns' },
-      { num: '11', title: 'Troubleshooting & Common Errors', subtitle: 'The errors you\'ll hit and how to fix them' },
-    ],
-  },
-];
+// Define the order and styles for groups
+const GROUP_CONFIG: Record<string, { color: string }> = {
+  'FOUNDATIONS': { color: colors.primary[600] },
+  'DESIGN SYSTEM': { color: colors.accent[600] },
+  'CRAFT': { color: colors.success },
+  'SHIPPING': { color: colors.info },
+};
 
 const s = StyleSheet.create({
   page: {
@@ -61,7 +32,7 @@ const s = StyleSheet.create({
   heading: {
     fontSize: typography.h1.fontSize,
     fontFamily: fonts.heading,
-    fontWeight: 700 as const,
+    fontWeight: fontWeight.bold,
     color: colors.primary[800],
     marginBottom: spacing.xs,
   },
@@ -82,7 +53,7 @@ const s = StyleSheet.create({
   groupLabel: {
     fontSize: fontScale.navSmall,
     fontFamily: fonts.bodyBold,
-    fontWeight: 600 as const,
+    fontWeight: fontWeight.semibold,
     color: colors.white,
     letterSpacing: letterSpacing.normal,
   },
@@ -95,10 +66,10 @@ const s = StyleSheet.create({
     borderBottomColor: colors.neutral[100],
   },
   entryNum: {
-    width: 28,
+    width: layout.tocEntryNumWidth,
     fontSize: fontScale.subtitle,
     fontFamily: fonts.heading,
-    fontWeight: 700 as const,
+    fontWeight: fontWeight.bold,
     color: colors.accent[500],
     marginRight: spacing.sm,
   },
@@ -108,16 +79,16 @@ const s = StyleSheet.create({
   entryTitle: {
     fontSize: fontScale.label,
     fontFamily: fonts.bodyBold,
-    fontWeight: 600 as const,
+    fontWeight: fontWeight.semibold,
     color: colors.primary[800],
     marginBottom: spacing.micro,
   },
   entrySubtitle: {
     fontSize: typography.code.fontSize,
     fontFamily: fonts.body,
-    fontWeight: 400 as const,
+    fontWeight: fontWeight.regular,
     color: colors.neutral[500],
-    lineHeight: 1.4,
+    lineHeight: lineHeight.snug,
   },
 });
 
@@ -125,24 +96,27 @@ const Page02TOC: React.FC = () => (
   <Page size="LETTER" style={s.page}>
     <Text style={s.heading}>Contents</Text>
     <AccentBar size="md" />
-    {groups.map((group) => (
-      <View key={group.label} style={s.groupContainer}>
-        <View style={s.groupLabelRow}>
-          <View style={[s.groupBadge, { backgroundColor: group.color }]}>
-            <Text style={s.groupLabel}>{group.label}</Text>
-          </View>
-        </View>
-        {group.chapters.map((ch) => (
-          <View key={ch.num} style={s.entry}>
-            <Text style={s.entryNum}>{ch.num}</Text>
-            <View style={s.entryText}>
-              <Text style={s.entryTitle}>{ch.title}</Text>
-              <Text style={s.entrySubtitle}>{ch.subtitle}</Text>
+    {Object.entries(tocGroups).map(([groupLabel, chapters]) => {
+      const config = GROUP_CONFIG[groupLabel] || { color: colors.neutral[500] };
+      return (
+        <View key={groupLabel} style={s.groupContainer}>
+          <View style={s.groupLabelRow}>
+            <View style={[s.groupBadge, { backgroundColor: config.color }]}>
+              <Text style={s.groupLabel}>{groupLabel}</Text>
             </View>
           </View>
-        ))}
-      </View>
-    ))}
+          {chapters.map((ch) => (
+            <View key={ch.num} style={s.entry}>
+              <Text style={s.entryNum}>{ch.num}</Text>
+              <View style={s.entryText}>
+                <Text style={s.entryTitle}>{ch.title}</Text>
+                <Text style={s.entrySubtitle}>{ch.subtitle}</Text>
+              </View>
+            </View>
+          ))}
+        </View>
+      );
+    })}
     <Footer />
   </Page>
 );

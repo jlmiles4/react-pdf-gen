@@ -1,3 +1,4 @@
+// Group: DESIGN SYSTEM
 /**
  * Chapter 06 — Avoiding AI Slop
  *
@@ -14,7 +15,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from '@react-pdf/renderer';
 import { styles } from '../styles/shared';
-import { colors, spacing, fonts, borders, fontScale } from '../styles/theme';
+import { colors, spacing, fonts, borders, fontScale, fontWeight, iconSize } from '../styles/theme';
 import ContentPage from '../components/ContentPage';
 import ChapterTitle from '../components/ChapterTitle';
 import CodeBlock from '../components/CodeBlock';
@@ -46,7 +47,7 @@ const local = StyleSheet.create({
   compLabel: {
     fontSize: fontScale.labelSmall,
     fontFamily: fonts.bodyBold,
-    fontWeight: 600 as const,
+    fontWeight: fontWeight.semibold,
     marginBottom: spacing.sm,
   },
   badLabel: { color: colors.error },
@@ -105,14 +106,14 @@ const Ch06AvoidingSlop: React.FC = () => (
       <View wrap={false} style={local.comparisonRow}>
         <View style={[local.comparisonCol, local.badCol]}>
           <View style={local.iconRow}>
-            <XIcon size={12} />
+            <XIcon size={iconSize.sm} />
             <Text style={[local.compLabel, local.badLabel]}>Slop</Text>
           </View>
           <Text style={styles.bodySmall}>fontSize: 16, centered, default font, no color, no spacing above or below. Blends into body text.</Text>
         </View>
         <View style={[local.comparisonCol, local.goodCol]}>
           <View style={local.iconRow}>
-            <CheckIcon size={12} />
+            <CheckIcon size={iconSize.sm} />
             <Text style={[local.compLabel, local.goodLabel]}>Premium</Text>
           </View>
           <Text style={styles.bodySmall}>Uses typography.h2 (20pt), primary color, 16pt marginBottom, 24pt marginTop. Clear hierarchy break.</Text>
@@ -123,14 +124,14 @@ const Ch06AvoidingSlop: React.FC = () => (
       <View wrap={false} style={local.comparisonRow}>
         <View style={[local.comparisonCol, local.badCol]}>
           <View style={local.iconRow}>
-            <XIcon size={12} />
+            <XIcon size={iconSize.sm} />
             <Text style={[local.compLabel, local.badLabel]}>Slop</Text>
           </View>
           <Text style={styles.bodySmall}>padding: 20 on all sides. Content cramped against edges. Feels claustrophobic.</Text>
         </View>
         <View style={[local.comparisonCol, local.goodCol]}>
           <View style={local.iconRow}>
-            <CheckIcon size={12} />
+            <CheckIcon size={iconSize.sm} />
             <Text style={[local.compLabel, local.goodLabel]}>Premium</Text>
           </View>
           <Text style={styles.bodySmall}>54pt horizontal, 60pt vertical margins. Content has room to breathe. Professional whitespace.</Text>

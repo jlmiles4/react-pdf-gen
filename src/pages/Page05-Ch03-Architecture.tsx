@@ -1,3 +1,4 @@
+// Group: FOUNDATIONS
 /**
  * Chapter 03 — Project Architecture for AI Agents
  *

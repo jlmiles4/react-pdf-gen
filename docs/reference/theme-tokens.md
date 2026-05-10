@@ -66,24 +66,45 @@ All values come from [`src/styles/theme.ts`](../../src/styles/theme.ts). Sizes a
 
 ## Typography
 
-`typography.*` entries are full style objects — `{ fontSize, fontFamily, fontWeight, lineHeight }`.
+`typography.*` entries are full style objects — `{ fontSize, fontFamily, fontWeight, lineHeight }`. They reference the `fontWeight` and `lineHeight` tokens below.
 
 | Token | Size | Weight | Line height | Use |
 |---|---|---|---|---|
-| `display` | 36 | 700 | 1.1 | Cover title |
-| `h1` | 26 | 700 | 1.2 | Page-level (rare) |
-| `h2` | 20 | 600 | 1.25 | Section headings |
-| `h3` | 16 | 600 | 1.3 | Sub-section |
-| `h4` | 13 | 600 | 1.35 | Labels, callout titles |
-| `body` | 11 | 400 | 1.6 | Reading text |
-| `bodySmall` | 9.5 | 400 | 1.5 | Tables, secondary |
-| `caption` | 8.5 | 400 | 1.4 | Footer, fine print |
-| `code` | 9 | 400 | 1.5 | Code blocks (Courier) |
-| `codeSmall` | 8 | 400 | 1.4 | Inline code labels |
+| `display` | 36 | `bold` (700) | 1.1 | Cover title |
+| `h1` | 26 | `bold` (700) | `tight` (1.2) | Page-level (rare) |
+| `h2` | 20 | `semibold` (600) | 1.25 | Section headings |
+| `h3` | 16 | `semibold` (600) | 1.3 | Sub-section |
+| `h4` | 13 | `semibold` (600) | 1.35 | Labels, callout titles |
+| `body` | 11 | `regular` (400) | `relaxed` (1.6) | Reading text |
+| `bodySmall` | 9.5 | `regular` (400) | `normal` (1.5) | Tables, secondary |
+| `caption` | 8.5 | `regular` (400) | `snug` (1.4) | Footer, fine print |
+| `code` | 9 | `regular` (400) | `normal` (1.5) | Code blocks (Courier) |
+| `codeSmall` | 8 | `regular` (400) | `snug` (1.4) | Inline code labels |
 
 `fontScale.*` holds the chrome sizes that don't fit the body scale: `coverTitle: 42`, `pageTitle: 32`, `sectionTitle: 18`, `subtitle: 15`, `contentTitle: 14`, `label: 12`, `bodyMedium: 10.5`, `labelSmall: 10`, `navSmall: 7.5`, `micro: 7`.
 
 `fonts.*` values: `heading`, `headingLight`, `body`, `bodyBold` are all the string `'Inter'`. `mono` is `'Courier'`, `monoBold` is `'Courier-Bold'`. The bold/heading distinction comes from `fontWeight`, not the family name.
+
+### `fontWeight`
+
+Numeric weights matching the variants registered in `src/fonts.ts`. Use these instead of inline literals (`fontWeight: 700 as const`) so the registered set stays in sync with usage.
+
+| Token | Value | Use |
+|---|---|---|
+| `regular` | 400 | Body, captions, default |
+| `semibold` | 600 | h2–h4, labels, emphasized inline |
+| `bold` | 700 | display, h1, cover/chapter titles |
+
+### `lineHeight`
+
+Multipliers for text outside the typography presets (e.g. local `StyleSheet` entries that compose their own `fontSize`).
+
+| Token | Value | Use |
+|---|---|---|
+| `tight` | 1.2 | Display/h1 — multi-line titles where stacking matters |
+| `snug` | 1.4 | Captions, codeSmall, dense tabular text |
+| `normal` | 1.5 | bodySmall, code, table cells |
+| `relaxed` | 1.6 | body — primary reading text |
 
 ## Spacing
 
@@ -133,6 +154,70 @@ LETTER, in points.
 | `radius.sm` | 3 |
 | `radius.md` | 6 |
 | `radius.lg` | 10 |
+
+## Icon sizes
+
+For SVG icons rendered through `src/components/Icon.tsx` (the react-icons → react-pdf adapter). Pass via the `size` prop: `<CheckIcon size={iconSize.sm} />`.
+
+| Token | Value | Use |
+|---|---|---|
+| `xs` | 10 | Dense inline checklists (e.g. Ch09 PNG-analysis flags) |
+| `sm` | 12 | Standard inline check/x in body text |
+| `callout` | 13 | `TipBox`, `WarningBox`, `InfoBox` label icons |
+| `md` | 14 | Recommended adapter size |
+| `lg` | 16 | `Icon`/named-icon default |
+| `xl` | 24 | Showcase / hero icons |
+
+## Opacity
+
+Layered decor and de-emphasized accents.
+
+| Token | Value | Use |
+|---|---|---|
+| `decor` | 0.08 | Background SVG flourishes — `CoverDecor`, `ChapterTitle` rings |
+| `decorSubtle` | 0.06 | One step dimmer for already-busy dark pages (Conclusion) |
+| `muted` | 0.4 | De-emphasized accent (e.g. divider in Conclusion) |
+
+## Letter spacing
+
+Tracking values for uppercase / tracked-out text.
+
+| Token | Value | Use |
+|---|---|---|
+| `tight` | 1 | Header section title (uppercase) |
+| `normal` | 1.2 | TOC group labels |
+| `wide` | 1.5 | Cover author name |
+| `wider` | 2.5 | Chapter label ("CHAPTER 03") |
+
+## Accent bar
+
+`accentBar.<size>` returns `{ width, height }` for the gold horizontal bar used by hero blocks. Consumed by `<AccentBar size="md" />`.
+
+| Size | Width | Height | Use |
+|---|---|---|---|
+| `sm` | 32 | 3 | `SectionBanner` |
+| `md` | 48 | 3 | TOC heading, Conclusion divider |
+| `lg` | 60 | 4 | `ChapterTitle` |
+| `xl` | 64 | 4 | Cover, Conclusion hero |
+
+## Layout
+
+Catch-all for layout constants that don't fit any other token bucket.
+
+| Field | Value | Use |
+|---|---|---|
+| `maxTextWidth` | 420 | Body-text max width (Conclusion CTA, ChapterTitle subtitle) |
+| `maxHeroWidth` | 460 | Cover/ChapterTitle title block max width |
+| `bulletWrapperWidth` | 14 | `BulletList` dot column width |
+| `bulletDotSize` | 6 | `BulletList` SVG circle width/height |
+| `tocEntryNumWidth` | 28 | TOC chapter-number column |
+| `cardShadowOffset` | 2 | Faux-shadow border offset (recipe) |
+| `flowStepWidth` | 100 | Page13 flow-diagram step width |
+| `dividerHeight` | 2 | Conclusion accent divider |
+| `decorMarkSize` | 160 | `CoverDecor` concentric-mark size |
+| `decorRingsSize` | 240 | `ChapterTitle` decorative-rings size |
+| `decorMarkRight` | 40 | `CoverDecor` default right offset |
+| `decorMarkBottom` | 60 | `CoverDecor` default bottom offset |
 
 ## Syntax highlighting
 

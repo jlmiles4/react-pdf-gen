@@ -13,7 +13,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from '@react-pdf/renderer';
 import { styles } from '../styles/shared';
-import { colors, spacing } from '../styles/theme';
+import { colors, spacing, iconSize } from '../styles/theme';
 import { ZapIcon, AlertTriangleIcon, InfoIcon } from './Icons';
 
 interface TipBoxProps {
@@ -33,7 +33,7 @@ const local = StyleSheet.create({
 export const TipBox: React.FC<TipBoxProps> = ({ children, label = 'Tip' }) => (
   <View wrap={false} style={styles.tipBox}>
     <View style={local.labelRow}>
-      <ZapIcon size={13} color={colors.accent[700]} />
+      <ZapIcon size={iconSize.callout} color={colors.accent[700]} />
       <Text style={styles.tipLabel}>{label}</Text>
     </View>
     <Text style={styles.body}>{children}</Text>
@@ -43,7 +43,7 @@ export const TipBox: React.FC<TipBoxProps> = ({ children, label = 'Tip' }) => (
 export const WarningBox: React.FC<TipBoxProps> = ({ children, label = 'Warning' }) => (
   <View wrap={false} style={styles.warningBox}>
     <View style={local.labelRow}>
-      <AlertTriangleIcon size={13} color={colors.error} />
+      <AlertTriangleIcon size={iconSize.callout} color={colors.error} />
       <Text style={styles.warningLabel}>{label}</Text>
     </View>
     <Text style={styles.body}>{children}</Text>
@@ -53,7 +53,7 @@ export const WarningBox: React.FC<TipBoxProps> = ({ children, label = 'Warning' 
 export const InfoBox: React.FC<TipBoxProps> = ({ children, label = 'Note' }) => (
   <View wrap={false} style={styles.infoBox}>
     <View style={local.labelRow}>
-      <InfoIcon size={13} color={colors.info} />
+      <InfoIcon size={iconSize.callout} color={colors.info} />
       <Text style={styles.infoLabel}>{label}</Text>
     </View>
     <Text style={styles.body}>{children}</Text>

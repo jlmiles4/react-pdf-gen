@@ -10,7 +10,7 @@
 import React from 'react';
 import { View, Text, Svg, Circle, StyleSheet } from '@react-pdf/renderer';
 import { styles } from '../styles/shared';
-import { colors, spacing } from '../styles/theme';
+import { colors, spacing, layout } from '../styles/theme';
 
 interface BulletListProps {
   items: string[];
@@ -27,15 +27,15 @@ const local = StyleSheet.create({
     paddingLeft: spacing.xs,
   },
   bulletWrapper: {
-    width: 14,
+    width: layout.bulletWrapperWidth,
     paddingTop: spacing.xs,
   },
 });
 
 const BulletDot = () => (
   <View style={local.bulletWrapper}>
-    <Svg width={6} height={6} viewBox="0 0 6 6">
-      <Circle cx="3" cy="3" r="3" fill={colors.accent[500]} />
+    <Svg width={layout.bulletDotSize} height={layout.bulletDotSize} viewBox={`0 0 ${layout.bulletDotSize} ${layout.bulletDotSize}`}>
+      <Circle cx={layout.bulletDotSize / 2} cy={layout.bulletDotSize / 2} r={layout.bulletDotSize / 2} fill={colors.accent[500]} />
     </Svg>
   </View>
 );

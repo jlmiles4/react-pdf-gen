@@ -24,9 +24,9 @@ Registered via `src/fonts.ts` with weights 400, 500, 600, 700 (regular + italic 
 
 **Rules:**
 - Never use default Helvetica. Every text element must use `fonts.body`, `fonts.bodyBold`, or `fonts.heading` from `theme.ts`.
-- Always pair `fontFamily: fonts.bodyBold` with `fontWeight: 600` (Inter is a single family; weight alone controls boldness).
-- Headings use `fontWeight: 700` for heading-level or `600` for sub-heading.
-- Body text line-height: 1.6. Never below 1.4 for any text.
+- Always pair `fontFamily: fonts.bodyBold` with `fontWeight: fontWeight.semibold` (Inter is a single family; weight alone controls boldness).
+- Headings use `fontWeight.bold` (700) for heading-level or `fontWeight.semibold` (600) for sub-heading. Use the token, not the literal.
+- Body text line-height: `lineHeight.relaxed` (1.6). Never below `lineHeight.snug` (1.4) for any text.
 - Hyphenation is disabled globally (`Font.registerHyphenationCallback`).
 
 ---
@@ -177,7 +177,7 @@ SVG-based Lucide icons. Never use emoji. Available: `CheckIcon`, `XIcon`, `Alert
 
 4. **Components, not inline styles.** Every visual pattern has a component (`SectionHeading`, `TipBox`, `BulletList`, `Table`, `CodeBlock`). Page files should import and compose these — never recreate patterns with inline styles.
 
-5. **Design tokens, not magic numbers.** Colors from `colors.*`, sizes from `typography.*`, spacing from `spacing.*`, borders from `borders.*`. Local `StyleSheet.create()` for page-specific styles that reference tokens.
+5. **Design tokens, not magic numbers.** Colors from `colors.*`, sizes from `typography.*`/`fontScale.*`, font weights from `fontWeight.*`, line heights from `lineHeight.*`, spacing from `spacing.*`, borders from `borders.*`, icon sizes from `iconSize.*`, opacity from `opacity.*`, layout constants from `layout.*`. Local `StyleSheet.create()` for page-specific styles that reference tokens.
 
 6. **SVG icons, never emoji.** Icons are vector-sharp, color-matched, and consistent across renderers.
 
@@ -239,5 +239,5 @@ Create [page type] using these constraints:
 - Match spacing and density of [existing page file]
 - No inline styles except in local StyleSheet.create()
 - No emojis – use Icons from '../components/Icons'
-- fontWeight must accompany every fontFamily reference
+- fontWeight must accompany every fontFamily reference, sourced from `fontWeight.*` token (never inline literals)
 ```
