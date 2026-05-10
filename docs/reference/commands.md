@@ -4,15 +4,27 @@ All commands run from the project root. Package manager: `pnpm` (declared in `pa
 
 ## `pnpm build`
 
-Runs `tsx src/build.tsx`. Reads `src/Document.tsx`, renders the React tree to `output/ebook.pdf`, and logs:
+Chains `pnpm sync && tsx src/build.tsx`:
+
+1. `pnpm sync` regenerates `src/registry.ts` from `src/pages/*.tsx`.
+2. `tsx src/build.tsx` does a **two-pass render**: render → `pdftotext -layout` extracts each `CHAPTER NN` title page position into `output/toc-positions.json` → render again so the TOC reflects the positions.
+
+Logs (one line each pass + final):
 
 ```
 Building PDF...
+TOC positions: 12 chapters mapped
 PDF generated: /abs/path/output/ebook.pdf
-Size: 4.21 MB | Time: 2843ms
+Size: 0.27 MB | Time: 10340ms
 ```
 
-Exits 1 on render failure. Creates `output/` if it doesn't exist. Does not clean previous PNGs.
+Exits 1 on render failure. Creates `output/` if it doesn't exist. Does not clean previous PNGs. Requires `pdftotext` (poppler-utils) on PATH for pass 1's extraction.
+
+## `pnpm sync`
+
+Runs `tsx scripts/sync-project.ts`. Reads `src/pages/*.tsx` alphabetically and writes `src/registry.ts` (auto-generated, gitignored). The registry exports `allPages` (the ordered page array Document.tsx renders) and `tocGroups` (chapter metadata grouped by `// Group:` comment).
+
+You don't normally run sync directly — `pnpm build` runs it first, and `pnpm dev` runs it on every change.
 
 ## `pnpm export`
 
@@ -29,7 +41,9 @@ Runs `bash scripts/export-pages.sh`. Calls `pdftoppm -png -r 200 output/ebook.pd
 
 ## `pnpm dev`
 
-Runs `tsx watch src/build.tsx`. Re-renders the PDF on every file change in `src/`. There is no live reload for the PDF viewer — open `output/ebook.pdf` in a viewer that auto-reloads on file change (Skim, Zathura), or re-open after each rebuild.
+Runs `pnpm sync && tsx watch src/build.tsx`. Re-syncs the registry once, then watches `src/` and re-runs the two-pass build on every change. There is no live reload for the PDF viewer — open `output/ebook.pdf` in a viewer that auto-reloads on file change (Skim, Zathura), or re-open after each rebuild.
+
+Note: dev watch re-runs `tsx src/build.tsx` only — if you add a new page file, the registry won't pick it up until the next explicit `pnpm sync` (or restart of dev watch).
 
 ## TypeScript
 

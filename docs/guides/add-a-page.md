@@ -1,20 +1,25 @@
 # Add a page
 
-Adding a new chapter or content page is a five-step edit. The numbered chapters use the file naming convention `PageNN-ChNN-Topic.tsx` where the first `NN` is the absolute page-component index (Cover = 01, TOC = 02, Ch01 = 03, …) and the second is the chapter number.
+Adding a chapter or content page is a three-step edit. The registry, TOC entry, and TOC page numbers are all auto-generated — you just create the file.
+
+Naming convention: `PageNN-ChNN-Topic.tsx` where the first `NN` is the absolute page-component index in render order (Cover = 01, TOC = 02, Ch01 = 03, …) and the second is the chapter number. Book chrome (Cover, TOC, Conclusion) drops the `ChNN` segment.
 
 ## 1. Create the page file
 
-Path: `src/pages/PageNN-ChNN-Topic.tsx`. Start from this skeleton (matches [Page03-Ch01-Introduction](../../src/pages/Page03-Ch01-Introduction.tsx)):
+Path: `src/pages/PageNN-ChNN-Topic.tsx`. The first file of each chapter starts the chapter and gets a `// Group:` metadata comment; subsequent files in the same chapter (multi-file chapters like Ch08, Ch10, Ch11) skip the comment and just render content. Skeleton matches [`Page03-Ch01-Introduction.tsx`](../../src/pages/Page03-Ch01-Introduction.tsx):
 
 ```tsx
+// Group: CRAFT
 import React from 'react';
-import { Text, View } from '@react-pdf/renderer';
+import { Text } from '@react-pdf/renderer';
 import { styles } from '../styles/shared';
-import ContentPage from '../components/ContentPage';
-import ChapterTitle from '../components/ChapterTitle';
-import SectionHeading from '../components/SectionHeading';
-import BulletList from '../components/BulletList';
-import { TipBox } from '../components/TipBox';
+import {
+  ContentPage,
+  ChapterTitle,
+  SectionHeading,
+  BulletList,
+  TipBox,
+} from '../components';
 
 const ChXXTopic: React.FC = () => (
   <>
@@ -35,33 +40,31 @@ const ChXXTopic: React.FC = () => (
 export default ChXXTopic;
 ```
 
-If the chapter spans multiple pages, render multiple `<ContentPage>` blocks back-to-back inside the same fragment. `react-pdf` will paginate within a single `<ContentPage>` automatically — only split into a second `<ContentPage>` when you want a hard break.
+Group values currently in use: `FOUNDATIONS`, `DESIGN SYSTEM`, `CRAFT`, `SHIPPING`. Pick one or add a new one — `Page02-TOC.tsx`'s `GROUP_CONFIG` controls the badge color, so a new group also needs an entry there.
 
-## 2. Wire it into `Document.tsx`
+`scripts/sync-project.ts` reads each page file and extracts:
+- `// Group: NAME` from a comment (first file of a chapter only)
+- `number`, `title`, `subtitle` from the `<ChapterTitle ... />` JSX in the same file
 
-Edit `src/Document.tsx`:
+Multi-file chapters: only the first file of each chapter has both `// Group:` AND a `<ChapterTitle>`, so only the first file becomes a TOC entry. Subsequent files render straight into the chapter without a new title page.
 
-```tsx
-import PageXXChXX from './pages/PageXX-ChXX-Topic';
-// ...
-<Document ...>
-  ...
-  <PageXXChXX />
-  ...
-</Document>
-```
-
-Order in the JSX is the order in the final PDF.
-
-## 3. Update the TOC
-
-`src/pages/Page02-TOC.tsx` is hand-curated. Add an entry that matches the new chapter's number, title, and starting page. Page numbers refer to the rendered PDF — re-run `pnpm pipeline` after adding the page to see where it lands, then update the TOC.
-
-## 4. Build and visually verify
+## 2. Run the build
 
 ```bash
 pnpm pipeline
 ```
+
+This does, in order:
+
+1. `pnpm sync` regenerates `src/registry.ts` from page files (alphabetical by filename).
+2. `tsx src/build.tsx` pass 1 renders the PDF.
+3. `pdftotext -layout` finds where each `CHAPTER NN` title page landed; positions are written to `output/toc-positions.json`.
+4. Pass 2 re-renders so the TOC reflects the new page positions.
+5. `pnpm export` rasterizes to `output/pages/page-NN.png` at 200 DPI.
+
+You don't edit `Document.tsx`, `Page02-TOC.tsx`, or `registry.ts` — all three follow from the page files.
+
+## 3. Visually verify
 
 Open the relevant PNG(s) in `output/pages/`. Check for:
 
@@ -69,15 +72,14 @@ Open the relevant PNG(s) in `output/pages/`. Check for:
 - Callouts and tables not split across page boundaries
 - Bullet lists where a single item didn't get isolated at the top of the next page
 - Footer page number is consistent with the TOC entry
-- Header section title matches `sectionTitle` prop
-
-## 5. Iterate
+- Header section title matches the `sectionTitle` prop on `ContentPage`
+- Chapter title page shows the correct page number bottom-left
 
 If a section is breaking awkwardly, see [pagination](pagination.md) — the usual fixes are `wrap={false}`, `minPresenceAhead={40}`, or restructuring content density.
 
 ## Conventions to keep
 
 - Import styles only from `../styles/shared` and tokens only from `../styles/theme`. Don't reach into `theme.ts` for raw values inside JSX — use the named token (`colors.accent[500]`, not `'#F0A000'`).
-- Reuse components from `src/components/`. If a visual pattern repeats, promote it to a component instead of duplicating styles.
-- Pair every `fontFamily` with an explicit `fontWeight` (400, 500, 600, or 700).
-- Use SVG icons from `src/components/Icons.tsx`, never emoji — Inter doesn't ship emoji glyphs and `pdftoppm` won't pull them from the system.
+- Reuse components from `src/components/`. If a visual pattern repeats, promote it to a component instead of duplicating local styles.
+- Pair every `fontFamily` with a `fontWeight` token (`fontWeight.regular`, `fontWeight.semibold`, `fontWeight.bold`) — never inline literals like `fontWeight: 700 as const`. The token set is the contract with `Font.register` in `src/fonts.ts`; an unregistered weight silently falls back to Helvetica.
+- Use SVG icons from `src/components/Icons.tsx` sized via `iconSize.*` tokens, never emoji — Inter doesn't ship emoji glyphs and `pdftoppm` won't pull them from the system.

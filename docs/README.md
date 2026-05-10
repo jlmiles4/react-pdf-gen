@@ -16,12 +16,14 @@ pnpm dev         # tsx watch on src/build.tsx
 
 ## Documentation
 
-- [Architecture](architecture/overview.md) — how pages, components, and the build pipeline fit together
-  - [Rendering pipeline](architecture/rendering-pipeline.md) — TSX → PDF → PNG, end to end
+- Architecture
+  - [Overview](architecture/overview.md) — how pages, components, and the registry fit together
   - [Design system](architecture/design-system.md) — theme tokens, shared styles, font registration
+- Build
+  - [Pipeline](build/pipeline.md) — TSX → PDF → PNG end to end, including the two-pass TOC render
+  - [Pagination and layout](build/pagination.md) — `wrap={false}`, `minPresenceAhead`, fixed headers, orphan avoidance
 - Guides
   - [Add a page](guides/add-a-page.md) — step-by-step for adding a new chapter or content page
-  - [Pagination and layout](guides/pagination.md) — `wrap={false}`, `minPresenceAhead`, fixed headers, orphan avoidance
   - [Troubleshooting](guides/troubleshooting.md) — build errors, render surprises, the CodeBlock template-literal trap
 - Reference
   - [Commands](reference/commands.md) — every `pnpm` script and what it does

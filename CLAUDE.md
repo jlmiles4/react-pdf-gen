@@ -1,21 +1,15 @@
 # React-PDF Project — Claude Code Instructions
 
 ## Commands
-- **Build PDF:** `pnpm build` (syncs registry + runs `tsx src/build.tsx`, outputs to `output/ebook.pdf`)
-- **Sync Registry:** `pnpm sync` (updates `src/registry.ts` based on `src/pages/`)
+- **Build PDF:** `pnpm build` (syncs registry, then `tsx src/build.tsx` does a two-pass render: render → `pdftotext` extracts chapter page positions to `output/toc-positions.json` → render again so the TOC reflects them. Outputs `output/ebook.pdf`, ~10s.)
+- **Sync Registry:** `pnpm sync` (regenerates `src/registry.ts` from `src/pages/`)
 - **Export PNGs:** `pnpm export` (runs `scripts/export-pages.sh`, outputs to `output/pages/`)
 - **Full pipeline:** `pnpm pipeline` (build + export)
 - **Dev watch:** `pnpm dev`
 
 ## Architecture Rules
-1. **One file per page.** Each page is a separate component in `src/pages/`. Named `Page##-Ch##-Topic.tsx`.
-2. **Metadata comments.** Every page file must start with metadata comments for the registry:
-   ```tsx
-   // Group: CATEGORY_NAME
-   // Number: CH_NUMBER
-   // Title: CH_TITLE
-   // Subtitle: CH_SUBTITLE
-   ```
+1. **One file per page.** Each page is a separate component in `src/pages/`. Chapter pages are named `Page##-Ch##-Topic.tsx`. Book chrome (Cover, TOC, Conclusion) drop the `Ch##` segment: `Page01-Cover.tsx`, `Page02-TOC.tsx`, `Page22-Conclusion.tsx`.
+2. **Metadata for the registry.** `scripts/sync-project.ts` extracts metadata to build `src/registry.ts` (auto-generated, gitignored). The first file of each chapter must have a `// Group: NAME` comment so the chapter shows up in the right TOC group; the chapter number, title, and subtitle are read from the `<ChapterTitle number="..." title="..." subtitle="..." />` JSX in that same file. Subsequent files of a multi-file chapter (e.g. Ch08 splits across Page10/11/12) need no metadata — only the first file becomes a TOC entry. Optional override: `// Number:` / `// Title:` / `// Subtitle:` comments take precedence over the JSX props if present.
 3. **Design tokens only.** Never hardcode colors, fonts, weights, sizes, line heights, icon sizes, or spacing. Import from `src/styles/theme.ts`. Tokens cover: `colors`, `fonts`, `fontWeight`, `lineHeight`, `typography`, `fontScale`, `letterSpacing`, `spacing`, `page`, `borders`, `iconSize`, `opacity`, `accentBar`, `layout`, `syntax`.
 4. **Shared components.** Use existing components from `src/components/` — never recreate patterns inline.
 5. **No Helvetica.** All text uses Inter. Always pair `fontFamily` with `fontWeight` from the `fontWeight` token (`fontWeight.regular`/`semibold`/`bold`) — never inline literals like `fontWeight: 700 as const`.

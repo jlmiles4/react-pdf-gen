@@ -132,18 +132,81 @@ All use `wrap={false}`. Body text is rendered as a single `<Text>` with `styles.
 | `rows` | `string[][]` | yes |
 | `columnWidths` | `string[]` | no |
 
+## Markdown
+
+### `MarkdownRenderer`
+
+[`src/components/MarkdownRenderer.tsx`](../../src/components/MarkdownRenderer.tsx) — parses a markdown string via `src/utils/markdownParser.ts` and renders each node as the matching project component (`SectionHeading` for `##`, `BulletList` for lists, `CodeBlock` for fenced blocks, `TipBox`/`WarningBox`/`InfoBox` for callouts). Used by Ch12 to load `content/chapters/12-markdown-demo.md` directly into a page.
+
+```tsx
+import { readFileSync } from 'fs';
+const body = readFileSync('content/chapters/12-markdown-demo.md', 'utf8');
+<MarkdownRenderer content={body} />
+```
+
+| Prop | Type | Required |
+|---|---|---|
+| `content` | `string` | yes |
+
+## Decor
+
+### `AccentBar`
+
+[`src/components/AccentBar.tsx`](../../src/components/AccentBar.tsx) — horizontal gold bar used by hero/title elements. Sizes are tokens from `theme.accentBar` (`sm`/`md`/`lg`/`xl`).
+
+```tsx
+<AccentBar size="lg" mb={spacing.lg} />
+```
+
+| Prop | Type | Required | Default |
+|---|---|---|---|
+| `size` | `'sm' \| 'md' \| 'lg' \| 'xl'` | no | `'md'` |
+| `mb` | `number` | no | `spacing.md` |
+| `color` | `string` | no | `colors.accent[500]` |
+
+### `CoverDecor`
+
+[`src/components/CoverDecor.tsx`](../../src/components/CoverDecor.tsx) — concentric-circle / crosshair geometric mark used as a low-opacity background flourish on hero pages (Cover, Conclusion). All defaults come from theme tokens (`layout.decorMarkSize`, `opacity.decor`, etc.).
+
+```tsx
+<CoverDecor opacity={opacity.decorSubtle} />
+```
+
+| Prop | Type | Required | Default |
+|---|---|---|---|
+| `size` | `number` | no | `layout.decorMarkSize` (160) |
+| `opacity` | `number` | no | `opacity.decor` (0.08) |
+| `right` | `number` | no | `layout.decorMarkRight` (40) |
+| `bottom` | `number` | no | `layout.decorMarkBottom` (60) |
+| `color` | `string` | no | `colors.accent[500]` |
+
 ## Page chrome
 
 ### `Header`, `Footer`
 
-[`src/components/Header.tsx`](../../src/components/Header.tsx) and [`Footer.tsx`](../../src/components/Footer.tsx). Used internally by `ContentPage` and rendered as `fixed` so they repeat on every page. Not typically composed directly.
+[`src/components/Header.tsx`](../../src/components/Header.tsx) and [`Footer.tsx`](../../src/components/Footer.tsx). Used internally by `ContentPage` and rendered as `fixed` so they repeat on every page. The footer renders the dynamic `pageNumber / totalPages` via the `Text render={({pageNumber, totalPages}) => ...}` API. Not typically composed directly.
 
 ## Icons
 
-[`src/components/Icons.tsx`](../../src/components/Icons.tsx) — SVG Lucide-style icons. Available exports: `CheckIcon`, `XIcon`, `AlertTriangleIcon`, `InfoIcon`, `ArrowRightIcon`, `BookIcon`, `CodeIcon`, `LayersIcon`, `PaletteIcon`, `ZapIcon`. Each accepts `size` (number, default varies) and `color` (string).
+[`src/components/Icons.tsx`](../../src/components/Icons.tsx) — SVG Lucide-style icons. Each is a thin wrapper around `Icon.tsx` (the react-icons → react-pdf adapter). Available exports: `CheckIcon`, `XIcon`, `AlertTriangleIcon`, `InfoIcon`, `ArrowRightIcon`, `BookIcon`, `CodeIcon`, `LayersIcon`, `PaletteIcon`, `ZapIcon`. Each accepts `size` (number, default `iconSize.lg` = 16) and `color` (string, default varies by icon — e.g. `CheckIcon` defaults to `colors.success`).
 
 ```tsx
-<CheckIcon size={12} color={colors.success} />
+<CheckIcon size={iconSize.sm} color={colors.success} />
 ```
 
-Never use emoji in this project — Inter doesn't ship emoji glyphs and the PDF will fall back to system fonts inconsistently.
+Pass sizes through the `iconSize` token (`xs`/`sm`/`callout`/`md`/`lg`/`xl`) — see [theme tokens reference](theme-tokens.md#icon-sizes). Never use emoji in this project — Inter doesn't ship emoji glyphs and the PDF will fall back to system fonts inconsistently.
+
+### `Icon`
+
+[`src/components/Icon.tsx`](../../src/components/Icon.tsx) — the underlying react-icons adapter. Use directly for icons not pre-bound in `Icons.tsx`.
+
+```tsx
+import { LuFile } from 'react-icons/lu';
+<Icon icon={LuFile} size={iconSize.md} color={colors.primary[600]} />
+```
+
+| Prop | Type | Required | Default |
+|---|---|---|---|
+| `icon` | `IconType` (from react-icons) | yes | |
+| `size` | `number` | no | `iconSize.lg` (16) |
+| `color` | `string` | no | `'currentColor'` |
