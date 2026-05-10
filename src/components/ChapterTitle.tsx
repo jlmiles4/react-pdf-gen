@@ -12,6 +12,11 @@ import { Page, Text, StyleSheet, Svg, Circle, G } from '@react-pdf/renderer';
 import { colors, fonts, spacing, page, fontScale, typography, letterSpacing, layout, fontWeight, opacity } from '../styles/theme';
 import AccentBar from './AccentBar';
 
+interface PageNumberRenderArgs {
+  pageNumber: number;
+  totalPages: number;
+}
+
 const noHyphenation = (word: string) => [word];
 
 interface ChapterTitleProps {
@@ -62,6 +67,17 @@ const ctStyles = StyleSheet.create({
     width: RINGS_SIZE,
     height: RINGS_SIZE,
   },
+  pageNumber: {
+    position: 'absolute',
+    bottom: page.coverMargin.bottom,
+    left: page.margin.left + page.chapterPaddingExtra,
+    fontSize: typography.codeSmall.fontSize,
+    fontFamily: fonts.body,
+    fontWeight: fontWeight.regular,
+    color: colors.accent[400],
+    opacity: opacity.muted,
+    letterSpacing: letterSpacing.wide,
+  },
 });
 
 const ChapterTitle: React.FC<ChapterTitleProps> = ({ number, title, subtitle }) => (
@@ -77,6 +93,11 @@ const ChapterTitle: React.FC<ChapterTitleProps> = ({ number, title, subtitle }) 
         <Circle cx="190" cy="190" r="135" stroke={colors.accent[500]} strokeWidth="0.75" fill="none" />
       </G>
     </Svg>
+    <Text
+      style={ctStyles.pageNumber}
+      render={({ pageNumber }: PageNumberRenderArgs) => String(pageNumber)}
+      fixed
+    />
   </Page>
 );
 

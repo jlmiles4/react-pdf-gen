@@ -13,6 +13,7 @@ import { colors, fonts, spacing, page, borders, typography, fontScale, letterSpa
 import Footer from '../components/Footer';
 import AccentBar from '../components/AccentBar';
 import { tocGroups } from '../registry';
+import { getTocPositions } from '../tocPositions';
 
 // Define the order and styles for groups
 const GROUP_CONFIG: Record<string, { color: string }> = {
@@ -75,6 +76,7 @@ const s = StyleSheet.create({
   },
   entryText: {
     flex: 1,
+    paddingRight: spacing.sm,
   },
   entryTitle: {
     fontSize: fontScale.label,
@@ -90,35 +92,48 @@ const s = StyleSheet.create({
     color: colors.neutral[500],
     lineHeight: lineHeight.snug,
   },
+  entryPage: {
+    width: layout.tocEntryNumWidth,
+    fontSize: fontScale.subtitle,
+    fontFamily: fonts.heading,
+    fontWeight: fontWeight.semibold,
+    color: colors.neutral[600],
+    textAlign: 'right',
+    paddingTop: spacing.xxs,
+  },
 });
 
-const Page02TOC: React.FC = () => (
-  <Page size="LETTER" style={s.page}>
-    <Text style={s.heading}>Contents</Text>
-    <AccentBar size="md" />
-    {Object.entries(tocGroups).map(([groupLabel, chapters]) => {
-      const config = GROUP_CONFIG[groupLabel] || { color: colors.neutral[500] };
-      return (
-        <View key={groupLabel} style={s.groupContainer}>
-          <View style={s.groupLabelRow}>
-            <View style={[s.groupBadge, { backgroundColor: config.color }]}>
-              <Text style={s.groupLabel}>{groupLabel}</Text>
-            </View>
-          </View>
-          {chapters.map((ch) => (
-            <View key={ch.num} style={s.entry}>
-              <Text style={s.entryNum}>{ch.num}</Text>
-              <View style={s.entryText}>
-                <Text style={s.entryTitle}>{ch.title}</Text>
-                <Text style={s.entrySubtitle}>{ch.subtitle}</Text>
+const Page02TOC: React.FC = () => {
+  const positions = getTocPositions();
+  return (
+    <Page size="LETTER" style={s.page}>
+      <Text style={s.heading}>Contents</Text>
+      <AccentBar size="md" />
+      {Object.entries(tocGroups).map(([groupLabel, chapters]) => {
+        const config = GROUP_CONFIG[groupLabel] || { color: colors.neutral[500] };
+        return (
+          <View key={groupLabel} style={s.groupContainer}>
+            <View style={s.groupLabelRow}>
+              <View style={[s.groupBadge, { backgroundColor: config.color }]}>
+                <Text style={s.groupLabel}>{groupLabel}</Text>
               </View>
             </View>
-          ))}
-        </View>
-      );
-    })}
-    <Footer />
-  </Page>
-);
+            {chapters.map((ch) => (
+              <View key={ch.num} style={s.entry}>
+                <Text style={s.entryNum}>{ch.num}</Text>
+                <View style={s.entryText}>
+                  <Text style={s.entryTitle}>{ch.title}</Text>
+                  <Text style={s.entrySubtitle}>{ch.subtitle}</Text>
+                </View>
+                <Text style={s.entryPage}>{positions[ch.num] ?? ''}</Text>
+              </View>
+            ))}
+          </View>
+        );
+      })}
+      <Footer />
+    </Page>
+  );
+};
 
 export default Page02TOC;
