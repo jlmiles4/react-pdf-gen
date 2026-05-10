@@ -8,6 +8,7 @@ export { TipBox, WarningBox, InfoBox } from './TipBox';
 export { default as CodeBlock } from './CodeBlock';
 export { default as BulletList } from './BulletList';
 export { default as Table } from './Table';
+export { default as RecipeCard } from './RecipeCard';
 export { default as MarkdownRenderer } from './MarkdownRenderer';
 export { default as AccentBar } from './AccentBar';
 export { default as CoverDecor } from './CoverDecor';

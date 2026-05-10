@@ -1,26 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet } from '@react-pdf/renderer';
+import { Text } from '@react-pdf/renderer';
 import { styles } from '../styles/shared';
-import { colors, spacing, fonts, borders, fontScale, fontWeight } from '../styles/theme';
-import { ContentPage, SectionHeading, CodeBlock, BulletList, TipBox } from '../components';
-
-const local = StyleSheet.create({
-  recipeCard: {
-    borderWidth: borders.medium,
-    borderColor: colors.neutral[200],
-    borderRadius: borders.radius.md,
-    padding: spacing.lg,
-    marginBottom: spacing.lg,
-    backgroundColor: colors.neutral[50],
-  },
-  recipeTitle: {
-    fontSize: fontScale.contentTitle,
-    fontFamily: fonts.bodyBold,
-    fontWeight: fontWeight.semibold,
-    color: colors.primary[700],
-    marginBottom: spacing.sm,
-  },
-});
+import { ContentPage, SectionHeading, CodeBlock, BulletList, TipBox, RecipeCard } from '../components';
 
 const Ch10Patterns: React.FC = () => (
   <ContentPage sectionTitle="Premium Deliverables & Recipes">
@@ -29,8 +10,7 @@ const Ch10Patterns: React.FC = () => (
       Four layouts you'll reach for repeatedly. Each is a self-contained pattern you can drop into any ContentPage. All examples use design tokens from theme.ts for spacing, colors, and border radii.
     </Text>
 
-    <View wrap={false} style={local.recipeCard}>
-      <Text style={local.recipeTitle}>Two-Column Layout</Text>
+    <RecipeCard title="Two-Column Layout">
       <CodeBlock language="tsx">{`<View style={{ flexDirection: 'row', gap: spacing.lg }}>
   <View style={{ width: '50%' }}>
     <Text style={styles.body}>Left column</Text>
@@ -39,10 +19,9 @@ const Ch10Patterns: React.FC = () => (
     <Text style={styles.body}>Right column</Text>
   </View>
 </View>`}</CodeBlock>
-    </View>
+    </RecipeCard>
 
-    <View wrap={false} style={local.recipeCard}>
-      <Text style={local.recipeTitle}>Sidebar + Content</Text>
+    <RecipeCard title="Sidebar + Content">
       <CodeBlock language="tsx">{`<View style={{ flexDirection: 'row', gap: spacing.lg }}>
   <View style={{ width: '30%',
     backgroundColor: colors.neutral[50],
@@ -54,10 +33,9 @@ const Ch10Patterns: React.FC = () => (
     <Text style={styles.body}>Main content area</Text>
   </View>
 </View>`}</CodeBlock>
-    </View>
+    </RecipeCard>
 
-    <View wrap={false} style={local.recipeCard}>
-      <Text style={local.recipeTitle}>Card Grid (2x2)</Text>
+    <RecipeCard title="Card Grid (2x2)">
       <CodeBlock language="tsx">{`<View style={{ flexDirection: 'row', flexWrap: 'wrap',
   gap: spacing.md }}>
   {items.map((item, i) => (
@@ -72,10 +50,9 @@ const Ch10Patterns: React.FC = () => (
     </View>
   ))}
 </View>`}</CodeBlock>
-    </View>
+    </RecipeCard>
 
-    <View wrap={false} style={local.recipeCard}>
-      <Text style={local.recipeTitle}>Metric / KPI Row</Text>
+    <RecipeCard title="Metric / KPI Row">
       <CodeBlock language="tsx">{`<View style={{ flexDirection: 'row', gap: spacing.md }}>
   {metrics.map((m, i) => (
     <View key={i} style={{ flex: 1, alignItems: 'center',
@@ -87,7 +64,7 @@ const Ch10Patterns: React.FC = () => (
     </View>
   ))}
 </View>`}</CodeBlock>
-    </View>
+    </RecipeCard>
 
     <SectionHeading>Putting It All Together</SectionHeading>
     <BulletList items={[

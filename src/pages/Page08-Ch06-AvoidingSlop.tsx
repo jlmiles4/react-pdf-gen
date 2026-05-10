@@ -16,13 +16,8 @@ import React from 'react';
 import { View, Text, StyleSheet } from '@react-pdf/renderer';
 import { styles } from '../styles/shared';
 import { colors, spacing, fonts, borders, fontScale, fontWeight, iconSize } from '../styles/theme';
-import ContentPage from '../components/ContentPage';
-import ChapterTitle from '../components/ChapterTitle';
-import CodeBlock from '../components/CodeBlock';
-import BulletList from '../components/BulletList';
-import { TipBox, WarningBox } from '../components/TipBox';
+import { ContentPage, ChapterTitle, CodeBlock, BulletList, TipBox, WarningBox, SectionHeading } from '../components';
 import { CheckIcon, XIcon } from '../components/Icons';
-import SectionHeading from '../components/SectionHeading';
 
 const local = StyleSheet.create({
   comparisonRow: {
@@ -52,12 +47,6 @@ const local = StyleSheet.create({
   },
   badLabel: { color: colors.error },
   goodLabel: { color: colors.success },
-  iconRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.sm,
-    marginBottom: spacing.xs,
-  },
 });
 
 const Ch06AvoidingSlop: React.FC = () => (
@@ -105,14 +94,14 @@ const Ch06AvoidingSlop: React.FC = () => (
       <Text style={styles.h3}>Heading Styles</Text>
       <View wrap={false} style={local.comparisonRow}>
         <View style={[local.comparisonCol, local.badCol]}>
-          <View style={local.iconRow}>
+          <View style={styles.iconRow}>
             <XIcon size={iconSize.sm} />
             <Text style={[local.compLabel, local.badLabel]}>Slop</Text>
           </View>
           <Text style={styles.bodySmall}>fontSize: 16, centered, default font, no color, no spacing above or below. Blends into body text.</Text>
         </View>
         <View style={[local.comparisonCol, local.goodCol]}>
-          <View style={local.iconRow}>
+          <View style={styles.iconRow}>
             <CheckIcon size={iconSize.sm} />
             <Text style={[local.compLabel, local.goodLabel]}>Premium</Text>
           </View>
@@ -123,14 +112,14 @@ const Ch06AvoidingSlop: React.FC = () => (
       <Text style={styles.h3}>Page Margins</Text>
       <View wrap={false} style={local.comparisonRow}>
         <View style={[local.comparisonCol, local.badCol]}>
-          <View style={local.iconRow}>
+          <View style={styles.iconRow}>
             <XIcon size={iconSize.sm} />
             <Text style={[local.compLabel, local.badLabel]}>Slop</Text>
           </View>
           <Text style={styles.bodySmall}>padding: 20 on all sides. Content cramped against edges. Feels claustrophobic.</Text>
         </View>
         <View style={[local.comparisonCol, local.goodCol]}>
-          <View style={local.iconRow}>
+          <View style={styles.iconRow}>
             <CheckIcon size={iconSize.sm} />
             <Text style={[local.compLabel, local.goodLabel]}>Premium</Text>
           </View>

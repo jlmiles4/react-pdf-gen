@@ -2,9 +2,9 @@
 
 Two files own the visual language: `src/styles/theme.ts` (tokens) and `src/styles/shared.ts` (styles built from those tokens). Pages import from both; pages should never define raw hex values, font sizes, or padding numbers.
 
-For the full token tables see [theme-tokens reference](../reference/theme-tokens.md).
+This page describes the **shape** of the token system and the conventions for using it. For concrete values (every hex code, every spacing number), see [theme-tokens reference](../reference/theme-tokens.md).
 
-## Tokens (`src/styles/theme.ts`)
+## Token exports (`src/styles/theme.ts`)
 
 Every export is `as const`. `typography` composes from `fontWeight` and `lineHeight`, so the rest of the codebase only needs to import the leaf tokens it actually styles with.
 
@@ -12,19 +12,19 @@ Every export is `as const`. `typography` composes from `fontWeight` and `lineHei
 |---|---|---|
 | `colors` | `{ primary: {50..900}, accent: {50..900}, neutral: {50..900}, success, error, info, warning, ...Light, white, black }` | `colors.primary[800]`, `colors.accent[500]` |
 | `fonts` | `{ heading, headingLight, body, bodyBold, mono, monoBold }` | All Inter except `mono`/`monoBold` (Courier) |
-| `fontWeight` | `{ regular: 400, semibold: 600, bold: 700 }` | `fontWeight.bold` (matches `Font.register` weights) |
+| `fontWeight` | `{ regular: 400, semibold: 600, bold: 700 }` | Matches `Font.register` weights |
 | `lineHeight` | `{ tight: 1.2, snug: 1.4, normal: 1.5, relaxed: 1.6 }` | For local styles that don't pull a typography preset |
 | `typography` | `{ display, h1, h2, h3, h4, body, bodySmall, caption, code, codeSmall }` | Each is `{ fontSize, fontFamily, fontWeight, lineHeight }` |
 | `fontScale` | `{ coverTitle, pageTitle, sectionTitle, subtitle, contentTitle, label, bodyMedium, labelSmall, navSmall, micro }` | Header/footer/chapter chrome sizes outside the body scale |
-| `letterSpacing` | `{ tight: 1, normal: 1.2, wide: 1.5, wider: 2.5 }` | Uppercase/tracked-out text (chapter label, cover author) |
+| `letterSpacing` | `{ tight, normal, wide, wider }` | Uppercase/tracked-out text (chapter label, cover author) |
 | `spacing` | `{ micro: 1, xxs: 2, xs: 4, sm: 8, md: 12, lg: 16, xl: 24, xxl: 32, xxxl: 48 }` | 4pt grid (with sub-grid micros for fine-tuning) |
 | `page` | `{ width: 612, height: 792, margin, coverMargin, headerHeight, footerHeight, topBarHeight, chapterPaddingExtra, contentWidth: 504, contentHeight: 672 }` | LETTER, in points |
 | `borders` | `{ thin: 0.5, medium: 1, thick: 2, radius: { xs, sm, md, lg } }` | |
-| `iconSize` | `{ xs: 10, sm: 12, callout: 13, md: 14, lg: 16, xl: 24 }` | `<CheckIcon size={iconSize.sm} />` |
-| `opacity` | `{ decor: 0.08, decorSubtle: 0.06, muted: 0.4 }` | Background flourishes, dim accents |
-| `accentBar` | `{ sm, md, lg, xl } → { width, height }` | Sizes for `<AccentBar size="lg" />` |
-| `layout` | `{ maxTextWidth, maxHeroWidth, bulletWrapperWidth, bulletDotSize, tocEntryNumWidth, cardShadowOffset, flowStepWidth, dividerHeight, decorMarkSize, decorRingsSize, decorMarkRight, decorMarkBottom }` | Catch-all for layout constants that don't fit elsewhere |
-| `syntax` | `{ keyword, string, comment, tag, number, punctuation, default }` | Tuned for `primary[900]` code-block background |
+| `iconSize` | `{ xs, sm, callout, md, lg, xl }` | `<CheckIcon size={iconSize.sm} />` |
+| `opacity` | `{ decor, decorSubtle, muted }` | Background flourishes, dim accents |
+| `accentBar` | `{ sm, md, lg, xl } → { width, height }` | `<AccentBar size="lg" />` |
+| `layout` | Catch-all for layout constants — bullet dot size, decor offsets, hero max widths, etc. | |
+| `syntax` | `{ keyword, string, comment, tag, number, punctuation, default }` | Tuned for the `primary[900]` code-block background |
 
 ## Shared styles (`src/styles/shared.ts`)
 
@@ -57,11 +57,11 @@ Inter is registered with seven `(weight, style)` variants pointing at `.ttf` fil
 
 Hyphenation is disabled globally with `Font.registerHyphenationCallback((word) => [word])`.
 
-`@react-pdf/renderer` resolves font weights by exact match. If you set `fontFamily: 'Inter'` and `fontWeight: 500` somewhere, weight 500 must be registered or you'll silently get a fallback. Stick to the four weights present (400/500/600/700) unless you also add a `Font.register` entry.
+`@react-pdf/renderer` resolves font weights by exact match. If you set `fontFamily: 'Inter'` and `fontWeight: 500`, weight 500 must be registered or you'll silently get a fallback. Stick to the four registered weights (400/500/600/700) unless you also add a `Font.register` entry. The `fontWeight` token only exposes 400/600/700 — use the literal `500` (or extend the token) when you need Medium.
 
 ## Conventions
 
-- **Pair `fontFamily` with `fontWeight`.** Inter is one family; weight alone selects the variant. `fonts.bodyBold` is `'Inter'` (same string as `fonts.body`) — the bold-ness comes from `fontWeight: fontWeight.semibold` paired with it.
+- **Pair `fontFamily` with `fontWeight`.** Inter is one family; weight alone selects the variant. `fonts.bodyBold` is `'Inter'` (same string as `fonts.body`) — boldness comes from `fontWeight: fontWeight.semibold` paired with it.
 - **Use `fontWeight` tokens, never inline literals.** Write `fontWeight: fontWeight.bold`, not `fontWeight: 700 as const`. The token set is the contract with `Font.register` in `src/fonts.ts` — adding an unregistered weight silently falls back to Helvetica.
 - **Never use Helvetica.** That's the react-pdf default if no font is set; check by looking at PNG output for telltale Helvetica letterforms.
 - **Color usage carries meaning** — `primary` for structure (headings, dark backgrounds), `accent` for emphasis (bars, bullets, callouts), `neutral` for body and chrome, `success/error/info/warning` only for status.

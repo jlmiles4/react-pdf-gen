@@ -13,39 +13,11 @@
  * Renders: 1 chapter title + 4 content pages
  */
 import React from 'react';
-import { View, Text, StyleSheet } from '@react-pdf/renderer';
+import { Text } from '@react-pdf/renderer';
 import { styles } from '../styles/shared';
-import { colors, spacing, fonts, borders, fontScale, fontWeight, iconSize } from '../styles/theme';
-import ContentPage from '../components/ContentPage';
-import ChapterTitle from '../components/ChapterTitle';
-import CodeBlock from '../components/CodeBlock';
-import BulletList from '../components/BulletList';
+import { iconSize } from '../styles/theme';
+import { ContentPage, ChapterTitle, CodeBlock, BulletList, SectionHeading, RecipeCard } from '../components';
 import { XIcon } from '../components/Icons';
-import SectionHeading from '../components/SectionHeading';
-
-const local = StyleSheet.create({
-  recipeCard: {
-    borderWidth: borders.medium,
-    borderColor: colors.neutral[200],
-    borderRadius: borders.radius.md,
-    padding: spacing.lg,
-    marginBottom: spacing.lg,
-    backgroundColor: colors.neutral[50],
-  },
-  recipeTitle: {
-    fontSize: fontScale.contentTitle,
-    fontFamily: fonts.bodyBold,
-    fontWeight: fontWeight.semibold,
-    color: colors.primary[700],
-    marginBottom: spacing.sm,
-  },
-  iconRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.sm,
-    marginBottom: spacing.xs,
-  },
-});
 
 const Ch07DesignChallenges: React.FC = () => (
   <>
@@ -73,11 +45,7 @@ const Ch07DesignChallenges: React.FC = () => (
 
       <SectionHeading>What Doesn't Work (and Fixes)</SectionHeading>
 
-      <View wrap={false} style={local.recipeCard}>
-        <View style={local.iconRow}>
-          <XIcon size={iconSize.sm} />
-          <Text style={local.recipeTitle}>CSS Grid Layouts</Text>
-        </View>
+      <RecipeCard title="CSS Grid Layouts" icon={<XIcon size={iconSize.sm} />}>
         <Text style={styles.bodySmall}>
           Not supported. Use nested flexbox with explicit widths instead:
         </Text>
@@ -93,13 +61,9 @@ const Ch07DesignChallenges: React.FC = () => (
     <Text>Column 3</Text>
   </View>
 </View>`}</CodeBlock>
-      </View>
+      </RecipeCard>
 
-      <View wrap={false} style={local.recipeCard}>
-        <View style={local.iconRow}>
-          <XIcon size={iconSize.sm} />
-          <Text style={local.recipeTitle}>Drop Shadows</Text>
-        </View>
+      <RecipeCard title="Drop Shadows" icon={<XIcon size={iconSize.sm} />}>
         <Text style={styles.bodySmall}>
           box-shadow is not supported. Use a subtle border or an offset nested View:
         </Text>
@@ -117,13 +81,9 @@ const Ch07DesignChallenges: React.FC = () => (
 }}>
   <Text>Card with faux shadow</Text>
 </View>`}</CodeBlock>
-      </View>
+      </RecipeCard>
 
-      <View wrap={false} style={local.recipeCard}>
-        <View style={local.iconRow}>
-          <XIcon size={iconSize.sm} />
-          <Text style={local.recipeTitle}>Text Wrapping Around Images</Text>
-        </View>
+      <RecipeCard title="Text Wrapping Around Images" icon={<XIcon size={iconSize.sm} />}>
         <Text style={styles.bodySmall}>
           Float is not supported. Use a side-by-side row layout instead:
         </Text>
@@ -136,13 +96,9 @@ const Ch07DesignChallenges: React.FC = () => (
     </Text>
   </View>
 </View>`}</CodeBlock>
-      </View>
+      </RecipeCard>
 
-      <View wrap={false} style={local.recipeCard}>
-        <View style={local.iconRow}>
-          <XIcon size={iconSize.sm} />
-          <Text style={local.recipeTitle}>Gradient Backgrounds</Text>
-        </View>
+      <RecipeCard title="Gradient Backgrounds" icon={<XIcon size={iconSize.sm} />}>
         <Text style={styles.bodySmall}>
           CSS gradients don't work. Use an SVG LinearGradient behind your content:
         </Text>
@@ -164,7 +120,7 @@ const Ch07DesignChallenges: React.FC = () => (
     Content over gradient
   </Text>
 </View>`}</CodeBlock>
-      </View>
+      </RecipeCard>
 
       <SectionHeading>Recipe: Professional Table</SectionHeading>
       <Text style={styles.body}>

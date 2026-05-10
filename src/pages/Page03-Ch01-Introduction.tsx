@@ -12,12 +12,7 @@
 import React from 'react';
 import { View, Text } from '@react-pdf/renderer';
 import { styles } from '../styles/shared';
-import ContentPage from '../components/ContentPage';
-import ChapterTitle from '../components/ChapterTitle';
-import BulletList from '../components/BulletList';
-import { TipBox } from '../components/TipBox';
-import SectionHeading from '../components/SectionHeading';
-import SectionBanner from '../components/SectionBanner';
+import { ContentPage, ChapterTitle, BulletList, TipBox, SectionHeading, SectionBanner } from '../components';
 
 const Ch01Intro: React.FC = () => (
   <>

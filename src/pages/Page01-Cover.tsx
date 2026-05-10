@@ -10,8 +10,7 @@
 import React from 'react';
 import { Page, View, Text, StyleSheet } from '@react-pdf/renderer';
 import { colors, fonts, spacing, page, fontScale, typography, letterSpacing, layout, fontWeight } from '../styles/theme';
-import AccentBar from '../components/AccentBar';
-import CoverDecor from '../components/CoverDecor';
+import { AccentBar, CoverDecor } from '../components';
 
 const s = StyleSheet.create({
   page: {

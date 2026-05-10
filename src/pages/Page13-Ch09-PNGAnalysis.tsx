@@ -17,12 +17,8 @@ import React from 'react';
 import { View, Text, StyleSheet } from '@react-pdf/renderer';
 import { styles } from '../styles/shared';
 import { colors, spacing, fonts, borders, typography, fontScale, fontWeight, iconSize, layout } from '../styles/theme';
-import ContentPage from '../components/ContentPage';
-import ChapterTitle from '../components/ChapterTitle';
-import CodeBlock from '../components/CodeBlock';
-import Table from '../components/Table';
+import { ContentPage, ChapterTitle, CodeBlock, Table, SectionHeading } from '../components';
 import { CheckIcon, XIcon } from '../components/Icons';
-import SectionHeading from '../components/SectionHeading';
 
 const local = StyleSheet.create({
   flowRow: {

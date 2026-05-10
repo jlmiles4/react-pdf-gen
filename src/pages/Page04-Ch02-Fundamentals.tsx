@@ -14,13 +14,7 @@
 import React from 'react';
 import { View, Text } from '@react-pdf/renderer';
 import { styles } from '../styles/shared';
-import ContentPage from '../components/ContentPage';
-import ChapterTitle from '../components/ChapterTitle';
-import CodeBlock from '../components/CodeBlock';
-import BulletList from '../components/BulletList';
-import Table from '../components/Table';
-import { TipBox, WarningBox } from '../components/TipBox';
-import SectionHeading from '../components/SectionHeading';
+import { ContentPage, ChapterTitle, CodeBlock, BulletList, Table, TipBox, WarningBox, SectionHeading } from '../components';
 
 const Ch02Fundamentals: React.FC = () => (
   <>

@@ -10,8 +10,7 @@
 import React from 'react';
 import { Page, View, Text, StyleSheet } from '@react-pdf/renderer';
 import { colors, fonts, spacing, page, borders, typography, fontScale, letterSpacing, layout, fontWeight, lineHeight } from '../styles/theme';
-import Footer from '../components/Footer';
-import AccentBar from '../components/AccentBar';
+import { Footer, AccentBar } from '../components';
 import { tocGroups } from '../registry';
 import { getTocPositions } from '../tocPositions';
 

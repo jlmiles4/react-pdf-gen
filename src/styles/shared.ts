@@ -114,6 +114,12 @@ export const styles = StyleSheet.create({
   flexWrap: {
     flexWrap: 'wrap',
   },
+  iconRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    marginBottom: spacing.xs,
+  },
 
   // --- Code blocks ---
   codeBlock: {
