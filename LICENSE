@@ -2,28 +2,12 @@ MIT License
 
 Copyright (c) 2026 Landon Miles
 
-This license covers the *code, build scripts, design system, and reusable
-components* in this repository — specifically:
-
-  - src/components/
-  - src/styles/
-  - src/utils/
-  - src/fonts.ts
-  - src/build.tsx
-  - src/Document.tsx
-  - scripts/
-  - templates/
-
-It does NOT cover the book's prose, illustrations, or rendered PDF; for those,
-see LICENSE-CONTENT. Third-party assets (Inter font, react-icons, Lucide) are
-governed by their own licenses; see NOTICE.
-
 Permission is hereby granted, free of charge, to any person obtaining a copy
-of the materials covered by this license (the "Software"), to deal in the
-Software without restriction, including without limitation the rights to use,
-copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
@@ -35,3 +19,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+
+Third-party assets bundled with this repository (the Inter font family,
+react-icons, Lucide icons, and notes derived from upstream react-pdf
+documentation) retain their own licenses — see NOTICE.

@@ -10,7 +10,7 @@ import { View, Text } from '@react-pdf/renderer';
 import { styles } from '../styles/shared';
 
 interface SectionHeadingProps {
-  children: string;
+  children: React.ReactNode;
 }
 
 const SectionHeading: React.FC<SectionHeadingProps> = ({ children }) => (

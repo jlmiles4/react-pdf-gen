@@ -1,35 +1,43 @@
 /**
  * Footer — Fixed page footer
  *
- * Renders at the bottom of every page via `fixed` prop.
- * Shows brand URL on the left and dynamic "pageNumber / totalPages" on the right,
- * separated by a subtle top border.
+ * Brand and page number both rendered as `<Text fixed>` siblings with absolute
+ * positioning. Border drawn as a `<View fixed>` line above them. Both texts'
+ * vertical positions are computed as `pageHeight - footerHeight + (footerHeight
+ * - fontSize) / 2` so their visual centers land on the same baseline regardless
+ * of their (slightly different) font sizes.
  */
 import React from 'react';
 import { View, Text, StyleSheet } from '@react-pdf/renderer';
 import { colors, fonts, page, borders, fontScale, typography, fontWeight } from '../styles/theme';
 
+const brandTop = page.height - page.footerHeight + (page.footerHeight - fontScale.navSmall) / 2;
+const pageNumberTop = page.height - page.footerHeight + (page.footerHeight - typography.codeSmall.fontSize) / 2;
+
 const footerStyles = StyleSheet.create({
-  container: {
+  border: {
     position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: page.footerHeight,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: page.margin.left,
+    bottom: page.footerHeight,
+    left: page.margin.left,
+    right: page.margin.right,
     borderTopWidth: borders.thin,
     borderTopColor: colors.neutral[200],
   },
   brand: {
+    position: 'absolute',
+    top: brandTop,
+    left: page.margin.left,
     fontSize: fontScale.navSmall,
     fontFamily: fonts.body,
     fontWeight: fontWeight.regular,
     color: colors.neutral[400],
   },
   pageNumber: {
+    position: 'absolute',
+    top: pageNumberTop,
+    left: page.margin.left,
+    right: page.margin.right,
+    textAlign: 'right',
     fontSize: typography.codeSmall.fontSize,
     fontFamily: fonts.body,
     fontWeight: fontWeight.regular,
@@ -38,13 +46,15 @@ const footerStyles = StyleSheet.create({
 });
 
 const Footer: React.FC = () => (
-  <View style={footerStyles.container} fixed>
-    <Text style={footerStyles.brand}>landonmiles.com</Text>
+  <>
+    <View style={footerStyles.border} fixed />
+    <Text style={footerStyles.brand} fixed>landonmiles.com</Text>
     <Text
       style={footerStyles.pageNumber}
-      render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`}
+      fixed
+      render={({ pageNumber, totalPages }) => `Page ${pageNumber} of ${totalPages}`}
     />
-  </View>
+  </>
 );
 
 export default Footer;

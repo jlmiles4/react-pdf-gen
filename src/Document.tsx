@@ -7,7 +7,7 @@
  * matching the naming + metadata-comment convention; sync wires it in.
  *
  * Page order: Cover → TOC → Ch01–Ch12 → Conclusion.
- * Currently 22 source files render to 77 PDF pages (as of 2026-05-09).
+ * Currently 15 source files render to 73 PDF pages (as of 2026-05-09).
  */
 import React from 'react';
 import { Document } from '@react-pdf/renderer';

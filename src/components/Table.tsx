@@ -5,7 +5,13 @@
  * (white / neutral[50]), subtle bottom borders, and rounded container. Supports
  * custom column widths via percentage strings.
  *
- * Props: headers (string[]), rows (string[][]), columnWidths (optional string[])
+ * The outer container defaults to `wrap={false}` so short tables stay intact
+ * rather than splitting a row across pages. For tables that may exceed the
+ * remaining page space, pass `wrap={true}` so the table can break — individual
+ * rows still stay together because each row is wrap={false}.
+ *
+ * Props: headers (string[]), rows (string[][]), columnWidths (optional string[]),
+ *        wrap (optional bool, default false)
  */
 import React from 'react';
 import { View, Text } from '@react-pdf/renderer';
@@ -15,14 +21,15 @@ interface TableProps {
   headers: string[];
   rows: string[][];
   columnWidths?: string[];
+  wrap?: boolean;
 }
 
-const Table: React.FC<TableProps> = ({ headers, rows, columnWidths }) => {
+const Table: React.FC<TableProps> = ({ headers, rows, columnWidths, wrap = false }) => {
   if (!headers.length) return null;
   const widths = columnWidths || headers.map(() => `${100 / headers.length}%`);
 
   return (
-    <View wrap={false} style={styles.tableContainer}>
+    <View wrap={wrap} style={styles.tableContainer}>
       <View wrap={false} style={styles.tableHeader}>
         {headers.map((header, i) => (
           <Text key={i} style={[styles.tableHeaderText, { width: widths[i] }]}>

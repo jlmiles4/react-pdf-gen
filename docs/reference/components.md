@@ -6,18 +6,19 @@ Every component lives in `src/components/` and is re-exported from `src/componen
 
 ### `ContentPage`
 
-[`src/components/ContentPage.tsx`](../../src/components/ContentPage.tsx) — standard LETTER page with shared page styles, fixed `<Header>` and fixed `<Footer>`. `wrap` is enabled.
+[`src/components/ContentPage.tsx`](../../src/components/ContentPage.tsx) — standard LETTER page with shared page styles, fixed `<Header>` and fixed `<Footer>`. The `wrap` prop is plumbed through to the underlying `<Page>` and defaults to `true`. The project convention is **one source file = one PDF page**, so pages typically pass `wrap={false}` to enforce that (overflow then clips rather than flowing onto a second physical page).
 
 ```tsx
-<ContentPage sectionTitle="Introduction">
+<ContentPage sectionTitle="Introduction" wrap={false}>
   ...children...
 </ContentPage>
 ```
 
-| Prop | Type | Required | Notes |
-|---|---|---|---|
-| `children` | `ReactNode` | yes | |
-| `sectionTitle` | `string` | no | Right-aligned text in the page header |
+| Prop | Type | Required | Default | Notes |
+|---|---|---|---|---|
+| `children` | `ReactNode` | yes | — | |
+| `sectionTitle` | `string` | no | — | Right-aligned text in the page header |
+| `wrap` | `boolean` | no | `true` | Pass `false` to enforce one-PDF-page-per-source-file |
 
 ### `ChapterTitle`
 
@@ -104,15 +105,24 @@ All use `wrap={false}`. Body text is rendered as a single `<Text>` with `styles.
 
 ### `BulletList`
 
-[`src/components/BulletList.tsx`](../../src/components/BulletList.tsx) — vertical list with gold SVG circle bullets. Each item is `wrap={false}` individually.
+[`src/components/BulletList.tsx`](../../src/components/BulletList.tsx) — vertical list with gold SVG circle bullets. Each item is `wrap={false}` individually so a dot can't get stranded from its text. `items` accepts strings (rendered as plain body text) or React nodes (rendered as-is, useful for inline `<Text style={styles.bold}>` / `<Text style={styles.inlineCode}>` spans). `keepTogether` puts `wrap={false}` on the whole list — use it for short lists known to fit on a single page.
 
 ```tsx
 <BulletList items={['First', 'Second', 'Third']} />
+
+<BulletList
+  items={[
+    <Text>Plain item</Text>,
+    <Text><Text style={styles.bold}>Bold</Text> + body</Text>,
+  ]}
+  keepTogether
+/>
 ```
 
-| Prop | Type | Required |
-|---|---|---|
-| `items` | `string[]` | yes |
+| Prop | Type | Required | Default |
+|---|---|---|---|
+| `items` | `(string \| ReactNode)[]` | yes | — |
+| `keepTogether` | `boolean` | no | `false` |
 
 ### `Table`
 
@@ -132,11 +142,29 @@ All use `wrap={false}`. Body text is rendered as a single `<Text>` with `styles.
 | `rows` | `string[][]` | yes |
 | `columnWidths` | `string[]` | no |
 
+## Recipe cards
+
+### `RecipeCard`
+
+[`src/components/RecipeCard.tsx`](../../src/components/RecipeCard.tsx) — bordered card with a title row (optional leading icon) and body content. Neutral-50 background, neutral-200 border, medium radius. `wrap={false}`. Used in Ch07 design challenges and Ch10 layout patterns.
+
+```tsx
+<RecipeCard title="Card title" icon={<CheckIcon size={iconSize.sm} color={colors.success} />}>
+  <Text style={styles.body}>Card body.</Text>
+</RecipeCard>
+```
+
+| Prop | Type | Required |
+|---|---|---|
+| `title` | `string` | yes |
+| `icon` | `ReactNode` | no |
+| `children` | `ReactNode` | yes |
+
 ## Markdown
 
 ### `MarkdownRenderer`
 
-[`src/components/MarkdownRenderer.tsx`](../../src/components/MarkdownRenderer.tsx) — parses a markdown string via `src/utils/markdownParser.ts` and renders each node as the matching project component (`SectionHeading` for `##`, `BulletList` for lists, `CodeBlock` for fenced blocks, `TipBox`/`WarningBox`/`InfoBox` for callouts). Used by Ch12 to load `content/chapters/12-markdown-demo.md` directly into a page.
+[`src/components/MarkdownRenderer.tsx`](../../src/components/MarkdownRenderer.tsx) — parses a markdown string via `src/utils/markdownParser.ts` and renders each node as the matching project component (`SectionHeading` for `##`, `BulletList` for lists, `CodeBlock` for fenced blocks, `TipBox`/`WarningBox`/`InfoBox` for callouts). Inline `**bold**` and `` `code` `` runs are supported inside headings, paragraphs, list items, and callout bodies. Used by [`src/pages/14-markdown-automation/01-markdown-automation.tsx`](../../src/pages/14-markdown-automation/01-markdown-automation.tsx) to load `content/chapters/12-markdown-demo.md` directly into a page. See [markdown-content guide](../guides/markdown-content.md) for full syntax.
 
 ```tsx
 import { readFileSync } from 'fs';

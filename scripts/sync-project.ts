@@ -1,66 +1,115 @@
 import fs from 'fs';
 import path from 'path';
+import { MANIFEST } from '../src/manifest';
 
 const PAGES_DIR = path.join(__dirname, '../src/pages');
 const REGISTRY_FILE = path.join(__dirname, '../src/registry.ts');
 
-interface ChapterMetadata {
-  file: string;
-  component: string;
-  number?: string;
-  title?: string;
-  subtitle?: string;
-  group?: string;
+function toIdentifier(relPath: string): string {
+  // Convert "03-introduction/01-introduction" -> "Page_03_Introduction_01_Introduction".
+  const pascal = relPath
+    .split('/')
+    .map((segment) =>
+      segment
+        .split('-')
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(''),
+    )
+    .join('_')
+    .replace(/[^a-zA-Z0-9_]/g, '');
+  return `Page_${pascal}`;
 }
 
-function extractMetadata(filePath: string): ChapterMetadata {
-  const content = fs.readFileSync(filePath, 'utf-8');
-  const fileName = path.basename(filePath);
-  const componentName = fileName.replace('.tsx', '').replace(/-/g, '');
+/** 
+ * Walk PAGES_DIR finding all .tsx files.
+ * We'll use this to ensure all files are included, even those not in the manifest.
+ */
+function findAllPageFiles(): string[] {
+  const files: string[] = [];
+  
+  function walk(dir: string) {
+    const entries = fs.readdirSync(dir, { withFileTypes: true });
+    for (const entry of entries) {
+      const res = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        walk(res);
+      } else if (entry.isFile() && entry.name.endsWith('.tsx')) {
+        files.push(path.relative(PAGES_DIR, res).replace('.tsx', ''));
+      }
+    }
+  }
 
-  // Extract group from comment: // Group: NAME
-  const groupMatch = content.match(/\/\/\s*Group:\s*([^\n\r]+)/);
-  const group = groupMatch ? groupMatch[1].trim() : undefined;
-
-  // Extract ChapterTitle props
-  const numMatch = content.match(/number="(\d+)"/) || content.match(/\/\/\s*Number:\s*(\d+)/);
-  const titleMatch = content.match(/title="([^"]+)"/) || content.match(/\/\/\s*Title:\s*([^\n\r]+)/);
-  const subtitleMatch = content.match(/subtitle="([^"]+)"/) || content.match(/\/\/\s*Subtitle:\s*([^\n\r]+)/);
-
-  return {
-    file: fileName,
-    component: componentName,
-    number: numMatch ? (Array.isArray(numMatch) ? numMatch[1] : numMatch[1]).trim() : undefined,
-    title: titleMatch ? (Array.isArray(titleMatch) ? titleMatch[1] : titleMatch[1]).trim() : undefined,
-    subtitle: subtitleMatch ? (Array.isArray(subtitleMatch) ? subtitleMatch[1] : subtitleMatch[1]).trim() : undefined,
-    group,
-  };
+  walk(PAGES_DIR);
+  return files.sort();
 }
 
 async function sync() {
-  const files = fs.readdirSync(PAGES_DIR)
-    .filter(f => f.endsWith('.tsx'))
-    .sort();
+  const allFiles = findAllPageFiles();
+  
+  // 1. Start with fixed chrome
+  const orderedRelPaths: string[] = [
+    '01-cover/01-cover',
+    '02-toc/01-toc'
+  ];
 
-  const metadata = files.map(f => extractMetadata(path.join(PAGES_DIR, f)));
+  // 2. Add manifest chapters and their directory siblings
+  const manifestFiles = new Set<string>();
+  
+  MANIFEST.forEach(group => {
+    group.chapters.forEach(ch => {
+      const entryPath = ch.entryPage;
+      if (manifestFiles.has(entryPath)) return;
+      manifestFiles.add(entryPath);
+      orderedRelPaths.push(entryPath);
 
-  // Generate imports
-  const imports = metadata.map(m => `import ${m.component} from './pages/${m.file.replace('.tsx', '')}';`).join('\n');
+      // Find all files in the same directory as the entry page that haven't
+      // already been claimed by another manifest entry sharing the directory.
+      const chDir = path.dirname(entryPath);
+      const siblings = allFiles
+        .filter(f => f.startsWith(chDir + '/') && f !== entryPath && !manifestFiles.has(f))
+        .sort();
 
-  // Generate pages list
-  const pagesList = metadata.map(m => m.component).join(',\n  ');
-
-  // Generate TOC groups
-  const groups: Record<string, any[]> = {};
-  metadata.forEach(m => {
-    if (m.group && m.number) {
-      if (!groups[m.group]) groups[m.group] = [];
-      groups[m.group].push({
-        num: m.number,
-        title: m.title,
-        subtitle: m.subtitle,
+      siblings.forEach(s => {
+        orderedRelPaths.push(s);
+        manifestFiles.add(s);
       });
-    }
+    });
+  });
+
+  // 3. Add any leftovers (files not in manifest or not siblings of manifest entries)
+  const leftovers = allFiles.filter(f => 
+    !manifestFiles.has(f) && 
+    f !== '01-cover/01-cover' && 
+    f !== '02-toc/01-toc' &&
+    f !== '15-conclusion/01-conclusion'
+  );
+  
+  orderedRelPaths.push(...leftovers);
+  
+  // 4. End with conclusion
+  if (allFiles.includes('15-conclusion/01-conclusion')) {
+    orderedRelPaths.push('15-conclusion/01-conclusion');
+  }
+
+  const pages = orderedRelPaths.map(relPath => ({
+    relPath,
+    component: toIdentifier(relPath)
+  }));
+
+  const imports = pages
+    .map((p) => `import ${p.component} from './pages/${p.relPath}';`)
+    .join('\n');
+
+  const pagesList = pages.map((p) => p.component).join(',\n  ');
+
+  // Simple groups for TOC consumption
+  const tocGroups: Record<string, any[]> = {};
+  MANIFEST.forEach(g => {
+    tocGroups[g.id] = g.chapters.map(ch => ({
+      num: ch.num,
+      title: ch.title,
+      subtitle: ch.subtitle
+    }));
   });
 
   const registryContent = `/**
@@ -74,11 +123,11 @@ export const allPages = [
   ${pagesList}
 ];
 
-export const tocGroups = ${JSON.stringify(groups, null, 2)};
+export const tocGroups = ${JSON.stringify(tocGroups, null, 2)};
 `;
 
   fs.writeFileSync(REGISTRY_FILE, registryContent);
-  console.log('Registry generated at src/registry.ts');
+  console.log(`Registry generated at src/registry.ts (${pages.length} pages)`);
 }
 
 sync();

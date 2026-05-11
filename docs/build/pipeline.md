@@ -4,7 +4,7 @@ End-to-end: TSX components → PDF file → PNG pages.
 
 ## Stage 1: PDF render (`pnpm build`)
 
-`pnpm build` runs `pnpm sync && tsx src/build.tsx`. Sync regenerates `src/registry.ts` from `src/pages/`; the build script does a two-pass render so the TOC can show real page numbers.
+`pnpm build` runs `pnpm sync && tsx src/build.tsx`. Sync regenerates `src/registry.ts` from `src/manifest.ts` + the `src/pages/` tree; the build script does a two-pass render so the TOC can show real page numbers.
 
 ```ts
 import './fonts';                          // side-effect: Font.register
@@ -21,7 +21,7 @@ Order matters: `fonts.ts` must be imported before any `<Page>` renders, otherwis
 1. Creates `output/` if it doesn't exist.
 2. Pass 1: renders via `ReactPDF.render(...)`. The TOC reserves its page-number column but renders empty strings on first build (or stale positions from a prior run).
 3. Spawns `pdftotext -layout output/ebook.pdf -`, splits on form-feed (`\f`) for one block per page, and matches `^CHAPTER\s+(\d+)$` line-by-line. The first page each chapter number appears on is recorded into `output/toc-positions.json`.
-4. Pass 2: re-renders. `Page02-TOC.tsx` reads `toc-positions.json` via `src/tocPositions.ts` and fills the page-number column.
+4. Pass 2: re-renders. `src/pages/02-toc/01-toc.tsx` reads `toc-positions.json` via `src/tocPositions.ts` and fills the page-number column.
 5. Logs file size and total elapsed ms (~10s for both passes on a current laptop). Exits 1 on failure.
 
 The TOC layout is identical between passes (column reserved either way), so positions extracted from pass 1 are still correct for pass 2 — no convergence iteration needed.
@@ -57,7 +57,7 @@ Use this whenever you want to verify visual output. PDF first; if the build fail
 
 ## Performance notes
 
-- A full 77-page two-pass render takes ~10s on a current laptop (~0.27 MB PDF). One render is ~5s of layout; the second pass plus `pdftotext` extraction adds the rest. Most of the cost is the layout engine, not I/O.
+- A full 73-page two-pass render takes ~10s on a current laptop (~0.27 MB PDF). One render is ~5s of layout; the second pass plus `pdftotext` extraction adds the rest. Most of the cost is the layout engine, not I/O.
 - PDF size is ~270 KB; the dominant cost would be embedded font subsets (Inter × 7 variants) plus any raster images. Removing unused weights from `src/fonts.ts` shrinks the file.
 - PNG export at 200 DPI produces ~40–320 KB per page (text-heavy pages compress smaller). 150 DPI is enough for layout review; 200 DPI is what the book itself recommends for AI vision analysis.
 

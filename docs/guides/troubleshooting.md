@@ -1,6 +1,6 @@
 # Troubleshooting
 
-Common build errors and rendering surprises when editing the source, with the smallest fix that resolves each. End-user troubleshooting (what readers of the book see) lives in the book itself at `src/pages/Page13-Ch11-Troubleshooting.tsx`.
+Common build errors and rendering surprises when editing the source, with the smallest fix that resolves each. End-user troubleshooting (what readers of the book see) lives in the book itself at `src/pages/13-troubleshooting/`.
 
 ## Build errors
 
@@ -45,7 +45,7 @@ When the *displayed* code is itself a template literal (e.g. an invoice formatte
 
 When the *displayed* code is JSX (`<Text>Total: ${price}</Text>`), the `$` is a literal character and `{price}` is a JSX expression — write `\${price}` in the source, not `$\${price}`. Otherwise the rendered PDF shows `$$`.
 
-Fixed example: `src/pages/Page12-Ch10-PremiumDeliverables.tsx` invoice recipe.
+Fixed example: `src/pages/12-premium-recipes/06-recipe-invoice.tsx`.
 
 ### Section heading appears at the bottom of a page with no body
 
@@ -95,4 +95,4 @@ Run `pnpm build` first, or use `pnpm pipeline` to chain both.
 
 ### Page count changed unexpectedly after a one-line edit
 
-Adding a line of body text to a page near the bottom can push content over a page break and ripple downstream. Check the TOC entries in `src/pages/Page02-TOC.tsx` and the page count in any docs that mention it (`docs/README.md`, `TASK.md`, `src/Document.tsx` docstring) after non-trivial content edits.
+Adding a line of body text to a page near the bottom can push content over a page break and ripple downstream. With `<ContentPage wrap={false}>` (the project default), overflow clips silently — the symptom is missing content at the bottom of the page rather than an extra page appearing. If the content legitimately needs more room, split it into a new continuation file in the same chapter folder rather than fighting the layout. After non-trivial edits, also re-check the page count in `docs/README.md`, `TASK.md`, and the `src/Document.tsx` docstring.

@@ -4,7 +4,11 @@
 
 ## `<Page>` and `wrap`
 
-`ContentPage` wraps children in `<Page size="LETTER" style={styles.page} wrap>`. The `wrap` prop allows content to flow across multiple physical pages within one `<Page>` element. `ChapterTitle` does *not* set `wrap` — chapter title pages always render as a single page.
+`ContentPage` wraps children in `<Page size="LETTER" style={styles.page} wrap={wrap}>`, with `wrap` controllable via prop (default `true`). The `wrap` prop allows content to flow across multiple physical pages within one `<Page>` element.
+
+The project's per-source-file convention is **one `.tsx` file = one PDF page**, so most pages call `<ContentPage ... wrap={false}>` to enforce that — a single source file that overflows is treated as a layout bug to fix, not as content to flow. Leave `wrap` at its `true` default only when a single source file deliberately spans multiple physical pages.
+
+`ChapterTitle` does *not* set `wrap` — chapter title pages always render as a single page.
 
 ## `wrap={false}` on a `<View>`
 

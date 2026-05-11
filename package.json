@@ -17,7 +17,7 @@
     "ebook"
   ],
   "author": "Landon Miles",
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "MIT",
   "packageManager": "pnpm@10.29.1",
   "dependencies": {
     "@react-pdf/renderer": "^4.3.2",

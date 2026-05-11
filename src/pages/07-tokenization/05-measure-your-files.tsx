@@ -1,0 +1,34 @@
+import React from 'react';
+import { Text } from '@react-pdf/renderer';
+import { styles } from '../../styles/shared';
+import { ContentPage, CodeBlock, TipBox, InfoBox, SectionHeading } from '../../components';
+
+const Page: React.FC = () => (
+  <ContentPage sectionTitle="Tokenization" wrap={false}>
+    <Text style={styles.body}>
+      Total context: roughly 1,200 tokens. The AI has everything it needs to produce code that matches your design system, uses the correct component wrapper, and fits the existing page structure. No guesswork required.
+    </Text>
+
+    <InfoBox label="The Reference Folder">
+      Keep a reference/ folder with concise markdown docs about your project: design tokens, component API, coding conventions. When prompting AI, point it to these docs instead of loading all source files. Markdown tokenizes more efficiently than TypeScript code.
+    </InfoBox>
+
+    <TipBox label="Token Budget Template">
+      For each AI edit session, aim for this budget: theme (400) + components (300) + target page (400) + instructions (200) = 1,300 tokens. That leaves the AI 98% of its context window for reasoning and generating output.
+    </TipBox>
+
+    <SectionHeading>Measure Your Own Files</SectionHeading>
+    <Text style={styles.body}>
+      Estimates lie. Real numbers don't. Run this in your project root for a per-file token estimate (4 chars ≈ 1 token):
+    </Text>
+    <CodeBlock language="bash">{`# Approximate token count per .tsx file, largest first
+find src -name '*.tsx' -exec wc -c {} + \\
+  | awk '{ printf "%6d tokens  %s\\n", $1/4, $2 }' \\
+  | sort -rn | head -20`}</CodeBlock>
+    <Text style={styles.body}>
+      Anything over 1,500 tokens is a split candidate. Then sum the files an AI actually needs for one edit (theme + components + target page + instructions). If that total stays under 2,000, you're inside the high-attention zone of every modern model — leaving 95%+ of the context window for reasoning and generation.
+    </Text>
+  </ContentPage>
+);
+
+export default Page;

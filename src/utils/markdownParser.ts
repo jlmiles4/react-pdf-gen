@@ -1,11 +1,39 @@
-import { styles } from '../styles/shared';
+export type InlineSpan =
+  | { type: 'plain'; text: string }
+  | { type: 'bold'; text: string }
+  | { type: 'italic'; text: string }
+  | { type: 'code'; text: string };
 
 export type MarkdownNode =
-  | { type: 'heading'; level: number; text: string }
-  | { type: 'text'; text: string }
-  | { type: 'list'; items: string[] }
+  | { type: 'heading'; level: number; spans: InlineSpan[] }
+  | { type: 'text'; spans: InlineSpan[] }
+  | { type: 'list'; items: InlineSpan[][] }
   | { type: 'code'; language: string; code: string }
-  | { type: 'callout'; variant: 'tip' | 'warning' | 'info'; label: string; text: string };
+  | { type: 'callout'; variant: 'tip' | 'warning' | 'info'; label: string; spans: InlineSpan[] };
+
+/**
+ * Parse `**bold**`, `*italic*` / `_italic_`, and `` `code` `` runs in a single
+ * line of body text. Bold is matched before italic so `**x**` is not seen as
+ * a stray italic. Underscore-italics require non-alphanumeric boundaries so
+ * `snake_case` identifiers are left alone — wrap real identifiers in backticks.
+ */
+export function parseInline(line: string): InlineSpan[] {
+  const spans: InlineSpan[] = [];
+  const re = /\*\*([^*]+)\*\*|`([^`]+)`|\*([^*\n]+)\*|(?<![A-Za-z0-9])_([^_\n]+)_(?![A-Za-z0-9])/g;
+  let last = 0;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(line)) !== null) {
+    if (m.index > last) spans.push({ type: 'plain', text: line.slice(last, m.index) });
+    if (m[1] !== undefined) spans.push({ type: 'bold', text: m[1] });
+    else if (m[2] !== undefined) spans.push({ type: 'code', text: m[2] });
+    else if (m[3] !== undefined) spans.push({ type: 'italic', text: m[3] });
+    else if (m[4] !== undefined) spans.push({ type: 'italic', text: m[4] });
+    last = m.index + m[0].length;
+  }
+  if (last < line.length) spans.push({ type: 'plain', text: line.slice(last) });
+  if (spans.length === 0) spans.push({ type: 'plain', text: line });
+  return spans;
+}
 
 export function parseMarkdown(md: string): MarkdownNode[] {
   const lines = md.split('\n');
@@ -20,23 +48,28 @@ export function parseMarkdown(md: string): MarkdownNode[] {
       continue;
     }
 
-    // Headings
-    if (line.startsWith('## ')) {
-      nodes.push({ type: 'heading', level: 2, text: line.replace('## ', '') });
+    // Headings (check ### before ## before # to avoid prefix collisions)
+    if (line.startsWith('### ')) {
+      nodes.push({ type: 'heading', level: 3, spans: parseInline(line.replace('### ', '')) });
       i++;
       continue;
     }
-    if (line.startsWith('### ')) {
-      nodes.push({ type: 'heading', level: 3, text: line.replace('### ', '') });
+    if (line.startsWith('## ')) {
+      nodes.push({ type: 'heading', level: 2, spans: parseInline(line.replace('## ', '')) });
+      i++;
+      continue;
+    }
+    if (line.startsWith('# ')) {
+      nodes.push({ type: 'heading', level: 1, spans: parseInline(line.replace('# ', '')) });
       i++;
       continue;
     }
 
     // Lists
     if (line.startsWith('* ') || line.startsWith('- ')) {
-      const items: string[] = [];
+      const items: InlineSpan[][] = [];
       while (i < lines.length && (lines[i].trim().startsWith('* ') || lines[i].trim().startsWith('- '))) {
-        items.push(lines[i].trim().replace(/^[*+-]\s+/, ''));
+        items.push(parseInline(lines[i].trim().replace(/^[*+-]\s+/, '')));
         i++;
       }
       nodes.push({ type: 'list', items });
@@ -70,19 +103,19 @@ export function parseMarkdown(md: string): MarkdownNode[] {
           calloutLines.push(lines[i].trim().replace(/^>\s*/, ''));
           i++;
         }
-        nodes.push({ type: 'callout', variant, label, text: calloutLines.join(' ') });
+        nodes.push({ type: 'callout', variant, label, spans: parseInline(calloutLines.join(' ')) });
         continue;
       }
     }
 
     // Default: Body Text (group consecutive lines)
     const textLines: string[] = [];
-    while (i < lines.length && lines[i].trim() && !lines[i].trim().match(/^(##|###|\*|-|```|> \[!)/)) {
+    while (i < lines.length && lines[i].trim() && !lines[i].trim().match(/^(#{1,3}\s|\*\s|-\s|```|> \[!)/)) {
       textLines.push(lines[i].trim());
       i++;
     }
     if (textLines.length > 0) {
-      nodes.push({ type: 'text', text: textLines.join(' ') });
+      nodes.push({ type: 'text', spans: parseInline(textLines.join(' ')) });
     }
   }
 

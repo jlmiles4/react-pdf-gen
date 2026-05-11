@@ -8,6 +8,8 @@ import { colors, typography, spacing, page, borders, fonts, fontScale, fontWeigh
 export const styles = StyleSheet.create({
   // --- Page layouts ---
   page: {
+    width: page.width,
+    height: page.height,
     paddingTop: page.margin.top,
     paddingBottom: page.margin.bottom,
     paddingLeft: page.margin.left,

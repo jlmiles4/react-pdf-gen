@@ -1,6 +1,6 @@
 # Theme tokens
 
-All values come from [`src/styles/theme.ts`](../../src/styles/theme.ts). Sizes are in PDF points (1pt = 1/72 inch).
+The concrete values for every token in [`src/styles/theme.ts`](../../src/styles/theme.ts). For the conceptual layer — what each export is for, how they compose, and conventions for using them — see [design-system](../architecture/design-system.md). Sizes are in PDF points (1pt = 1/72 inch).
 
 ## Colors
 
@@ -212,7 +212,7 @@ Catch-all for layout constants that don't fit any other token bucket.
 | `bulletDotSize` | 6 | `BulletList` SVG circle width/height |
 | `tocEntryNumWidth` | 28 | TOC chapter-number column |
 | `cardShadowOffset` | 2 | Faux-shadow border offset (recipe) |
-| `flowStepWidth` | 100 | Page13 flow-diagram step width |
+| `flowStepWidth` | 100 | Ch11 troubleshooting flow-diagram step width |
 | `dividerHeight` | 2 | Conclusion accent divider |
 | `decorMarkSize` | 160 | `CoverDecor` concentric-mark size |
 | `decorRingsSize` | 240 | `ChapterTitle` decorative-rings size |

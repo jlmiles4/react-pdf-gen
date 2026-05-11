@@ -22,7 +22,7 @@ Exits 1 on render failure. Creates `output/` if it doesn't exist. Does not clean
 
 ## `pnpm sync`
 
-Runs `tsx scripts/sync-project.ts`. Reads `src/pages/*.tsx` alphabetically and writes `src/registry.ts` (auto-generated, gitignored). The registry exports `allPages` (the ordered page array Document.tsx renders) and `tocGroups` (chapter metadata grouped by `// Group:` comment).
+Runs `tsx scripts/sync-project.ts`. Reads `src/manifest.ts` (chapter structure) plus the `src/pages/` tree, then writes `src/registry.ts` (auto-generated, gitignored). The registry exports `allPages` (the ordered page array `Document.tsx` renders, with chrome at the ends and manifest chapters in between) and `tocGroups` (a mirror of the manifest, retained but currently unused — the TOC page reads `MANIFEST` directly).
 
 You don't normally run sync directly — `pnpm build` runs it first, and `pnpm dev` runs it on every change.
 
@@ -43,7 +43,7 @@ Runs `bash scripts/export-pages.sh`. Calls `pdftoppm -png -r 200 output/ebook.pd
 
 Runs `pnpm sync && tsx watch src/build.tsx`. Re-syncs the registry once, then watches `src/` and re-runs the two-pass build on every change. There is no live reload for the PDF viewer — open `output/ebook.pdf` in a viewer that auto-reloads on file change (Skim, Zathura), or re-open after each rebuild.
 
-Note: dev watch re-runs `tsx src/build.tsx` only — if you add a new page file, the registry won't pick it up until the next explicit `pnpm sync` (or restart of dev watch).
+Note: dev watch re-runs `tsx src/build.tsx` only — if you add a new page file or edit `src/manifest.ts`, the registry won't pick it up until the next explicit `pnpm sync` (or restart of dev watch).
 
 ## TypeScript
 

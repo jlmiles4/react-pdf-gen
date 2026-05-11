@@ -1,52 +1,70 @@
 # Page anatomy
 
-A file in `src/pages/` exports one React component returning either a single `<Page>` (chrome) or a `<ChapterTitle>` followed by one or more `<ContentPage>` blocks (a chapter).
+A chapter lives in `src/pages/NN-chapter/`. The first file in that folder is the **chapter-divider page** (`00-title.tsx`) — it renders `<ChapterTitle>` and nothing else. The second (`01-<chapter>.tsx`) is the chapter's first `<ContentPage>`. Sibling files (`02-…`, `03-…`, `04-…`, …) are **continuation pages** — each renders one more `<ContentPage>` for the same chapter.
 
-## Chapter file
+The per-source-file convention is: **one `.tsx` file = one PDF page**. `<ContentPage>` is usually called with `wrap={false}` so a single source file can't accidentally spill onto a second physical page; `wrap` defaults to `true` and is left on only for the rare deliberate multi-page section.
 
-Example: [Page03-Ch01-Introduction.tsx](../../src/pages/Page03-Ch01-Introduction.tsx).
+## Chapter-divider page
+
+Example: [`src/pages/03-introduction/00-title.tsx`](../../src/pages/03-introduction/00-title.tsx).
 
 ```tsx
-// Group: FOUNDATIONS
-const Ch01Intro: React.FC = () => (
-  <>
-    <ChapterTitle number="01" title="Introduction" subtitle="..." />
-    <ContentPage sectionTitle="Introduction">
-      <SectionHeading>What This Book Is</SectionHeading>
-      <Text style={styles.body}>...</Text>
-      <BulletList items={[...]} />
-      <TipBox>...</TipBox>
-    </ContentPage>
-  </>
+import React from 'react';
+import { ChapterTitle } from '../../components';
+
+const Page: React.FC = () => (
+  <ChapterTitle
+    number="01"
+    title="Introduction"
+    subtitle="Why react-pdf and AI belong together..."
+  />
 );
+
+export default Page;
 ```
 
-`<ChapterTitle>` renders a full-bleed dark-navy `<Page>` with no header/footer. `<ContentPage>` renders a LETTER `<Page>` with `wrap`, a fixed `<Header>`, and a fixed `<Footer>`. A chapter can hold multiple `<ContentPage>` blocks if its content spans more than one page.
+`<ChapterTitle>` renders a full-bleed dark-navy `<Page>` (no header/footer) with the chapter label, large white title, and optional subtitle. The divider is its own file so the "one source file = one PDF page" rule actually holds — and so an AI agent can edit a chapter's first content page without touching the divider.
 
-The `// Group: NAME` comment at the top is what wires the page into the right TOC group during sync. The chapter `number`/`title`/`subtitle` come from the `<ChapterTitle>` JSX props (also read at sync time). See [registry-sync](../build/registry-sync.md) for the full extraction rules.
+The `number`/`title`/`subtitle` props on `<ChapterTitle>` should match the matching `Chapter` entry in [`src/manifest.ts`](../../src/manifest.ts). Sync does not enforce the match — the manifest is what drives the TOC; the JSX props are what the chapter title page actually displays.
 
-## Multi-file chapter
+## First content page
 
-When a chapter outgrows one source file (e.g. Ch08 spans `Page10`, `Page11`, `Page12`), only the first file declares `<ChapterTitle>` and the `// Group:` comment. Continuation files are plain `<ContentPage>` exports — they render without their own chapter divider and don't add a TOC entry.
+Example: [`src/pages/03-introduction/01-introduction.tsx`](../../src/pages/03-introduction/01-introduction.tsx). Same shape as a continuation page — just one `<ContentPage>`. `<ContentPage>` renders a LETTER `<Page>` with `wrap` controllable, a fixed `<Header>`, and a fixed `<Footer>`.
+
+## Continuation page
+
+Example: [`src/pages/04-fundamentals/03-styling-and-flexbox.tsx`](../../src/pages/04-fundamentals/03-styling-and-flexbox.tsx).
 
 ```tsx
-// Page11-Ch08-IconAdapter.tsx — no Group comment, no ChapterTitle
-const Ch08IconAdapter: React.FC = () => (
-  <ContentPage sectionTitle="Icons over Emojis">
-    ...
+import React from 'react';
+import { Text } from '@react-pdf/renderer';
+import { styles } from '../../styles/shared';
+import { ContentPage, CodeBlock, SectionHeading } from '../../components';
+
+const Page: React.FC = () => (
+  <ContentPage sectionTitle="Fundamentals" wrap={false}>
+    <SectionHeading>The Styling System</SectionHeading>
+    <Text style={styles.body}>...</Text>
+    <CodeBlock language="tsx">{`...`}</CodeBlock>
   </ContentPage>
 );
+
+export default Page;
 ```
+
+No `<ChapterTitle>`, no fragment wrapper — just one `<ContentPage>`. The `sectionTitle` repeats the chapter name so the page header shows it.
+
+Continuation files are picked up automatically: `scripts/sync-project.ts` walks the chapter folder (everything that shares the divider page's directory prefix) and sorts the files alphabetically. The numeric prefixes (`00-title`, `01-<chapter>`, `02-…`, `03-…`, …) drive that ordering.
 
 ## Chrome pages
 
-Cover, TOC, and Conclusion drop the `Ch##` segment from the filename — `Page01-Cover.tsx`, `Page02-TOC.tsx`, `Page22-Conclusion.tsx`. They typically render a single custom `<Page>` (no `<ChapterTitle>`, no `<ContentPage>`) because their layouts are unique:
+Cover, TOC, and Conclusion each live in their own folder with a single `01-` file: `01-cover/01-cover.tsx`, `02-toc/01-toc.tsx`, `15-conclusion/01-conclusion.tsx`. Chrome folders use the `NN-…/01-…tsx` shape directly — no separate `00-title.tsx`, because chrome pages aren't chapters and don't have a `<ChapterTitle>` divider. They render a custom `<Page>` rather than going through `<ContentPage>` because their layouts are unique:
 
 - **Cover** — full-bleed dark `<Page>`, large display title, gold accent bar, no header/footer.
-- **TOC** — custom layout reading `tocGroups` from the registry plus `getTocPositions()` from `src/tocPositions.ts` (which reads `output/toc-positions.json`).
-- **Conclusion** — typically full-bleed hero, sometimes followed by a back-cover `<ContentPage>`.
+- **TOC** — custom layout that imports `MANIFEST` from `src/manifest.ts` and `getTocPositions()` from `src/tocPositions.ts` (which reads `output/toc-positions.json`). Sequence of group badges, then per-chapter rows of `num · title/subtitle · page-number`.
+- **Conclusion** — typically a full-bleed hero, sometimes followed by a back-cover `<ContentPage>`.
 
-Chrome pages don't need `// Group:` (they aren't grouped in the TOC). They are picked up by sync automatically because they live in `src/pages/`.
+Chrome pages are not listed in `MANIFEST`. Cover and TOC are hard-coded at the start of the registry's page array; Conclusion is appended at the end. See [registry-sync](../build/registry-sync.md).
 
 ## Data flow at build time
 
@@ -55,11 +73,11 @@ src/build.tsx
   └─ imports './fonts'              (Font.register — must run before render)
   └─ imports './Document'
        └─ imports './registry'      (auto-generated by sync-project.ts)
-            └─ imports each src/pages/Page*.tsx
+            └─ imports each src/pages/NN-chapter/NN-page.tsx
                  └─ each page imports from src/components/ and src/styles/
 
 ReactPDF.render(<EbookDocument/>, 'output/ebook.pdf')
   └─ writes PDF, runs pdftotext for chapter positions, re-renders
 ```
 
-See [pipeline](../build/pipeline.md) for the two-pass detail and [registry-sync](../build/registry-sync.md) for the metadata-extraction rules.
+See [pipeline](../build/pipeline.md) for the two-pass detail and [registry-sync](../build/registry-sync.md) for how `manifest.ts` plus the directory layout produce the import order in `registry.ts`.

@@ -32,7 +32,7 @@ Every export is `as const`. `typography` composes from `fontWeight` and `lineHei
 
 - **Page layout:** `page`, `pageNoPadding`
 - **Typography:** `display`, `h1`, `h2`, `h2Container`, `h2Accent`, `h2Text`, `h3`, `h4`, `body`, `bodySmall`, `caption`, `bold`, `italic`
-- **Layout helpers:** `row`, `col`, `center`, `spaceBetween`, `flex1`, `flexWrap`
+- **Layout helpers:** `row`, `col`, `center`, `spaceBetween`, `flex1`, `flexWrap`, `iconRow` (icon + label on one baseline)
 - **Code:** `codeBlock`, `codeText`, `codeLabel`, `inlineCode`
 - **Callouts:** `tipBox`, `tipLabel`, `warningBox`, `warningLabel`, `infoBox`, `infoLabel`
 - **Lists:** `listItem`, `listBullet`, `listContent`

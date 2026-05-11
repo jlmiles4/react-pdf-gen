@@ -19,12 +19,12 @@ Drop `CLAUDE.md.template` into your project root as `CLAUDE.md`. Claude Code rea
 
 ## The Source Code
 
-The full source of the ebook you purchased is in the `src/` directory of this repo. It's a working 54-page PDF that demonstrates every pattern discussed in the book:
+The full source of the ebook you purchased is in the `src/` directory of this repo. It's a working 73-page PDF that demonstrates every pattern discussed in the book:
 
 - `src/styles/theme.ts` — Complete design token system
 - `src/styles/shared.ts` — Shared StyleSheet with 40+ styles
 - `src/components/` — 11 reusable components
-- `src/pages/` — 13 page files (cover, TOC, 11 chapters)
+- `src/pages/` — 15 page files (cover, TOC, 12 chapters, conclusion)
 - `src/fonts.ts` — Font registration pattern
 - `src/build.tsx` — Build script
 - `STYLE.md` — Design system documentation
