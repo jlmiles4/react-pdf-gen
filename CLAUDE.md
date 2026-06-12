@@ -49,7 +49,7 @@
 See `docs/guides/add-a-page.md` for full skeletons.
 
 ## Image Viewing Limit
-The Claude API has a hard limit of **100 images per conversation**. This project exports ~70 page PNGs (close to the limit), so batch-reading them will break the session with an `invalid_request_error`.
+Model APIs hard-cap images per conversation (the Claude API fails at **100** with an `invalid_request_error`; other providers have similar caps). This project exports ~70 page PNGs — close to that limit — so batch-reading them will break the session.
 
 - **Only open one PNG at a time.** Never batch-read all pages from `output/pages/`.
 - When verifying visual output, open only the specific page(s) you changed.
