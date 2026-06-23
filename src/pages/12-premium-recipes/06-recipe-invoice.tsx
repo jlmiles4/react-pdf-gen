@@ -10,9 +10,8 @@ const Page: React.FC = () => (
       This invoice component takes a typed data object and renders a header, line items table, and totals. Swap the InvoiceData interface for any typed shape (receipts, purchase orders, quotes) and the structure stays the same.
     </Text>
     <CodeBlock language="tsx">{`interface InvoiceData {
-  number: string; date: string; due: string;
+  number: string; due: string;
   from: { name: string; address: string };
-  to: { name: string; address: string };
   items: { desc: string; qty: number; price: number }[];
   tax?: number;
 }

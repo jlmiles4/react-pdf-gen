@@ -13,10 +13,10 @@ const Page: React.FC = () => (
       headers={['Error', 'Root Fix', 'Pattern From']}
       rows={[
         ['Text not in <Text>', 'Wrap all strings', 'Ch2: Fundamentals'],
-        ['Wrong font', 'Match fontWeight to registered weights', 'Ch4: Design Tokens'],
-        ['Content overflow', 'Remove wrap={false} from parent', 'Ch7: Challenges'],
-        ['Orphaned heading', 'minPresenceAhead={40}', 'Ch7: Challenges'],
-        ['Split callout', 'wrap={false} on outer View', 'Ch7: Challenges'],
+        ['Wrong font', 'Match fontWeight to registered weights', 'Ch2: Fundamentals'],
+        ['Content overflow', 'Remove wrap={false} from parent', 'Ch2: Fundamentals'],
+        ['Orphaned heading', 'minPresenceAhead={40}', 'Ch2: Fundamentals'],
+        ['Split callout', 'wrap={false} on outer View', 'Ch2: Fundamentals'],
         ['Styles ignored', 'Use camelCase, check support', 'Ch2: Fundamentals'],
         ['Wrong layout', 'Set flexDirection: "row"', 'Ch7: Challenges'],
         ['Out of memory', 'Resize images, increase heap', 'Ch11: Troubleshooting'],
@@ -24,7 +24,7 @@ const Page: React.FC = () => (
       columnWidths={['25%', '40%', '35%']}
     />
     <Text style={styles.body}>
-      The debug workflow isn't something you do when things go wrong. It's the last step in the build loop: write, render, export, review, fix. When that loop is fast — and with react-pdf and PNG export, it's very fast — you stop fearing bugs and start shipping.
+      The debug workflow isn't something you do when things go wrong. It's the last step in the build loop: write, render, export, review, fix. When that loop is fast – and with react-pdf and PNG export, it's very fast – you stop fearing bugs and start shipping.
     </Text>
   </ContentPage>
 );

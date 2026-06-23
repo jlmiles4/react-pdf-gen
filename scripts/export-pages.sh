@@ -14,10 +14,15 @@ if [ ! -f "$PDF_FILE" ]; then
   exit 1
 fi
 
-# Check for pdftoppm
+# pdftoppm ships with poppler-utils. Don't auto-install (sudo/network/OS vary) —
+# detect it and print platform-specific guidance instead.
 if ! command -v pdftoppm &> /dev/null; then
-  echo "Installing poppler-utils for pdftoppm..."
-  sudo apt-get install -y poppler-utils
+  echo "Error: pdftoppm not found (needed to rasterize the PDF)." >&2
+  echo "Install poppler-utils:" >&2
+  echo "  Debian/Ubuntu: sudo apt-get install -y poppler-utils" >&2
+  echo "  macOS:         brew install poppler" >&2
+  echo "  Fedora/RHEL:   sudo dnf install poppler-utils" >&2
+  exit 1
 fi
 
 mkdir -p "$PNG_DIR"

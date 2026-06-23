@@ -5,16 +5,17 @@
 - **Sync Registry:** `pnpm sync` (regenerates `src/registry.ts` from `src/pages/`)
 - **Export PNGs:** `pnpm export` (runs `scripts/export-pages.sh`, outputs to `output/pages/`)
 - **Full pipeline:** `pnpm pipeline` (build + export)
+- **Typecheck:** `pnpm typecheck` (sync, then `tsc --noEmit`)
 - **Dev watch:** `pnpm dev`
 
 ## Architecture Rules
-1. **One file per page.** Each `.tsx` under `src/pages/` renders exactly one PDF page. Layout is directory-based: one folder per chapter, `src/pages/NN-chapter/NN-page.tsx`. Each chapter folder starts with `00-title.tsx` (renders `<ChapterTitle>` only), then `01-<chapter>.tsx` (first `<ContentPage>`), then continuation pages `02-…`, `03-…`. Book chrome (Cover, TOC, Conclusion) live in their own folders — `01-cover/`, `02-toc/`, `15-conclusion/` — each with a single `01-…tsx` file and no divider.
-2. **Manifest, not metadata comments.** Chapter structure lives in `src/manifest.ts` (groups, num, title, subtitle, entryPage). `scripts/sync-project.ts` reads it plus the `src/pages/` tree to generate `src/registry.ts` (auto-generated, gitignored). Page files contain only React — no `// Group:` / `// Number:` / `// Title:` directives. To add a chapter, edit the manifest; to add a page within a chapter, just drop a file in the folder.
+1. **One file per page.** Each `.tsx` under `src/pages/` renders exactly one PDF page. Layout is directory-based: one folder per chapter, `src/pages/NN-chapter/NN-page.tsx`. Each chapter folder starts with `00-title.tsx` (renders `<ChapterTitle>` only), then `01-<chapter>.tsx` (first `<ContentPage>`), then continuation pages `03-…`, `04-…` (continuations start at `03-` by convention). Book chrome (Cover, TOC, Conclusion) live in their own folders — `01-cover/`, `02-toc/`, `15-conclusion/` — each with a single `01-…tsx` file and no divider.
+2. **Manifest, not metadata comments.** Chapter structure lives in `src/manifest.ts` — a `Group[]`, where each group has `id`/`title`/`chapters` and each chapter has `num`/`title`/`subtitle`/`entryPage`. `scripts/sync-project.ts` reads it plus the `src/pages/` tree to generate `src/registry.ts` (auto-generated, gitignored). Page files contain only React — no `// Group:` / `// Number:` / `// Title:` directives. To add a chapter, edit the manifest; to add a page within a chapter, just drop a file in the folder.
 3. **Dir-number vs chapter-number.** The page directories are `01`–`15` (book-position order); manifest chapter numbers run `01`–`12`. The gap is the three chrome folders (`01-cover`, `02-toc`, `15-conclusion`). Chapter directory `NN` maps to manifest chapter `NN - 2`.
 4. **Design tokens only.** Never hardcode colors, fonts, weights, sizes, line heights, icon sizes, or spacing. Import from `src/styles/theme.ts`. Tokens cover: `colors`, `fonts`, `fontWeight`, `lineHeight`, `typography`, `fontScale`, `letterSpacing`, `spacing`, `page`, `borders`, `iconSize`, `opacity`, `accentBar`, `layout`, `syntax`.
 5. **Shared components.** Use existing components from `src/components/` — never recreate patterns inline.
-6. **No Helvetica.** All text uses Inter. Always pair `fontFamily` with `fontWeight` from the `fontWeight` token (`fontWeight.regular`/`semibold`/`bold`) — never inline literals like `fontWeight: 700 as const`.
-7. **Markdown support.** Use `<MarkdownRenderer content={body} />` to render content from .md files. Supports `#`/`##`/`###` headings, `**bold**`, `*italic*`/`_italic_`, `` `code` ``, lists, fenced code blocks, and `> [!TIP|WARNING|INFO]` callouts.
+6. **No Helvetica.** All body and heading text uses Inter; code blocks and inline code use the monospace `fonts.mono`/`fonts.monoBold` (Courier) tokens. Always pair `fontFamily` with `fontWeight` from the `fontWeight` token (`fontWeight.regular`/`semibold`/`bold`) — never inline literals like `fontWeight: 700 as const`.
+7. **Markdown support.** Use `<MarkdownRenderer content={body} />` to render a Markdown string. Supports `#`/`##`/`###` headings, `**bold**`, `*italic*`/`_italic_`, `` `code` ``, lists, fenced code blocks, and `> [!TIP|WARNING|INFO]` callouts. (Only `14-markdown-automation/01-…` actually reads from a `.md` file; the rest of the book is hand-authored TSX.)
 8. **wrap={false}** on any element that must not split across pages.
 9. **minPresenceAhead={40}** on section headings.
 
@@ -23,7 +24,7 @@
 |------|---------|
 | `src/styles/theme.ts` | Design tokens (colors, fonts, spacing, borders, page) |
 | `src/styles/shared.ts` | Shared StyleSheet used by all pages |
-| `src/fonts.ts` | Inter font registration (7 weights) |
+| `src/fonts.ts` | Inter font registration (7 weight/style variants) |
 | `src/Document.tsx` | Root Document component, assembles all pages |
 | `src/build.tsx` | Build script |
 | `STYLE.md` | Complete visual style guide |
@@ -36,9 +37,12 @@
 <SectionBanner title="..." subtitle="..." />  — Dark navy hero card
 <CodeBlock language="tsx">{code}</CodeBlock>   — Dark code block
 <BulletList items={['item1', 'item2']} />     — Gold-dot bullet list
-<Table headers={[...]} rows={[[...]]} columnWidths={['30%','70%']} />
+<Table headers={[...]} rows={[[...]]} columnWidths={['30%','70%']} />  — cells are plain strings (no inline JSX)
 <TipBox label="Custom Label">text</TipBox>    — Gold callout (also: WarningBox, InfoBox)
 <CheckIcon size={iconSize.sm} color={colors.success} /> — SVG icon (also: XIcon, InfoIcon, etc.)
+<RecipeCard title="..." icon={<...>}>…</RecipeCard>  — bordered titled card (Ch07/Ch10 recipe pattern)
+<ChecklistItem>text</ChecklistItem>      — check-icon checklist row; pair with <ChecklistCategory>Heading</ChecklistCategory> (Ch10 checklists)
+<IconList items={[...]} icon={CheckIcon} color={colors.success} />  — icon + bodySmall row list, optional size (Ch09 checklists)
 ```
 
 ## When Adding a New Page
@@ -69,3 +73,4 @@ Model APIs hard-cap images per conversation (the Claude API fails at **100** wit
 - `reference/react-pdf-api/` — Upstream react-pdf API docs
 - `STYLE.md` — Visual style guide with color palette, typography, spacing
 - `TASK.md` — Project roadmap and chapter status
+- `content/chapters/` — author Markdown drafts; **not** loaded by the build except `12-markdown-demo.md` (rendered by `14-markdown-automation/01-…`). Editing the others does not change the PDF.

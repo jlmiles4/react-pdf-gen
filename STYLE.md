@@ -7,11 +7,11 @@ This document defines the visual language for the ebook. Every page, component, 
 ## Typography
 
 **Font Family:** Inter (Google Fonts)
-Registered via `src/fonts.ts` with weights 400, 500, 600, 700 (regular + italic variants).
+Registered via `src/fonts.ts` with weights 400, 500, 600, 700, plus italics for 400/600/700.
 
 | Token       | Size  | Weight | Use                                    |
 |-------------|-------|--------|----------------------------------------|
-| `display`   | 36pt  | 700    | Cover page title                       |
+| `display`   | 36pt  | 700    | Hero scale (cover title itself uses `fontScale.coverTitle` = 42pt) |
 | `h1`        | 26pt  | 700    | Page-level headings (rarely used)      |
 | `h2`        | 20pt  | 600    | Section headings (via `SectionHeading`)|
 | `h3`        | 16pt  | 600    | Sub-section headings                   |
@@ -23,7 +23,7 @@ Registered via `src/fonts.ts` with weights 400, 500, 600, 700 (regular + italic 
 | `codeSmall` | 8pt   | —      | Inline code labels                     |
 
 **Rules:**
-- Never use default Helvetica. Every text element must use `fonts.body`, `fonts.bodyBold`, or `fonts.heading` from `theme.ts`.
+- Never use default Helvetica. Every text element must use `fonts.body`, `fonts.bodyBold`, or `fonts.heading` from `theme.ts` — except code, which uses `fonts.mono`/`fonts.monoBold` (Courier).
 - Always pair `fontFamily: fonts.bodyBold` with `fontWeight: fontWeight.semibold` (Inter is a single family; weight alone controls boldness).
 - Headings use `fontWeight.bold` (700) for heading-level or `fontWeight.semibold` (600) for sub-heading. Use the token, not the literal.
 - Body text line-height: `lineHeight.relaxed` (1.6). Never below `lineHeight.snug` (1.4) for any text.
@@ -87,10 +87,12 @@ Body text, borders, subtle backgrounds, secondary information.
 
 ## Spacing Scale
 
-Based on a 4pt grid:
+Based on a 4pt grid, plus two sub-grid utility tokens:
 
 | Token  | Value | Use                                     |
 |--------|-------|-----------------------------------------|
+| `micro`| 1pt   | Hairlines, inline-code vertical padding |
+| `xxs`  | 2pt   | Sub-grid nudges (inline code, TOC rows) |
 | `xs`   | 4pt   | Tight gaps, icon-to-label spacing       |
 | `sm`   | 8pt   | Standard element spacing, list items    |
 | `md`   | 12pt  | Component internal padding, margins     |
@@ -120,8 +122,8 @@ Based on a 4pt grid:
 
 ### Page Types
 
-1. **Cover Page** (`Page01-Cover.tsx`) — Dark navy background, gold accent bar, large display title, no header/footer.
-2. **Table of Contents** (`Page02-TOC.tsx`) — Custom layout with grouped chapter entries and colored category badges.
+1. **Cover Page** (`01-cover/01-cover.tsx`) — Dark navy background, gold accent bar, large display title, no header/footer.
+2. **Table of Contents** (`02-toc/01-toc.tsx`) — Custom layout with grouped chapter entries and colored category badges.
 3. **Chapter Title Pages** (`ChapterTitle` component) — Dark navy full-bleed page, gold accent bar, chapter number + title + subtitle. Decorative SVG circle in corner.
 4. **Content Pages** (`ContentPage` wrapper) — White background, fixed header with section title, fixed footer with brand + page number.
 
@@ -190,8 +192,11 @@ SVG-based Lucide icons. Never use emoji. Available: `CheckIcon`, `XIcon`, `Alert
 ```
 src/
 ├── fonts.ts              # Inter font registration
-├── build.tsx             # PDF build script
-├── Document.tsx          # Root Document component
+├── build.tsx             # PDF build script (two-pass render)
+├── Document.tsx          # Root Document component (maps the generated registry)
+├── manifest.ts           # Chapter structure (source of truth)
+├── registry.ts           # AUTO-GENERATED page list (gitignored)
+├── tocPositions.ts       # Reads output/toc-positions.json
 ├── styles/
 │   ├── theme.ts          # Design tokens (single source of truth)
 │   └── shared.ts         # Shared StyleSheet used by all pages
@@ -206,12 +211,25 @@ src/
 │   ├── CodeBlock.tsx     # Styled code block
 │   ├── BulletList.tsx    # Gold-dot bullet list
 │   ├── Table.tsx         # Professional table
-│   └── Icons.tsx         # SVG Lucide icons
-└── pages/
-    ├── Page01-Cover.tsx
-    ├── Page02-TOC.tsx
-    ├── Page03-Ch01-*.tsx
-    └── ...
+│   ├── MarkdownRenderer.tsx # Renders Markdown strings (headings, lists, code, callouts)
+│   ├── RecipeCard.tsx    # Bordered recipe/example card
+│   ├── ChecklistItem.tsx # Check-icon checklist row + category heading
+│   ├── IconList.tsx      # Icon + small-body row list
+│   ├── AccentBar.tsx     # Horizontal gold hero bar
+│   ├── CoverDecor.tsx    # Concentric-circle background flourish
+│   ├── Icon.tsx          # react-icons → react-pdf adapter
+│   ├── Icons.tsx         # SVG Lucide icons (bound via Icon.tsx)
+│   └── index.ts          # Barrel re-export
+├── utils/
+│   ├── syntaxHighlight.ts# CodeBlock token coloring
+│   └── markdownParser.ts # MarkdownRenderer parser
+└── pages/                # One folder per chapter: NN-chapter/NN-page.tsx
+    ├── 01-cover/01-cover.tsx
+    ├── 02-toc/01-toc.tsx
+    ├── 03-introduction/00-title.tsx       # chapter divider
+    ├── 03-introduction/01-introduction.tsx
+    ├── 03-introduction/03-who-this-is-for.tsx # continuations start at 03-
+    └── ...                                # 04-fundamentals/ … 15-conclusion/
 fonts/
     ├── Inter-Regular.ttf
     ├── Inter-Medium.ttf
@@ -230,14 +248,14 @@ When asking AI to create or edit a page, include these constraints:
 
 ```
 Create [page type] using these constraints:
-- Import styles from '../styles/shared'
-- Import tokens from '../styles/theme'
+- Import styles from '../../styles/shared'
+- Import tokens from '../../styles/theme'
 - Use ContentPage wrapper with sectionTitle="[section]"
 - Section headings: <SectionHeading> component (gold bar + h2)
 - Body text: styles.body (11pt Inter, neutral[800])
 - Include at least one: CodeBlock, BulletList, or TipBox
 - Match spacing and density of [existing page file]
 - No inline styles except in local StyleSheet.create()
-- No emojis – use Icons from '../components/Icons'
+- No emojis – use icons from the '../../components' barrel (CheckIcon, XIcon, ...)
 - fontWeight must accompany every fontFamily reference, sourced from `fontWeight.*` token (never inline literals)
 ```

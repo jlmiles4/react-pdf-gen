@@ -51,13 +51,13 @@ body: {
 
 ### Proper margins and whitespace
 
-Do not cram content to the edges. Standard page margins of 36-48pt (0.5-0.67 inches) give the content room to breathe. Generous margins look more professional than tight margins.
+Do not cram content to the edges. Use at least 36pt (0.5 inches) of page margin; 50-70pt reads as premium – this kit uses 54-60pt. Generous margins look more professional than tight margins.
 
 ```tsx
 page: {
-  paddingTop: 40,
-  paddingBottom: 60,     // extra for footer
-  paddingHorizontal: 40,
+  paddingTop: 60,
+  paddingBottom: 60,     // room for footer
+  paddingHorizontal: 54,
 }
 ```
 
@@ -273,7 +273,7 @@ Headings, body text, cards, and images should all align to the same left margin.
 
 ```tsx
 // GOOD – all content shares the same left edge (page padding)
-page: { paddingHorizontal: 40 }  // everything starts at 40pt from left
+page: { paddingHorizontal: 54 }  // everything starts at 54pt from left
 
 // BAD – some elements have extra left margin, creating misalignment
 heading: { marginLeft: 0 }
@@ -318,7 +318,7 @@ Typography
   [ ] No text is smaller than 7pt
 
 Spacing
-  [ ] Page margins are 36-48pt on all sides
+  [ ] Page margins are at least 36pt on all sides (50-70pt reads as premium)
   [ ] Consistent spacing between sections
   [ ] Cards and containers have internal padding
   [ ] Passes the squint test (balanced blocks with breathing room)

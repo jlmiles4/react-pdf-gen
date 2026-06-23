@@ -24,10 +24,10 @@ const Page: React.FC = () => (
     <Table
       headers={['Web CSS', 'react-pdf Equivalent']}
       rows={[
-        ['box-shadow', 'Not supported — use borderWidth + borderColor'],
+        ['box-shadow', 'Not supported – use borderWidth + borderColor'],
         ['text-decoration', 'textDecoration (underline, line-through)'],
-        ['linear-gradient', 'Not supported — use Svg + Defs'],
-        ['display: grid', 'Not supported — use flexbox'],
+        ['linear-gradient', 'Not supported – use Svg + Defs'],
+        ['display: grid', 'Not supported – use flexbox'],
         ['font-weight: bold', 'fontWeight: 700 (numeric or named)'],
       ]}
       columnWidths={['45%', '55%']}

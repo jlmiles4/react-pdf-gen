@@ -4,7 +4,7 @@ import { styles } from '../../styles/shared';
 import { ContentPage, Table, WarningBox, SectionHeading } from '../../components';
 
 const Page: React.FC = () => (
-  <ContentPage sectionTitle="Icons vs Emojis" wrap={false}>
+  <ContentPage sectionTitle="Icons over Emojis" wrap={false}>
       <SectionHeading>Why Emojis Fail in PDFs</SectionHeading>
       <Text style={styles.body}>
         Emojis look harmless. They're quick to type and AI agents love inserting them. But in react-pdf, they introduce real problems:

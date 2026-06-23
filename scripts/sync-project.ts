@@ -5,8 +5,12 @@ import { MANIFEST } from '../src/manifest';
 const PAGES_DIR = path.join(__dirname, '../src/pages');
 const REGISTRY_FILE = path.join(__dirname, '../src/registry.ts');
 
+// Chrome folders aren't manifest chapters; they render at fixed book positions.
+const CHROME_START = ['01-cover', '02-toc'];
+const CHROME_END = ['15-conclusion'];
+
 function toIdentifier(relPath: string): string {
-  // Convert "03-introduction/01-introduction" -> "Page_03_Introduction_01_Introduction".
+  // Convert "03-introduction/01-introduction" -> "Page_03Introduction_01Introduction".
   const pascal = relPath
     .split('/')
     .map((segment) =>
@@ -20,13 +24,13 @@ function toIdentifier(relPath: string): string {
   return `Page_${pascal}`;
 }
 
-/** 
- * Walk PAGES_DIR finding all .tsx files.
- * We'll use this to ensure all files are included, even those not in the manifest.
+/**
+ * Walk PAGES_DIR finding all .tsx files (relative paths without extension),
+ * sorted. Used so every page file is included, even ones not in the manifest.
  */
 function findAllPageFiles(): string[] {
   const files: string[] = [];
-  
+
   function walk(dir: string) {
     const entries = fs.readdirSync(dir, { withFileTypes: true });
     for (const entry of entries) {
@@ -34,7 +38,7 @@ function findAllPageFiles(): string[] {
       if (entry.isDirectory()) {
         walk(res);
       } else if (entry.isFile() && entry.name.endsWith('.tsx')) {
-        files.push(path.relative(PAGES_DIR, res).replace('.tsx', ''));
+        files.push(path.relative(PAGES_DIR, res).replace(/\.tsx$/, ''));
       }
     }
   }
@@ -43,57 +47,68 @@ function findAllPageFiles(): string[] {
   return files.sort();
 }
 
-async function sync() {
+function sync() {
   const allFiles = findAllPageFiles();
-  
-  // 1. Start with fixed chrome
-  const orderedRelPaths: string[] = [
-    '01-cover/01-cover',
-    '02-toc/01-toc'
-  ];
+  const claimed = new Set<string>();
 
-  // 2. Add manifest chapters and their directory siblings
-  const manifestFiles = new Set<string>();
-  
-  MANIFEST.forEach(group => {
-    group.chapters.forEach(ch => {
+  const filesInDirs = (dirs: string[]): string[] => {
+    const out: string[] = [];
+    for (const dir of dirs) {
+      for (const f of allFiles) {
+        if (f.startsWith(dir + '/') && !claimed.has(f)) {
+          out.push(f);
+          claimed.add(f);
+        }
+      }
+    }
+    return out;
+  };
+
+  // 1. Fixed chrome at the start (all files in cover/TOC folders, sorted).
+  const startPaths = filesInDirs(CHROME_START);
+
+  // 2. Manifest chapters and their directory siblings, in manifest order.
+  const middlePaths: string[] = [];
+  MANIFEST.forEach((group) => {
+    group.chapters.forEach((ch) => {
       const entryPath = ch.entryPage;
-      if (manifestFiles.has(entryPath)) return;
-      manifestFiles.add(entryPath);
-      orderedRelPaths.push(entryPath);
+      if (!allFiles.includes(entryPath)) {
+        console.error(
+          `sync: manifest chapter ${ch.num} ("${ch.title}") entryPage '${entryPath}' has no matching file under src/pages/`,
+        );
+        process.exit(1);
+      }
+      if (claimed.has(entryPath)) return;
+      middlePaths.push(entryPath);
+      claimed.add(entryPath);
 
-      // Find all files in the same directory as the entry page that haven't
-      // already been claimed by another manifest entry sharing the directory.
+      // All files sharing the entry page's directory that no other entry claimed.
       const chDir = path.dirname(entryPath);
-      const siblings = allFiles
-        .filter(f => f.startsWith(chDir + '/') && f !== entryPath && !manifestFiles.has(f))
-        .sort();
-
-      siblings.forEach(s => {
-        orderedRelPaths.push(s);
-        manifestFiles.add(s);
-      });
+      allFiles
+        .filter((f) => f.startsWith(chDir + '/') && !claimed.has(f))
+        .sort()
+        .forEach((f) => {
+          middlePaths.push(f);
+          claimed.add(f);
+        });
     });
   });
 
-  // 3. Add any leftovers (files not in manifest or not siblings of manifest entries)
-  const leftovers = allFiles.filter(f => 
-    !manifestFiles.has(f) && 
-    f !== '01-cover/01-cover' && 
-    f !== '02-toc/01-toc' &&
-    f !== '15-conclusion/01-conclusion'
-  );
-  
-  orderedRelPaths.push(...leftovers);
-  
-  // 4. End with conclusion
-  if (allFiles.includes('15-conclusion/01-conclusion')) {
-    orderedRelPaths.push('15-conclusion/01-conclusion');
+  // 3. Conclusion / back-cover chrome, appended at the end.
+  const endPaths = filesInDirs(CHROME_END);
+
+  // 4. Anything not claimed by chrome or the manifest (defensive — keeps the page
+  //    in the book rather than dropping it silently, just before the conclusion).
+  const leftovers = allFiles.filter((f) => !claimed.has(f)).sort();
+  if (leftovers.length > 0) {
+    console.warn(`sync: ${leftovers.length} page(s) not in manifest or chrome, placed before conclusion: ${leftovers.join(', ')}`);
   }
 
-  const pages = orderedRelPaths.map(relPath => ({
+  const orderedRelPaths = [...startPaths, ...middlePaths, ...leftovers, ...endPaths];
+
+  const pages = orderedRelPaths.map((relPath) => ({
     relPath,
-    component: toIdentifier(relPath)
+    component: toIdentifier(relPath),
   }));
 
   const imports = pages
@@ -102,28 +117,15 @@ async function sync() {
 
   const pagesList = pages.map((p) => p.component).join(',\n  ');
 
-  // Simple groups for TOC consumption
-  const tocGroups: Record<string, any[]> = {};
-  MANIFEST.forEach(g => {
-    tocGroups[g.id] = g.chapters.map(ch => ({
-      num: ch.num,
-      title: ch.title,
-      subtitle: ch.subtitle
-    }));
-  });
-
   const registryContent = `/**
  * AUTO-GENERATED FILE - DO NOT EDIT MANUALLY
  * Generated by scripts/sync-project.ts
  */
-import React from 'react';
 ${imports}
 
 export const allPages = [
   ${pagesList}
 ];
-
-export const tocGroups = ${JSON.stringify(tocGroups, null, 2)};
 `;
 
   fs.writeFileSync(REGISTRY_FILE, registryContent);

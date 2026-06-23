@@ -29,11 +29,12 @@ export const colors = {
     400: '#F5B733',   // Light accent - code labels
     50:  '#FEF8E6',   // Lightest - tip box backgrounds
   },
-  // Neutral palette (10 shades for text, borders, backgrounds)
+  // Neutral palette (8 shades for text, borders, backgrounds)
   neutral: {
     900: '#1A1A2E',   // Default text
     800: '#2D2D44',   // Body text
     500: '#7A7A91',   // Secondary text
+    400: '#9696AA',   // Muted glyphs, diagram arrows
     300: '#B2B2C2',   // Subtitles
     200: '#D0D0DB',   // Borders
     100: '#E8E8EF',   // Subtle lines
@@ -52,7 +53,6 @@ export const colors = {
 
 export const fonts = {
   heading: 'Inter',      // fontWeight 700
-  headingLight: 'Inter', // fontWeight 500
   body: 'Inter',         // fontWeight 400
   bodyBold: 'Inter',     // fontWeight 600
   mono: 'Courier',

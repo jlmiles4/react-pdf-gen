@@ -22,9 +22,9 @@ Exits 1 on render failure. Creates `output/` if it doesn't exist. Does not clean
 
 ## `pnpm sync`
 
-Runs `tsx scripts/sync-project.ts`. Reads `src/manifest.ts` (chapter structure) plus the `src/pages/` tree, then writes `src/registry.ts` (auto-generated, gitignored). The registry exports `allPages` (the ordered page array `Document.tsx` renders, with chrome at the ends and manifest chapters in between) and `tocGroups` (a mirror of the manifest, retained but currently unused — the TOC page reads `MANIFEST` directly).
+Runs `tsx scripts/sync-project.ts`. Reads `src/manifest.ts` (chapter structure) plus the `src/pages/` tree, then writes `src/registry.ts` (auto-generated, gitignored). The registry exports `allPages` (the ordered page array `Document.tsx` renders, with chrome at the ends and manifest chapters in between) — its only export. The TOC page reads `MANIFEST` directly.
 
-You don't normally run sync directly — `pnpm build` runs it first, and `pnpm dev` runs it on every change.
+You don't normally run sync directly — `pnpm build` runs it first, and `pnpm dev` runs it once at startup.
 
 ## `pnpm export`
 
@@ -33,7 +33,7 @@ Runs `bash scripts/export-pages.sh`. Calls `pdftoppm -png -r 200 output/ebook.pd
 - Default DPI: `200` (matches Chapter 9's recommendation for AI vision analysis). Override with a positional arg: `./scripts/export-pages.sh 150` (faster) or `./scripts/export-pages.sh 300` (print-quality).
 - Clears existing `page-*.png` before exporting.
 - Errors out if `output/ebook.pdf` doesn't exist (run `pnpm build` first).
-- If `pdftoppm` is not on PATH, runs `sudo apt-get install -y poppler-utils`. On non-Debian systems, install `poppler` manually before running.
+- If `pdftoppm` is not on PATH, prints platform-specific `poppler-utils` install instructions (apt / brew / dnf) and exits 1 — the script never runs an install itself.
 
 ## `pnpm pipeline`
 
@@ -45,6 +45,6 @@ Runs `pnpm sync && tsx watch src/build.tsx`. Re-syncs the registry once, then wa
 
 Note: dev watch re-runs `tsx src/build.tsx` only — if you add a new page file or edit `src/manifest.ts`, the registry won't pick it up until the next explicit `pnpm sync` (or restart of dev watch).
 
-## TypeScript
+## `pnpm typecheck`
 
-There is no separate `pnpm typecheck` script. `tsx` does on-the-fly transpilation but does not type-check. To type-check, run `pnpm exec tsc --noEmit` against `tsconfig.json`.
+Runs `pnpm sync && tsc --noEmit`. Regenerates `src/registry.ts` first (so the auto-generated, gitignored registry type-checks), then runs the TypeScript compiler in no-emit mode against `tsconfig.json`. `tsx` only transpiles on the fly and never type-checks, so this is the command that actually catches type errors — run it before committing. No separate manual `tsc` invocation is needed.

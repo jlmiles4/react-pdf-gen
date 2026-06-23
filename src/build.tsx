@@ -18,6 +18,7 @@ import fs from 'fs';
 import { execSync } from 'child_process';
 import './fonts';
 import EbookDocument from './Document';
+import { MANIFEST } from './manifest';
 
 const OUTPUT_DIR = path.resolve(__dirname, '../output');
 const OUTPUT_FILE = path.join(OUTPUT_DIR, 'ebook.pdf');
@@ -29,6 +30,21 @@ if (!fs.existsSync(OUTPUT_DIR)) {
 
 async function renderPdf(): Promise<void> {
   await ReactPDF.render(<EbookDocument />, OUTPUT_FILE);
+}
+
+// pdftotext ships with poppler-utils. Don't auto-install (sudo/network/OS vary) —
+// detect it before pass 1 and print platform-specific guidance instead.
+function checkPdftotext(): void {
+  try {
+    execSync('pdftotext -v', { stdio: 'ignore' });
+  } catch {
+    console.error('Error: pdftotext not found (needed to extract TOC page positions).');
+    console.error('Install poppler-utils:');
+    console.error('  Debian/Ubuntu: sudo apt-get install -y poppler-utils');
+    console.error('  macOS:         brew install poppler');
+    console.error('  Fedora/RHEL:   sudo dnf install poppler-utils');
+    process.exit(1);
+  }
 }
 
 function extractTocPositions(): Record<string, number> {
@@ -49,6 +65,8 @@ function extractTocPositions(): Record<string, number> {
 }
 
 async function main(): Promise<void> {
+  checkPdftotext();
+
   console.log('Building PDF...');
   const start = Date.now();
 
@@ -57,6 +75,16 @@ async function main(): Promise<void> {
   const positions = extractTocPositions();
   fs.writeFileSync(POSITIONS_FILE, JSON.stringify(positions, null, 2) + '\n');
   console.log(`TOC positions: ${Object.keys(positions).length} chapters mapped`);
+
+  // Guard against silent TOC regressions: every manifest chapter should map to a
+  // page. A miss means a chapter divider's "CHAPTER NN" text didn't match and the
+  // TOC will render a blank page number for it.
+  const missing = MANIFEST.flatMap((g) => g.chapters)
+    .filter((c) => !(c.num in positions))
+    .map((c) => c.num);
+  if (missing.length > 0) {
+    console.warn(`⚠ TOC: ${missing.length} chapter(s) had no detected page and will render blank: ${missing.join(', ')}`);
+  }
 
   await renderPdf();
 

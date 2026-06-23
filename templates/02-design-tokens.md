@@ -35,6 +35,7 @@ export const colors = {
     900: '#1A1A2E',   // Default text color
     800: '#2D2D44',   // Body text
     500: '#7A7A91',   // Secondary text, page numbers
+    400: '#9696AA',   // Muted glyphs, diagram arrows
     300: '#B2B2C2',   // Subtitles
     200: '#D0D0DB',   // Borders, dividers
     100: '#E8E8EF',   // Subtle lines
@@ -55,7 +56,6 @@ export const colors = {
 
 export const fonts = {
   heading: 'YourFont',      // fontWeight 700
-  headingLight: 'YourFont', // fontWeight 500
   body: 'YourFont',         // fontWeight 400
   bodyBold: 'YourFont',     // fontWeight 600
   mono: 'Courier',

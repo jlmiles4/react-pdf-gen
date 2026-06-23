@@ -22,11 +22,12 @@ The `MarkdownRenderer` component parses your Markdown and maps it to the project
 import { MarkdownRenderer } from '../components';
 import fs from 'fs';
 
-const content = fs.readFileSync('content/chapters/12-markdown.md', 'utf-8');
+const content = fs.readFileSync('content/chapters/12-markdown-demo.md', 'utf-8');
+const body = content.replace(/^---[\s\S]*?---/, '').trim();
 
 const Page = () => (
   <ContentPage sectionTitle="Automation">
-    <MarkdownRenderer content={content} />
+    <MarkdownRenderer content={body} />
   </ContentPage>
 );
 ```
@@ -38,8 +39,18 @@ const Page = () => (
 
 The current parser supports:
 
-* **Headings** (h2 and h3)
+* **Headings** (h1, h2, and h3)
 * **Body text** with automatic paragraph grouping
 * **Bullet lists** using the `BulletList` component
-* **Code blocks** with language-aware syntax highlighting
+* **Code blocks** with syntax highlighting and a language label
 * **Callouts** (Tip, Warning, Info boxes)
+
+> [!WARNING] label="Keep code blocks short"
+> Fenced blocks render through `CodeBlock`, which uses `wrap={false}` – a block that outgrows the page cannot split, so keep code samples under ~15 lines.
+
+## Inline Formatting
+
+You can mix **bold**, *italic*, and `inline code` directly in any paragraph, and the renderer maps each run to the matching text style. Reach for *emphasis* where a word carries weight, and `code` whenever you name a prop, file, or value.
+
+> [!INFO] label="Round-trip ready"
+> Because the source is plain Markdown, your AI agent can draft, edit, and review chapters as text – then this pipeline renders them into the same premium components every hand-built page uses.

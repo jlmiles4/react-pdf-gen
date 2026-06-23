@@ -7,7 +7,7 @@ const Page: React.FC = () => (
   <ContentPage sectionTitle="Premium Deliverables & Recipes" wrap={false}>
     <SectionHeading>Recipe: Data-Driven Pages</SectionHeading>
     <Text style={styles.body}>
-      Most useful PDFs are generated from data, not static content. The pattern: pass a typed array, .map() to render one page per item, use conditional rendering to control which sections appear. Each page becomes a pure function of its data — change the input and the PDF rebuilds.
+      Most useful PDFs are generated from data, not static content. The pattern: pass a typed array, .map() to render one page per item, use conditional rendering to control which sections appear. Each page becomes a pure function of its data – change the input and the PDF rebuilds.
     </Text>
     <CodeBlock language="tsx">{`interface Section {
   title: string;

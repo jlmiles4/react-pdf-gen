@@ -1,5 +1,7 @@
 import React from 'react';
-import { ContentPage, Table, SectionHeading } from '../../components';
+import { View, Text } from '@react-pdf/renderer';
+import { styles } from '../../styles/shared';
+import { ContentPage, Table, SectionHeading, BulletList } from '../../components';
 
 const Page: React.FC = () => (
   <ContentPage sectionTitle="Design Language" wrap={false}>
@@ -8,12 +10,27 @@ const Page: React.FC = () => (
       headers={['Category', 'Count', 'Example']}
       rows={[
         ['Colors (primary + accent)', '8-13 shades', '#121F3D navy, #F0A000 gold'],
-        ['Neutrals + semantic', '5-8 + 4 pairs', 'Gray scale + success/warning/error/info'],
-        ['Typography', '7-9 sizes', '8pt caption to 36pt display'],
-        ['Spacing', '6-8 values', '4pt (xs) to 48pt (xxxl)'],
+        ['Neutrals + semantic', '5-10 + 4 pairs', 'Gray scale + success/warning/error/info'],
+        ['Typography', '7-9 sizes', '8.5pt caption to 36pt display'],
+        ['Spacing', '7-9 values', '1pt (micro) to 48pt (xxxl)'],
         ['Borders', '3 widths + 3 radii', '0.5pt thin to 10pt lg radius'],
       ]}
       columnWidths={['35%', '20%', '45%']}
+    />
+
+    <View wrap={false} minPresenceAhead={40}>
+      <SectionHeading>Auditing Your Tokens</SectionHeading>
+      <Text style={styles.body}>
+        Run your theme.ts through this starter list before you build a single page – then let it grow. This book's theme reached 15 categories, from font weights to icon sizes:
+      </Text>
+    </View>
+    <BulletList
+      items={[
+        'Every value is named – no raw hex codes, point sizes, or pixel margins survive outside theme.ts.',
+        'Each scale has a clear step (4pt grid for spacing, a consistent ratio for type) so values feel intentional, not arbitrary.',
+        'Semantic colors map to meaning – success, warning, error, info – not to a specific shade you might want to swap later.',
+        'Names describe role, not appearance – primary[800] over navyDark, so a rebrand is a one-line change.',
+      ]}
     />
   </ContentPage>
 );

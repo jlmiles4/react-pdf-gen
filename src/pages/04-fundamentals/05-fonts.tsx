@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text } from '@react-pdf/renderer';
 import { styles } from '../../styles/shared';
-import { ContentPage, CodeBlock, WarningBox, SectionHeading } from '../../components';
+import { ContentPage, CodeBlock, WarningBox, SectionHeading, Table } from '../../components';
 
 const Page: React.FC = () => (
   <ContentPage sectionTitle="Fundamentals" wrap={false}>
@@ -23,6 +23,20 @@ Font.register({
     <WarningBox label="Font Limitations">
       Only TTF and WOFF formats work. OTF files and variable fonts are not supported. Register every weight and style you need – the renderer won't synthesize bold or italic from a regular font.
     </WarningBox>
+
+    <SectionHeading>Using Registered Fonts</SectionHeading>
+    <Text style={styles.body}>
+      Reference a registered family by name and request a weight or style – the numeric weight you pass must line up with one you actually registered.
+    </Text>
+    <Table
+      headers={['Style', 'Resolves to', 'Common use']}
+      rows={[
+        ['fontWeight: 400', 'Inter-Regular.ttf', 'Body copy, captions'],
+        ['fontWeight: 700', 'Inter-Bold.ttf', 'Headings, emphasis'],
+        ["fontStyle: 'italic'", 'Inter-Italic.ttf', 'Quotes, asides'],
+      ]}
+      columnWidths={['34%', '34%', '32%']}
+    />
   </ContentPage>
 );
 

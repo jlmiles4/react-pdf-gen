@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from '@react-pdf/renderer';
 import { styles } from '../../styles/shared';
 import { colors, spacing, fonts, typography, fontWeight } from '../../styles/theme';
-import { ContentPage, SectionHeading } from '../../components';
+import { ContentPage, SectionHeading, CodeBlock } from '../../components';
 
 const local = StyleSheet.create({
   scaleRow: {
@@ -27,8 +27,8 @@ const local = StyleSheet.create({
 });
 
 const scale = [
-  { name: 'display', size: '36pt', use: 'Cover title' },
-  { name: 'h1', size: '26pt', use: 'Chapter titles' },
+  { name: 'display', size: '36pt', use: 'Hero/display text' },
+  { name: 'h1', size: '26pt', use: 'Top-level headings' },
   { name: 'h2', size: '20pt', use: 'Section headers' },
   { name: 'h3', size: '16pt', use: 'Subsections' },
   { name: 'h4', size: '13pt', use: 'Labels, small headers' },
@@ -43,6 +43,8 @@ const Page: React.FC = () => (
     <SectionHeading>Typography Scale</SectionHeading>
     <Text style={styles.body}>
       Define every text size upfront. No magic numbers in page components.
+      Page chrome – this book's 42pt cover title, 32pt chapter titles – comes
+      from a separate fontScale token.
     </Text>
 
     <View>
@@ -54,6 +56,20 @@ const Page: React.FC = () => (
         </View>
       ))}
     </View>
+
+    <SectionHeading>One Source of Truth</SectionHeading>
+    <Text style={styles.body}>
+      Encode the scale as an object in theme.ts and read every size from it.
+      When you tell your AI agent to build a page, it pulls from these tokens –
+      so headings stay proportional and nothing drifts into a stray 14.5pt.
+    </Text>
+
+    <CodeBlock language="tsx">{`export const typography = {
+  display: { fontSize: 36, fontWeight: 700 },
+  h1:      { fontSize: 26, fontWeight: 700 },
+  h2:      { fontSize: 20, fontWeight: 600 },
+  body:    { fontSize: 11, fontWeight: 400 },
+} as const;`}</CodeBlock>
   </ContentPage>
 );
 

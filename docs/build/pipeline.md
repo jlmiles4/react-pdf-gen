@@ -20,7 +20,7 @@ Order matters: `fonts.ts` must be imported before any `<Page>` renders, otherwis
 
 1. Creates `output/` if it doesn't exist.
 2. Pass 1: renders via `ReactPDF.render(...)`. The TOC reserves its page-number column but renders empty strings on first build (or stale positions from a prior run).
-3. Spawns `pdftotext -layout output/ebook.pdf -`, splits on form-feed (`\f`) for one block per page, and matches `^CHAPTER\s+(\d+)$` line-by-line. The first page each chapter number appears on is recorded into `output/toc-positions.json`.
+3. Spawns `pdftotext -layout output/ebook.pdf -`, splits on form-feed (`\f`) for one block per page, and matches `^CHAPTER\s+(\d{1,2})$` line-by-line. The first page each chapter number appears on is recorded into `output/toc-positions.json`.
 4. Pass 2: re-renders. `src/pages/02-toc/01-toc.tsx` reads `toc-positions.json` via `src/tocPositions.ts` and fills the page-number column.
 5. Logs file size and total elapsed ms (~10s for both passes on a current laptop). Exits 1 on failure.
 
@@ -28,7 +28,7 @@ The TOC layout is identical between passes (column reserved either way), so posi
 
 `ReactPDF.render` is the Node-side API from `@react-pdf/renderer`. It walks the React tree synchronously, lays out pages with the embedded layout engine (Yoga flexbox), and streams the PDF to the given path. There is no separate "server" — `tsx` runs the file directly.
 
-Chapter title pages render their own page number bottom-left via `<Text render={({pageNumber})=>...} fixed />` inside `ChapterTitle.tsx`. Cover and Conclusion intentionally have none.
+Chapter title pages render their own page number bottom-left via `<Text render={({pageNumber})=>...} fixed />` inside `ChapterTitle.tsx`. The Cover intentionally has none; the Conclusion renders its own page number bottom-right.
 
 ## Stage 2: PNG export (`pnpm export`)
 
@@ -41,7 +41,7 @@ pdftoppm -png -r 200 output/ebook.pdf output/pages/page
 Defaults:
 - DPI: `200` (override via `./scripts/export-pages.sh 150` for faster/smaller output, or `300` for print-quality verification).
 - Output: `output/pages/page-NN.png`, one file per PDF page, zero-padded numbering.
-- The script clears existing `page-*.png` files before re-exporting and verifies `pdftoppm` is on PATH; on Debian/Ubuntu it runs `sudo apt-get install -y poppler-utils` if missing.
+- The script clears existing `page-*.png` files before re-exporting and verifies `pdftoppm` is on PATH; if it's missing it prints platform-specific `poppler-utils` install instructions and exits.
 
 ## Stage 3: combined (`pnpm pipeline`)
 
@@ -57,7 +57,7 @@ Use this whenever you want to verify visual output. PDF first; if the build fail
 
 ## Performance notes
 
-- A full 73-page two-pass render takes ~10s on a current laptop (~0.27 MB PDF). One render is ~5s of layout; the second pass plus `pdftotext` extraction adds the rest. Most of the cost is the layout engine, not I/O.
+- A full 71-page two-pass render takes ~10s on a current laptop (~0.27 MB PDF). One render is ~5s of layout; the second pass plus `pdftotext` extraction adds the rest. Most of the cost is the layout engine, not I/O.
 - PDF size is ~270 KB; the dominant cost would be embedded font subsets (Inter × 7 variants) plus any raster images. Removing unused weights from `src/fonts.ts` shrinks the file.
 - PNG export at 200 DPI produces ~40–320 KB per page (text-heavy pages compress smaller). 150 DPI is enough for layout review; 200 DPI is what the book itself recommends for AI vision analysis.
 

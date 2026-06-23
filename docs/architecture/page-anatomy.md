@@ -1,6 +1,6 @@
 # Page anatomy
 
-A chapter lives in `src/pages/NN-chapter/`. The first file in that folder is the **chapter-divider page** (`00-title.tsx`) — it renders `<ChapterTitle>` and nothing else. The second (`01-<chapter>.tsx`) is the chapter's first `<ContentPage>`. Sibling files (`02-…`, `03-…`, `04-…`, …) are **continuation pages** — each renders one more `<ContentPage>` for the same chapter.
+A chapter lives in `src/pages/NN-chapter/`. The first file in that folder is the **chapter-divider page** (`00-title.tsx`) — it renders `<ChapterTitle>` and nothing else. The second (`01-<chapter>.tsx`) is the chapter's first `<ContentPage>`. Sibling files (`03-…`, `04-…`, …) are **continuation pages** — each renders one more `<ContentPage>` for the same chapter. Continuations start at `03-` by convention; the `02-` slot is skipped.
 
 The per-source-file convention is: **one `.tsx` file = one PDF page**. `<ContentPage>` is usually called with `wrap={false}` so a single source file can't accidentally spill onto a second physical page; `wrap` defaults to `true` and is left on only for the rare deliberate multi-page section.
 
@@ -23,7 +23,7 @@ const Page: React.FC = () => (
 export default Page;
 ```
 
-`<ChapterTitle>` renders a full-bleed dark-navy `<Page>` (no header/footer) with the chapter label, large white title, and optional subtitle. The divider is its own file so the "one source file = one PDF page" rule actually holds — and so an AI agent can edit a chapter's first content page without touching the divider.
+`<ChapterTitle>` renders a full-bleed dark-navy `<Page>` (no `<Header>`/`<Footer>` components; it renders its own page number bottom-left) with the chapter label, large white title, and optional subtitle. The divider is its own file so the "one source file = one PDF page" rule actually holds — and so an AI agent can edit a chapter's first content page without touching the divider.
 
 The `number`/`title`/`subtitle` props on `<ChapterTitle>` should match the matching `Chapter` entry in [`src/manifest.ts`](../../src/manifest.ts). Sync does not enforce the match — the manifest is what drives the TOC; the JSX props are what the chapter title page actually displays.
 
@@ -54,15 +54,15 @@ export default Page;
 
 No `<ChapterTitle>`, no fragment wrapper — just one `<ContentPage>`. The `sectionTitle` repeats the chapter name so the page header shows it.
 
-Continuation files are picked up automatically: `scripts/sync-project.ts` walks the chapter folder (everything that shares the divider page's directory prefix) and sorts the files alphabetically. The numeric prefixes (`00-title`, `01-<chapter>`, `02-…`, `03-…`, …) drive that ordering.
+Continuation files are picked up automatically: `scripts/sync-project.ts` walks the chapter folder (everything that shares the divider page's directory prefix) and sorts the files alphabetically. The numeric prefixes (`00-title`, `01-<chapter>`, `03-…`, `04-…`, …) drive that ordering.
 
 ## Chrome pages
 
 Cover, TOC, and Conclusion each live in their own folder with a single `01-` file: `01-cover/01-cover.tsx`, `02-toc/01-toc.tsx`, `15-conclusion/01-conclusion.tsx`. Chrome folders use the `NN-…/01-…tsx` shape directly — no separate `00-title.tsx`, because chrome pages aren't chapters and don't have a `<ChapterTitle>` divider. They render a custom `<Page>` rather than going through `<ContentPage>` because their layouts are unique:
 
-- **Cover** — full-bleed dark `<Page>`, large display title, gold accent bar, no header/footer.
+- **Cover** — full-bleed dark `<Page>`, large display title, gold accent bar; no `<Header>`/`<Footer>` components, just a brand + year row along the bottom.
 - **TOC** — custom layout that imports `MANIFEST` from `src/manifest.ts` and `getTocPositions()` from `src/tocPositions.ts` (which reads `output/toc-positions.json`). Sequence of group badges, then per-chapter rows of `num · title/subtitle · page-number`.
-- **Conclusion** — typically a full-bleed hero, sometimes followed by a back-cover `<ContentPage>`.
+- **Conclusion** — a single full-bleed dark hero page matching the cover's visual weight. No `<Header>` component, but a footer-style brand + page-number row along the bottom, echoing the cover's bottom band.
 
 Chrome pages are not listed in `MANIFEST`. Cover and TOC are hard-coded at the start of the registry's page array; Conclusion is appended at the end. See [registry-sync](../build/registry-sync.md).
 

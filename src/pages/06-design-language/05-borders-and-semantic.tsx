@@ -12,11 +12,11 @@ const Page: React.FC = () => (
       </Text>
       <CodeBlock language="typescript">{`export const borders = {
   thin: 0.5,     // Dividers, table cell borders
-  medium: 1,     // Card borders, callout boxes
-  thick: 2,      // Emphasis borders, accent bars
+  medium: 1,     // Card borders, table header rules
+  thick: 2,      // Callout left borders, emphasis
   radius: {
-    sm: 3,       // Subtle rounding (badges, tags)
-    md: 6,       // Cards, callout boxes, code blocks
+    sm: 3,       // Callout boxes, badges, tags
+    md: 6,       // Cards, code blocks, tables
     lg: 10,      // Feature cards, hero elements
   },
 };`}</CodeBlock>
@@ -32,7 +32,7 @@ error:   '#C43333',  errorLight:   '#FEF3F3',
 info:    '#2E6BB5',  infoLight:    '#EDF1F8',`}</CodeBlock>
 
     <TipBox label="The Complete Token Set">
-      A professional design system for react-pdf needs exactly four categories: colors (5-8 base values), typography (7-9 sizes), spacing (6-8 values), and borders (3 widths + 3 radii). Add semantic colors for callouts. Anything more adds complexity without visible benefit.
+      Start with four core categories: colors (5-8 base values), typography (7-9 sizes), spacing (7-9 values), and borders (3 widths + 3 radii), plus semantic colors for callouts. Then promote recurring magic numbers into new tokens – this book's theme.ts grew to 15 categories.
     </TipBox>
   </ContentPage>
 );

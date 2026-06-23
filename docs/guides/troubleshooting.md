@@ -4,9 +4,9 @@ Common build errors and rendering surprises when editing the source, with the sm
 
 ## Build errors
 
-### `Text string must be rendered inside a <Text> component`
+### Console warning: `Invalid '...' string child outside <Text> component`
 
-A raw string ended up inside a `<View>` (or any non-`<Text>` element). Wrap it:
+A raw string ended up inside a `<View>` (or any non-`<Text>` element). The pinned `@react-pdf/renderer` 4.3.2 doesn't throw for this — it logs the warning above and omits the string from the output, so the symptom is text silently disappearing from the rendered page. Wrap it:
 
 ```tsx
 // Wrong
@@ -71,7 +71,7 @@ If the callout legitimately doesn't fit on one page even alone, split the conten
 
 Install poppler-utils:
 
-- Debian / Ubuntu: the script offers to do this with `sudo apt-get install -y poppler-utils`.
+- Debian / Ubuntu: `sudo apt-get install -y poppler-utils` (the script prints this command; it never runs it for you).
 - macOS: `brew install poppler`.
 - Fedora / RHEL: `sudo dnf install poppler-utils`.
 
@@ -95,4 +95,4 @@ Run `pnpm build` first, or use `pnpm pipeline` to chain both.
 
 ### Page count changed unexpectedly after a one-line edit
 
-Adding a line of body text to a page near the bottom can push content over a page break and ripple downstream. With `<ContentPage wrap={false}>` (the project default), overflow clips silently — the symptom is missing content at the bottom of the page rather than an extra page appearing. If the content legitimately needs more room, split it into a new continuation file in the same chapter folder rather than fighting the layout. After non-trivial edits, also re-check the page count in `docs/README.md`, `TASK.md`, and the `src/Document.tsx` docstring.
+Adding a line of body text to a page near the bottom can push content over a page break and ripple downstream. With `<ContentPage wrap={false}>` (the project default), overflow clips silently — the symptom is missing content at the bottom of the page rather than an extra page appearing. If the content legitimately needs more room, split it into a new continuation file in the same chapter folder rather than fighting the layout. After non-trivial edits, confirm the page count with `pdfinfo output/ebook.pdf` and update any docs that cite it (`README.md`, `docs/README.md`, `TASK.md`).

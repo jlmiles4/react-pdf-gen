@@ -80,6 +80,8 @@ import PageName from './pages/Page##-Name';
 <PageName />
 ```
 
+> This flat `pages/Page##-Name.tsx` layout with manual registration is the simple starter variant — this book's own repo uses a folder-per-chapter layout driven by a manifest (see the book's Architecture chapter).
+
 2. **Build and verify:**
 ```bash
 pnpm pipeline

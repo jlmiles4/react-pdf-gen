@@ -60,14 +60,13 @@ export const colors = {
 
 export const fonts = {
   heading: 'Inter',
-  headingLight: 'Inter',
   body: 'Inter',
   bodyBold: 'Inter',
   mono: 'Courier',
   monoBold: 'Courier-Bold',
 } as const;
 
-/** Font weights matching the registered Inter weights in fonts.ts. */
+/** Font-weight tokens. fonts.ts registers these three plus Inter-Medium (500), which has no token yet — extend here (e.g. medium: 500) before using it. */
 export const fontWeight = {
   regular: 400,
   semibold: 600,
@@ -181,6 +180,7 @@ export const accentBar = {
   md: { width: 48, height: 3 },   // TOC heading
   lg: { width: 60, height: 4 },   // ChapterTitle
   xl: { width: 64, height: 4 },   // Cover / Conclusion hero
+  heading: { width: 4, height: 22 }, // vertical gold bar beside SectionHeading h2
 } as const;
 
 /** Letter spacing tokens for uppercase / tracked-out text. */
@@ -198,6 +198,7 @@ export const layout = {
   bulletWrapperWidth: 14,
   bulletDotSize: 6,
   tocEntryNumWidth: 28,
+  tocPageColWidth: 28,  // TOC page-number column (right-aligned)
   cardShadowOffset: 2,
   flowStepWidth: 100,
   dividerHeight: 2,

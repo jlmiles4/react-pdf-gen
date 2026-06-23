@@ -1,5 +1,5 @@
 import { StyleSheet } from '@react-pdf/renderer';
-import { colors, typography, spacing, page, borders, fonts, fontScale, fontWeight, lineHeight } from './theme';
+import { colors, typography, spacing, page, borders, fonts, fontWeight, lineHeight, accentBar } from './theme';
 
 /**
  * Shared styles used across all pages.
@@ -21,27 +21,10 @@ export const styles = StyleSheet.create({
     lineHeight: typography.body.lineHeight,
     color: colors.neutral[900],
   },
-  pageNoPadding: {
-    backgroundColor: colors.white,
-    fontFamily: fonts.body,
-    fontWeight: fontWeight.regular,
-    fontSize: typography.body.fontSize,
-    color: colors.neutral[900],
-  },
 
   // --- Typography ---
-  display: {
-    ...typography.display,
-    color: colors.primary[800],
-  },
   h1: {
     ...typography.h1,
-    color: colors.primary[800],
-    marginBottom: spacing.lg,
-    marginTop: spacing.xl,
-  },
-  h2: {
-    ...typography.h2,
     color: colors.primary[800],
     marginBottom: spacing.lg,
     marginTop: spacing.xl,
@@ -54,8 +37,8 @@ export const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   h2Accent: {
-    width: 4,
-    height: 22,
+    width: accentBar.heading.width,
+    height: accentBar.heading.height,
     backgroundColor: colors.accent[500],
     borderRadius: borders.radius.sm,
   },
@@ -84,10 +67,6 @@ export const styles = StyleSheet.create({
     ...typography.bodySmall,
     color: colors.neutral[600],
   },
-  caption: {
-    ...typography.caption,
-    color: colors.neutral[500],
-  },
   bold: {
     fontFamily: fonts.bodyBold,
     fontWeight: fontWeight.semibold,
@@ -97,25 +76,6 @@ export const styles = StyleSheet.create({
   },
 
   // --- Layout helpers ---
-  row: {
-    flexDirection: 'row',
-  },
-  col: {
-    flexDirection: 'column',
-  },
-  center: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  spaceBetween: {
-    justifyContent: 'space-between',
-  },
-  flex1: {
-    flex: 1,
-  },
-  flexWrap: {
-    flexWrap: 'wrap',
-  },
   iconRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -194,16 +154,6 @@ export const styles = StyleSheet.create({
   },
 
   // --- Lists ---
-  listItem: {
-    flexDirection: 'row',
-    marginBottom: spacing.xs,
-    paddingLeft: spacing.sm,
-  },
-  listBullet: {
-    width: 16,
-    ...typography.body,
-    color: colors.accent[500],
-  },
   listContent: {
     flex: 1,
     ...typography.body,
@@ -211,16 +161,11 @@ export const styles = StyleSheet.create({
   },
 
   // --- Dividers ---
-  divider: {
-    borderBottomWidth: borders.thin,
-    borderBottomColor: colors.neutral[200],
-    marginVertical: spacing.lg,
-  },
   dividerAccent: {
     borderBottomWidth: borders.medium,
     borderBottomColor: colors.accent[400],
     marginVertical: spacing.lg,
-    width: 60,
+    width: accentBar.lg.width,
   },
 
   // --- Table ---

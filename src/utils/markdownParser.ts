@@ -35,6 +35,11 @@ export function parseInline(line: string): InlineSpan[] {
   return spans;
 }
 
+/** A list item starts with `* `, `- `, or `+ ` (CommonMark bullet markers). */
+function isListItem(line: string): boolean {
+  return line.startsWith('* ') || line.startsWith('- ') || line.startsWith('+ ');
+}
+
 export function parseMarkdown(md: string): MarkdownNode[] {
   const lines = md.split('\n');
   const nodes: MarkdownNode[] = [];
@@ -66,9 +71,9 @@ export function parseMarkdown(md: string): MarkdownNode[] {
     }
 
     // Lists
-    if (line.startsWith('* ') || line.startsWith('- ')) {
+    if (isListItem(line)) {
       const items: InlineSpan[][] = [];
-      while (i < lines.length && (lines[i].trim().startsWith('* ') || lines[i].trim().startsWith('- '))) {
+      while (i < lines.length && isListItem(lines[i].trim())) {
         items.push(parseInline(lines[i].trim().replace(/^[*+-]\s+/, '')));
         i++;
       }
@@ -110,7 +115,7 @@ export function parseMarkdown(md: string): MarkdownNode[] {
 
     // Default: Body Text (group consecutive lines)
     const textLines: string[] = [];
-    while (i < lines.length && lines[i].trim() && !lines[i].trim().match(/^(#{1,3}\s|\*\s|-\s|```|> \[!)/)) {
+    while (i < lines.length && lines[i].trim() && !lines[i].trim().match(/^(#{1,3}\s|[*+-]\s|```|> \[!)/)) {
       textLines.push(lines[i].trim());
       i++;
     }

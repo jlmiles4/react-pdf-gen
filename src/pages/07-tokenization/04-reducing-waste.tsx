@@ -25,13 +25,13 @@ const Page: React.FC = () => (
     <CodeBlock language="text">{`Context files (paste these):
   1. theme.ts (your design tokens)
   2. ContentPage.tsx (the wrapper component)
-  3. Page07-Ch05-Tokenization.tsx (the target page)
+  3. 07-tokenization/04-reducing-waste.tsx (target page)
 
 Instruction:
   "Add a new section called 'Prompt Sizing' after
-  the BulletList. Use styles.h2 for the heading
-  and styles.body for the paragraph. Include a
-  CodeBlock showing an example prompt."`}</CodeBlock>
+  the BulletList. Use a SectionHeading for the
+  heading and styles.body for the paragraph. Include
+  a CodeBlock showing an example prompt."`}</CodeBlock>
   </ContentPage>
 );
 

@@ -8,7 +8,8 @@
     "sync": "tsx scripts/sync-project.ts",
     "export": "bash scripts/export-pages.sh",
     "dev": "pnpm sync && tsx watch src/build.tsx",
-    "pipeline": "pnpm build && pnpm export"
+    "pipeline": "pnpm build && pnpm export",
+    "typecheck": "pnpm sync && tsc --noEmit"
   },
   "keywords": [
     "react-pdf",
@@ -19,6 +20,9 @@
   "author": "Landon Miles",
   "license": "MIT",
   "packageManager": "pnpm@10.29.1",
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
     "@react-pdf/renderer": "^4.3.2",
     "react": "^19.2.4",

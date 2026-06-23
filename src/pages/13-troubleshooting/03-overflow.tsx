@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text } from '@react-pdf/renderer';
 import { styles } from '../../styles/shared';
-import { ContentPage, SectionHeading, WarningBox, CodeBlock } from '../../components';
+import { ContentPage, SectionHeading, WarningBox, CodeBlock, Table } from '../../components';
 
 const Page: React.FC = () => (
   <ContentPage sectionTitle="Troubleshooting" wrap={false}>
@@ -14,7 +14,7 @@ const Page: React.FC = () => (
     </Text>
     <CodeBlock language="tsx">{`// Problem: wrap={false} prevents page breaks
 <View wrap={false} style={{ minHeight: 800 }}>
-  {/* Content can't split — overflows the page */}
+  {/* Content can't split – overflows the page */}
 </View>
 
 // Fix: wrap the parent, lock individual items
@@ -25,6 +25,16 @@ const Page: React.FC = () => (
     </View>
   ))}
 </View>`}</CodeBlock>
+
+    <SectionHeading>Other Culprits to Check</SectionHeading>
+    <Table
+      headers={['Property', 'Why it overflows', 'Fix']}
+      rows={[
+        ['height / minHeight', 'Forces a size taller than the page can hold.', 'Remove it – let content size itself.'],
+        ['position: absolute', 'Escapes flow, so react-pdf cannot break it.', 'Use flex layout for body content.'],
+      ]}
+      columnWidths={['28%', '42%', '30%']}
+    />
   </ContentPage>
 );
 

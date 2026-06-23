@@ -11,7 +11,7 @@ Every export is `as const`. `typography` composes from `fontWeight` and `lineHei
 | Export | Shape | Examples |
 |---|---|---|
 | `colors` | `{ primary: {50..900}, accent: {50..900}, neutral: {50..900}, success, error, info, warning, ...Light, white, black }` | `colors.primary[800]`, `colors.accent[500]` |
-| `fonts` | `{ heading, headingLight, body, bodyBold, mono, monoBold }` | All Inter except `mono`/`monoBold` (Courier) |
+| `fonts` | `{ heading, body, bodyBold, mono, monoBold }` | All Inter except `mono`/`monoBold` (Courier) |
 | `fontWeight` | `{ regular: 400, semibold: 600, bold: 700 }` | Matches `Font.register` weights |
 | `lineHeight` | `{ tight: 1.2, snug: 1.4, normal: 1.5, relaxed: 1.6 }` | For local styles that don't pull a typography preset |
 | `typography` | `{ display, h1, h2, h3, h4, body, bodySmall, caption, code, codeSmall }` | Each is `{ fontSize, fontFamily, fontWeight, lineHeight }` |
@@ -22,7 +22,7 @@ Every export is `as const`. `typography` composes from `fontWeight` and `lineHei
 | `borders` | `{ thin: 0.5, medium: 1, thick: 2, radius: { xs, sm, md, lg } }` | |
 | `iconSize` | `{ xs, sm, callout, md, lg, xl }` | `<CheckIcon size={iconSize.sm} />` |
 | `opacity` | `{ decor, decorSubtle, muted }` | Background flourishes, dim accents |
-| `accentBar` | `{ sm, md, lg, xl } → { width, height }` | `<AccentBar size="lg" />` |
+| `accentBar` | `{ sm, md, lg, xl, heading } → { width, height }` | `<AccentBar size="lg" />` |
 | `layout` | Catch-all for layout constants — bullet dot size, decor offsets, hero max widths, etc. | |
 | `syntax` | `{ keyword, string, comment, tag, number, punctuation, default }` | Tuned for the `primary[900]` code-block background |
 
@@ -30,13 +30,13 @@ Every export is `as const`. `typography` composes from `fontWeight` and `lineHei
 
 `styles` is a `StyleSheet.create({...})` with named entries grouped by purpose:
 
-- **Page layout:** `page`, `pageNoPadding`
-- **Typography:** `display`, `h1`, `h2`, `h2Container`, `h2Accent`, `h2Text`, `h3`, `h4`, `body`, `bodySmall`, `caption`, `bold`, `italic`
-- **Layout helpers:** `row`, `col`, `center`, `spaceBetween`, `flex1`, `flexWrap`, `iconRow` (icon + label on one baseline)
+- **Page layout:** `page`
+- **Typography:** `h1`, `h2Container`, `h2Accent`, `h2Text`, `h3`, `h4`, `body`, `bodySmall`, `bold`, `italic`
+- **Layout helpers:** `iconRow` (icon + label on one baseline)
 - **Code:** `codeBlock`, `codeText`, `codeLabel`, `inlineCode`
 - **Callouts:** `tipBox`, `tipLabel`, `warningBox`, `warningLabel`, `infoBox`, `infoLabel`
-- **Lists:** `listItem`, `listBullet`, `listContent`
-- **Dividers:** `divider`, `dividerAccent`
+- **Lists:** `listContent`
+- **Dividers:** `dividerAccent`
 - **Tables:** `tableContainer`, `tableHeader`, `tableHeaderText`, `tableRow`, `tableRowAlt`, `tableCell`
 
 Use these directly: `<Text style={styles.body}>`. For one-off styles in a page, create a local `StyleSheet.create({...})` that *references* tokens — never inline literal numbers or hex codes.
@@ -57,7 +57,7 @@ Inter is registered with seven `(weight, style)` variants pointing at `.ttf` fil
 
 Hyphenation is disabled globally with `Font.registerHyphenationCallback((word) => [word])`.
 
-`@react-pdf/renderer` resolves font weights by exact match. If you set `fontFamily: 'Inter'` and `fontWeight: 500`, weight 500 must be registered or you'll silently get a fallback. Stick to the four registered weights (400/500/600/700) unless you also add a `Font.register` entry. The `fontWeight` token only exposes 400/600/700 — use the literal `500` (or extend the token) when you need Medium.
+`@react-pdf/renderer` resolves font weights by exact match. If you set `fontFamily: 'Inter'` and `fontWeight: 500`, weight 500 must be registered or you'll silently get a fallback. Stick to the four registered weights (400/500/600/700) unless you also add a `Font.register` entry. The `fontWeight` token only exposes 400/600/700 — Inter-Medium (500) is registered but has no token yet, so if you ever need Medium, extend the token (e.g. add `medium: 500`) rather than hardcoding the literal.
 
 ## Conventions
 

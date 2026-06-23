@@ -83,11 +83,11 @@ The concrete values for every token in [`src/styles/theme.ts`](../../src/styles/
 
 `fontScale.*` holds the chrome sizes that don't fit the body scale: `coverTitle: 42`, `pageTitle: 32`, `sectionTitle: 18`, `subtitle: 15`, `contentTitle: 14`, `label: 12`, `bodyMedium: 10.5`, `labelSmall: 10`, `navSmall: 7.5`, `micro: 7`.
 
-`fonts.*` values: `heading`, `headingLight`, `body`, `bodyBold` are all the string `'Inter'`. `mono` is `'Courier'`, `monoBold` is `'Courier-Bold'`. The bold/heading distinction comes from `fontWeight`, not the family name.
+`fonts.*` values: `heading`, `body`, `bodyBold` are all the string `'Inter'`; `mono` is `'Courier'`, `monoBold` is `'Courier-Bold'`. The bold/heading distinction comes from `fontWeight`, not the family name.
 
 ### `fontWeight`
 
-Numeric weights matching the variants registered in `src/fonts.ts`. Use these instead of inline literals (`fontWeight: 700 as const`) so the registered set stays in sync with usage.
+A curated subset of the weights registered in `src/fonts.ts` (which also registers 500/Medium, currently unexposed as a token). Use these instead of inline literals (`fontWeight: 700 as const`) so usage stays in sync with the registered set.
 
 | Token | Value | Use |
 |---|---|---|
@@ -199,6 +199,7 @@ Tracking values for uppercase / tracked-out text.
 | `md` | 48 | 3 | TOC heading, Conclusion divider |
 | `lg` | 60 | 4 | `ChapterTitle` |
 | `xl` | 64 | 4 | Cover, Conclusion hero |
+| `heading` | 4 | 22 | Vertical gold bar beside `SectionHeading` h2 |
 
 ## Layout
 
@@ -211,6 +212,7 @@ Catch-all for layout constants that don't fit any other token bucket.
 | `bulletWrapperWidth` | 14 | `BulletList` dot column width |
 | `bulletDotSize` | 6 | `BulletList` SVG circle width/height |
 | `tocEntryNumWidth` | 28 | TOC chapter-number column |
+| `tocPageColWidth` | 28 | TOC page-number column (right-aligned) |
 | `cardShadowOffset` | 2 | Faux-shadow border offset (recipe) |
 | `flowStepWidth` | 100 | Ch11 troubleshooting flow-diagram step width |
 | `dividerHeight` | 2 | Conclusion accent divider |

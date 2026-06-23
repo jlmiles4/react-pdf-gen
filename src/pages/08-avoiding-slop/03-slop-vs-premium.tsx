@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from '@react-pdf/renderer';
 import { styles } from '../../styles/shared';
 import { colors, spacing, fonts, borders, fontScale, fontWeight, iconSize } from '../../styles/theme';
-import { ContentPage, SectionHeading } from '../../components';
+import { ContentPage, SectionHeading, TipBox } from '../../components';
 import { CheckIcon, XIcon } from '../../components/Icons';
 
 const local = StyleSheet.create({
@@ -74,6 +74,28 @@ const Page: React.FC = () => (
         <Text style={styles.bodySmall}>54pt horizontal, 60pt vertical margins. Content has room to breathe. Professional whitespace.</Text>
       </View>
     </View>
+
+    <Text style={styles.h3}>Color Palette</Text>
+    <View wrap={false} style={local.comparisonRow}>
+      <View style={[local.comparisonCol, local.badCol]}>
+        <View style={styles.iconRow}>
+          <XIcon size={iconSize.sm} />
+          <Text style={[local.compLabel, local.badLabel]}>Slop</Text>
+        </View>
+        <Text style={styles.bodySmall}>Pure black (#000) ink with a saturated default-blue link. Harsh contrast, screen-not-print feel.</Text>
+      </View>
+      <View style={[local.comparisonCol, local.goodCol]}>
+        <View style={styles.iconRow}>
+          <CheckIcon size={iconSize.sm} />
+          <Text style={[local.compLabel, local.goodLabel]}>Premium</Text>
+        </View>
+        <Text style={styles.bodySmall}>Deep navy ink, never pure black, with one restrained gold accent – a few tokens, used consistently everywhere.</Text>
+      </View>
+    </View>
+
+    <TipBox label="The Pattern">
+      Slop comes from accepting library defaults; premium comes from a small set of deliberate tokens applied without exception. The fix is rarely more design – it is fewer decisions, made once, and reused on every page.
+    </TipBox>
   </ContentPage>
 );
 

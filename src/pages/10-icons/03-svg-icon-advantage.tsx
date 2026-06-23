@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from '@react-pdf/renderer';
 import { styles } from '../../styles/shared';
 import { colors, spacing, fonts, borders, typography, fontWeight, iconSize } from '../../styles/theme';
-import { ContentPage, SectionHeading } from '../../components';
+import { ContentPage, SectionHeading, Table } from '../../components';
 import { CheckIcon, AlertTriangleIcon, InfoIcon, XIcon, ArrowRightIcon, ZapIcon } from '../../components/Icons';
 
 const local = StyleSheet.create({
@@ -30,10 +30,10 @@ const local = StyleSheet.create({
 });
 
 const Page: React.FC = () => (
-  <ContentPage sectionTitle="Icons vs Emojis" wrap={false}>
+  <ContentPage sectionTitle="Icons over Emojis" wrap={false}>
     <SectionHeading>SVG Icon Advantage</SectionHeading>
     <Text style={styles.body}>
-      React-pdf has extensive SVG support. SVG icons are vector graphics – they scale perfectly at any zoom level, match any color, and render identically on every platform with zero external dependencies.
+      React-PDF has extensive SVG support. SVG icons are vector graphics – they scale perfectly at any zoom level, match any color, and render identically on every platform with zero external dependencies.
     </Text>
 
     <View wrap={false} style={local.iconShowcase}>
@@ -64,8 +64,20 @@ const Page: React.FC = () => (
     </View>
 
     <Text style={styles.body}>
-      These icons come from Lucide via the react-icons package (MIT license). A small adapter rewrites react-icons' browser SVG output as @react-pdf/renderer Svg/Path nodes — so size, color, and stroke all stay under your control.
+      These icons come from Lucide via the react-icons package (MIT license). A small adapter rewrites react-icons' browser SVG output as @react-pdf/renderer Svg/Path nodes – so size, color, and stroke all stay under your control.
     </Text>
+
+    <SectionHeading>Why Not Emojis?</SectionHeading>
+    <Table
+      headers={['Property', 'SVG icon', 'Emoji glyph']}
+      columnWidths={['34%', '33%', '33%']}
+      rows={[
+        ['Color', 'Any token you want', 'Fixed by the font'],
+        ['Rendering', 'Identical everywhere', 'Varies per platform'],
+        ['Stroke weight', 'Tunable', 'None'],
+        ['Print fidelity', 'Crisp vectors', 'Often missing'],
+      ]}
+    />
   </ContentPage>
 );
 

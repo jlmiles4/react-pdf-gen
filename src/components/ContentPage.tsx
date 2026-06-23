@@ -7,6 +7,11 @@
  * Per-page architecture: each .tsx renders one PDF page, so wrap is default
  * (we don't expect wrapping to happen). The `wrap` prop is retained as an
  * escape hatch for the rare multi-page section.
+ *
+ * The Header is positioned so its rule sits a little above the content top
+ * (see Header.tsx), giving every page a consistent gap below the header without
+ * stealing vertical content space — important because content starts at the
+ * full top margin (60pt) and the bottom margin must stay clear of the footer.
  */
 import React from 'react';
 import { Page } from '@react-pdf/renderer';

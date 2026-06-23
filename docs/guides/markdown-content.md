@@ -24,18 +24,20 @@ The parser is intentionally minimal — it covers what this project's chapter fo
 
 | Markdown | Renders as |
 |---|---|
+| `# Heading` | `<Text style={styles.h1}>` |
 | `## Heading` | `<SectionHeading>` (gold bar + h2) |
 | `### Heading` | `<Text style={styles.h3}>` |
-| `* item` or `- item` (consecutive lines) | `<BulletList items={[...]} />` |
+| `* item`, `- item`, or `+ item` (consecutive lines) | `<BulletList items={[...]} />` |
 | ```` ```lang\ncode\n``` ```` | `<CodeBlock language="lang">{code}</CodeBlock>` |
 | `> [!TIP]` block (see below) | `<TipBox>` |
 | `> [!WARNING]` block | `<WarningBox>` |
 | `> [!INFO]` block | `<InfoBox>` |
 | `**bold**` (inline) | `<Text style={styles.bold}>` span |
+| `*italic*` / `_italic_` (inline) | `<Text style={styles.italic}>` span |
 | `` `code` `` (inline) | `<Text style={styles.inlineCode}>` span |
 | Other text (consecutive lines) | `<Text style={styles.body}>` (joined with spaces) |
 
-Anything not in this table is ignored. There are no links, no images, no italics, no horizontal rules, no markdown tables. The inline `**bold**` and `` `code` `` runs are recognized inside headings, paragraphs, list items, and callout bodies.
+Anything not in this table falls through to body text — its characters render literally. There are no links, no images, no horizontal rules, no markdown tables. The inline `**bold**`, `*italic*`, and `` `code` `` runs are recognized inside headings, paragraphs, list items, and callout bodies (underscore italics require non-alphanumeric boundaries, so `snake_case` identifiers are left alone).
 
 ### Callout syntax
 
@@ -66,5 +68,5 @@ For chapters where the layout matters (cross-page splits, custom callouts, side-
 ## Limitations to know
 
 - **Build-time read.** The markdown-automation page uses `fs.readFileSync` synchronously inside the React component body. That works because `tsx` runs the file in Node — but it ties the build to the markdown file's presence on disk. Move the read into a build-time prep step if you want to ship the rendered chapter without the source file.
-- **No italics, no links.** Italic markers, link syntax, and image syntax pass through as raw characters. Use TSX if you need those.
+- **No links, no images.** Link and image syntax pass through as raw characters. Use TSX if you need those.
 - **Code-block language label is free-text.** `lang` is a string passed to `<CodeBlock>`, which renders it as the gold label. Syntax highlighting lives in `src/utils/syntaxHighlight.ts` and is keyed by the same string — check what's supported there before relying on it.

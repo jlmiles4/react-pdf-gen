@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet } from '@react-pdf/renderer';
 import { styles } from '../../styles/shared';
-import { colors, spacing, fonts, borders, typography, fontWeight, layout } from '../../styles/theme';
+import { colors, spacing, fonts, borders, typography, fontWeight, layout, iconSize } from '../../styles/theme';
 import { ContentPage, Table, SectionHeading } from '../../components';
+import { ArrowRightIcon } from '../../components/Icons';
 
 const local = StyleSheet.create({
   flowRow: {
@@ -32,22 +33,16 @@ const local = StyleSheet.create({
     color: colors.primary[700],
     textAlign: 'center',
   },
-  flowArrow: {
-    fontSize: typography.h3.fontSize,
-    fontFamily: fonts.body,
-    fontWeight: fontWeight.regular,
-    color: colors.neutral[400],
-  },
 });
 
 const Page: React.FC = () => (
   <ContentPage sectionTitle="AI Visual Analysis" wrap={false}>
-      <SectionHeading>Why AI Can't Analyze PDF Files</SectionHeading>
+      <SectionHeading>Why PNGs Beat Raw PDFs for AI Review</SectionHeading>
       <Text style={styles.body}>
-        You've built the page. It compiles. It renders. But how do you know it actually looks right? If you upload that .pdf directly to an AI, you'll get vague feedback at best. AI vision models understand pixels, not PDF coordinate systems and PostScript drawing commands.
+        You've built the page. It compiles. It renders. But how do you know it actually looks right? Modern AI tools accept PDFs by rasterizing each page to an image first – and that conversion's quality varies. Vision models understand pixels, not PDF drawing commands.
       </Text>
       <Text style={styles.body}>
-        The fix is dead simple: convert your PDF pages to PNG images, then show those images to the AI. Now it sees exactly what your reader sees.
+        So control the conversion yourself: export each page to PNG at the DPI you choose, then show those images to the AI. Now it sees exactly what your reader sees.
       </Text>
 
       <SectionHeading>Visual QA Workflow</SectionHeading>
@@ -56,17 +51,17 @@ const Page: React.FC = () => (
           <Text style={local.flowStepNum}>1</Text>
           <Text style={local.flowStepLabel}>Generate PDF</Text>
         </View>
-        <Text style={local.flowArrow}>&rarr;</Text>
+        <ArrowRightIcon size={iconSize.md} color={colors.neutral[400]} />
         <View style={local.flowStep}>
           <Text style={local.flowStepNum}>2</Text>
           <Text style={local.flowStepLabel}>Export to PNG</Text>
         </View>
-        <Text style={local.flowArrow}>&rarr;</Text>
+        <ArrowRightIcon size={iconSize.md} color={colors.neutral[400]} />
         <View style={local.flowStep}>
           <Text style={local.flowStepNum}>3</Text>
           <Text style={local.flowStepLabel}>AI Reviews PNG</Text>
         </View>
-        <Text style={local.flowArrow}>&rarr;</Text>
+        <ArrowRightIcon size={iconSize.md} color={colors.neutral[400]} />
         <View style={local.flowStep}>
           <Text style={local.flowStepNum}>4</Text>
           <Text style={local.flowStepLabel}>Fix & Repeat</Text>
@@ -75,15 +70,15 @@ const Page: React.FC = () => (
 
       <SectionHeading>PDF to PNG Conversion</SectionHeading>
       <Text style={styles.body}>
-        The most reliable tool is pdftoppm from the poppler-utils package. It's fast, handles edge cases well, and produces clean output. DPI controls the trade-off between image quality and file size — 200 DPI is the sweet spot for AI analysis.
+        The most reliable tool is pdftoppm from the poppler-utils package. It's fast, handles edge cases well, and produces clean output. DPI trades image quality against file size – 200 DPI is the sweet spot. Sizes below are measured from this book's text-heavy pages.
       </Text>
       <Table
         headers={['DPI', 'Use Case', 'File Size']}
         rows={[
-          ['72', 'Quick preview, thumbnail', '~50-100KB per page'],
-          ['150', 'Standard review, good detail', '~200-400KB per page'],
-          ['200', 'Detailed AI analysis (recommended)', '~400-700KB per page'],
-          ['300', 'Print-quality verification', '~800KB-1.5MB per page'],
+          ['72', 'Quick preview, thumbnail', '~15-105KB per page'],
+          ['150', 'Standard review, good detail', '~35-265KB per page'],
+          ['200', 'Detailed AI analysis (recommended)', '~50-320KB per page'],
+          ['300', 'Print-quality verification', '~80-440KB per page'],
         ]}
         columnWidths={['15%', '50%', '35%']}
       />

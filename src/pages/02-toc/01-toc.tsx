@@ -1,9 +1,10 @@
 /**
- * Page 2 — Table of Contents
+ * Page 2 – Table of Contents
  *
  * Custom layout with four category groups (Foundations, Design System, Craft, Shipping),
- * each with a colored badge and chapter entries showing number, title, and subtitle.
- * Uses its own Page (not ContentPage) with Footer only.
+ * each with a colored badge and chapter entries showing number, title, subtitle, and
+ * page number (via src/tocPositions.ts reading output/toc-positions.json, populated by
+ * the two-pass build). Uses its own Page (not ContentPage) with Footer only.
  *
  * Renders from src/manifest.ts (Top-Down Architecture)
  */
@@ -92,7 +93,7 @@ const s = StyleSheet.create({
     lineHeight: lineHeight.snug,
   },
   entryPage: {
-    width: layout.tocEntryNumWidth,
+    width: layout.tocPageColWidth,
     fontSize: fontScale.label,
     fontFamily: fonts.heading,
     fontWeight: fontWeight.semibold,
@@ -118,7 +119,7 @@ const Page02TOC: React.FC = () => {
               </View>
             </View>
             {group.chapters.map((ch) => (
-              <View key={ch.num} style={s.entry}>
+              <View key={ch.num} wrap={false} style={s.entry}>
                 <Text style={s.entryNum}>{ch.num}</Text>
                 <View style={s.entryText}>
                   <Text style={s.entryTitle}>{ch.title}</Text>

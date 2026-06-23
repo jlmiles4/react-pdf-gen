@@ -22,7 +22,7 @@ Every component lives in `src/components/` and is re-exported from `src/componen
 
 ### `ChapterTitle`
 
-[`src/components/ChapterTitle.tsx`](../../src/components/ChapterTitle.tsx) — full-bleed dark-navy `<Page>` (no header/footer) with a gold accent bar, "CHAPTER NN" label, large white title, optional subtitle, and decorative SVG circles in the corner.
+[`src/components/ChapterTitle.tsx`](../../src/components/ChapterTitle.tsx) — full-bleed dark-navy `<Page>` (no `<Header>`/`<Footer>`; renders its own page number bottom-left) with a gold accent bar, "CHAPTER NN" label, large white title, optional subtitle, and decorative SVG circles in the corner.
 
 ```tsx
 <ChapterTitle number="03" title="Project Architecture" subtitle="..." />
@@ -46,7 +46,7 @@ Every component lives in `src/components/` and is re-exported from `src/componen
 
 | Prop | Type | Required |
 |---|---|---|
-| `children` | `string` | yes |
+| `children` | `ReactNode` | yes — a plain string is the common case; `MarkdownRenderer` passes styled `<Text>` spans |
 
 ### `SectionBanner`
 
@@ -126,7 +126,7 @@ All use `wrap={false}`. Body text is rendered as a single `<Text>` with `styles.
 
 ### `Table`
 
-[`src/components/Table.tsx`](../../src/components/Table.tsx) — navy header row, alternating row backgrounds, rounded container. The header row and every body row have `wrap={false}`. If `columnWidths` is omitted, columns split evenly.
+[`src/components/Table.tsx`](../../src/components/Table.tsx) — navy header row, alternating row backgrounds, rounded container. The header row and every body row have `wrap={false}`. Pass `wrap={true}` to let a long table break between rows (each row still stays whole). If `columnWidths` is omitted, columns split evenly.
 
 ```tsx
 <Table
@@ -136,11 +136,40 @@ All use `wrap={false}`. Body text is rendered as a single `<Text>` with `styles.
 />
 ```
 
+| Prop | Type | Required | Default |
+|---|---|---|---|
+| `headers` | `string[]` | yes | — |
+| `rows` | `string[][]` | yes | — |
+| `columnWidths` | `string[]` | no | even split |
+| `wrap` | `boolean` | no | `false` |
+
+### `ChecklistItem`, `ChecklistCategory`
+
+Both live in [`src/components/ChecklistItem.tsx`](../../src/components/ChecklistItem.tsx) — the premium-checklist primitives shared by the Ch10 checklist pages. `ChecklistItem` is a `wrap={false}` row: a green `CheckIcon` (`iconSize.sm`, `colors.success`) beside body text. `ChecklistCategory` is the semibold sub-heading above a run of items.
+
+```tsx
+<ChecklistCategory>Typography</ChecklistCategory>
+<ChecklistItem>Real fonts registered, no Helvetica fallback.</ChecklistItem>
+```
+
 | Prop | Type | Required |
 |---|---|---|
-| `headers` | `string[]` | yes |
-| `rows` | `string[][]` | yes |
-| `columnWidths` | `string[]` | no |
+| `children` | `ReactNode` | yes (the only prop, on both components) |
+
+### `IconList`
+
+[`src/components/IconList.tsx`](../../src/components/IconList.tsx) — vertical list of icon + `bodySmall` text rows. Pass an icon *component* (not an element); each row is `wrap={false}` so an icon can't get stranded from its label. Used for the Ch09 "what AI can/can't spot" lists.
+
+```tsx
+<IconList items={['Spacing drift', 'Orphaned headings']} icon={CheckIcon} color={colors.success} />
+```
+
+| Prop | Type | Required | Default |
+|---|---|---|---|
+| `items` | `string[]` | yes | — |
+| `icon` | `ComponentType<{size?: number; color?: string}>` | yes | — |
+| `color` | `string` | yes | — |
+| `size` | `number` | no | `iconSize.xs` |
 
 ## Recipe cards
 
@@ -180,7 +209,7 @@ const body = readFileSync('content/chapters/12-markdown-demo.md', 'utf8');
 
 ### `AccentBar`
 
-[`src/components/AccentBar.tsx`](../../src/components/AccentBar.tsx) — horizontal gold bar used by hero/title elements. Sizes are tokens from `theme.accentBar` (`sm`/`md`/`lg`/`xl`).
+[`src/components/AccentBar.tsx`](../../src/components/AccentBar.tsx) — horizontal gold bar used by hero/title elements. Sizes are tokens from `theme.accentBar` (`sm`/`md`/`lg`/`xl`, plus `heading` — the vertical h2-bar geometry, normally consumed via `styles.h2Accent` rather than `<AccentBar>`).
 
 ```tsx
 <AccentBar size="lg" mb={spacing.lg} />
@@ -188,7 +217,7 @@ const body = readFileSync('content/chapters/12-markdown-demo.md', 'utf8');
 
 | Prop | Type | Required | Default |
 |---|---|---|---|
-| `size` | `'sm' \| 'md' \| 'lg' \| 'xl'` | no | `'md'` |
+| `size` | `keyof typeof accentBar` (`'sm' \| 'md' \| 'lg' \| 'xl' \| 'heading'`) | no | `'md'` |
 | `mb` | `number` | no | `spacing.md` |
 | `color` | `string` | no | `colors.accent[500]` |
 
@@ -237,4 +266,4 @@ import { LuFile } from 'react-icons/lu';
 |---|---|---|---|
 | `icon` | `IconType` (from react-icons) | yes | |
 | `size` | `number` | no | `iconSize.lg` (16) |
-| `color` | `string` | no | `'currentColor'` |
+| `color` | `string` | no | `colors.neutral[900]` |

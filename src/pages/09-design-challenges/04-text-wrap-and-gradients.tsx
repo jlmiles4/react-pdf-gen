@@ -11,7 +11,7 @@ const Page: React.FC = () => (
       <Text style={styles.bodySmall}>
         Float is not supported. Use a side-by-side row layout instead:
       </Text>
-      <CodeBlock language="tsx">{`<View style={{ flexDirection: 'row', gap: 16 }}>
+      <CodeBlock language="tsx">{`<View style={{ flexDirection: 'row', gap: spacing.lg }}>
   <Image src="photo.png"
     style={{ width: 120, height: 90 }} />
   <View style={{ flex: 1 }}>

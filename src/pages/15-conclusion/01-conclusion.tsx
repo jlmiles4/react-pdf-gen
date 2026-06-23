@@ -3,7 +3,8 @@
  *
  * Full-bleed dark navy page matching the cover's visual weight.
  * Seven key takeaways referencing specific chapters, next steps call to action,
- * and author branding. No header or footer — standalone design mirroring the cover.
+ * and author branding. No standard Header/Footer components – a cover-style bottom
+ * strip carries the brand and page number.
  *
  * Renders: 1 page
  */
@@ -108,13 +109,13 @@ const s = StyleSheet.create({
 });
 
 const takeaways = [
-  'Structure your project for AI — one file per page, design tokens in one place, components that compose (Ch 3).',
-  'Define your design language once — colors, typography, spacing, borders. The theme file enforces consistency so you don\'t have to (Ch 4).',
-  'Optimize for token budgets — small, focused files mean small, focused prompts that keep AI in its high-attention zone (Ch 5).',
-  'Export to PNG, not PDF — AI vision models see pixels, not PostScript. The QA loop is generate, export, review, fix (Ch 9).',
-  'Iterate past the first draft — premium output takes 2-3 passes. Use the recipes and checklists from Chapter 10 to close the gap.',
-  'Use the troubleshooting playbook — most issues trace to three things: missing wrap, missing Text wrappers, or flexDirection defaulting to column (Ch 11).',
-  'Automate your workflow — use Markdown for content and let the rendering pipeline handle the layout, so you focus on writing (Ch 12).',
+  'Structure your project for AI – one file per page, design tokens in one place, components that compose (Ch 3).',
+  'Define your design language once – colors, typography, spacing, borders. The theme file enforces consistency so you don\'t have to (Ch 4).',
+  'Optimize for token budgets – small, focused files mean small, focused prompts that keep AI in its high-attention zone (Ch 5).',
+  'Export to PNG, not PDF – AI vision models see pixels, not PostScript. The QA loop is generate, export, review, fix (Ch 9).',
+  'Iterate past the first draft – premium output takes 2-3 passes. Use the recipes and checklists from Chapter 10 to close the gap.',
+  'Use the troubleshooting playbook – most issues trace to three things: missing wrap, missing Text wrappers, or flexDirection defaulting to column (Ch 11).',
+  'Automate your workflow – use Markdown for content and let the rendering pipeline handle the layout, so you focus on writing (Ch 12).',
 ];
 
 const Conclusion: React.FC = () => (
@@ -141,7 +142,7 @@ const Conclusion: React.FC = () => (
     <Text style={s.ctaText}>
       The source code for this entire book is included:{'\n'}
       A design token system (theme.ts) ready to customize.{'\n'}
-      A reusable component library — ContentPage, CodeBlock, Table, TipBox, Icons.{'\n'}
+      A reusable component library – ContentPage, CodeBlock, Table, TipBox, Icons.{'\n'}
       A build and PNG export pipeline.{'\n'}
       AI-optimized reference documentation.{'\n'}
       Clone it. Change the colors. Build your own.{'\n'}

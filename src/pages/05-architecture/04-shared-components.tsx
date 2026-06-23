@@ -14,7 +14,7 @@ const Page: React.FC = () => (
       headers={['Component', 'Purpose', 'Used By']}
       rows={[
         ['Header', 'Book title + section name at top', 'Every content page'],
-        ['Footer', 'Page number + branding at bottom', 'Every page'],
+        ['Footer', 'Page number + branding at bottom', 'Content pages + TOC'],
         ['ChapterTitle', 'Full-page chapter opener', 'Start of each chapter'],
         ['ContentPage', 'Standard page with header/footer', 'All content pages'],
         ['CodeBlock', 'Styled code display', 'Technical chapters'],

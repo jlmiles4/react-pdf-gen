@@ -1,9 +1,9 @@
 /**
- * Page 1 — Cover Page
+ * Page 1 – Cover Page
  *
  * Full-bleed dark navy background with gold accent bar, book title ("React-PDF + AI"),
  * subtitle, author name, and decorative SVG geometric element.
- * No header or footer — standalone design.
+ * No header or footer – standalone design.
  *
  * Renders: 1 page
  */
@@ -47,7 +47,7 @@ const s = StyleSheet.create({
     color: colors.neutral[300],
     lineHeight: typography.bodySmall.lineHeight,
     marginBottom: spacing.xxxl,
-    maxWidth: layout.maxHeroWidth - spacing.xl - spacing.xxl, // 364pt approx
+    maxWidth: layout.maxHeroWidth - spacing.xl - spacing.xxl, // 404pt approx
   },
   author: {
     fontSize: typography.h4.fontSize,

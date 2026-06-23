@@ -15,13 +15,13 @@ const Page: React.FC = () => (
       </Text>
       <CodeBlock language="tsx">{`// Three-column "grid" using flexbox
 <View style={{ flexDirection: 'row' }}>
-  <View style={{ width: '33%', padding: 8 }}>
+  <View style={{ width: '33%', padding: spacing.sm }}>
     <Text>Column 1</Text>
   </View>
-  <View style={{ width: '33%', padding: 8 }}>
+  <View style={{ width: '33%', padding: spacing.sm }}>
     <Text>Column 2</Text>
   </View>
-  <View style={{ width: '33%', padding: 8 }}>
+  <View style={{ width: '33%', padding: spacing.sm }}>
     <Text>Column 3</Text>
   </View>
 </View>`}</CodeBlock>
@@ -31,7 +31,7 @@ const Page: React.FC = () => (
       <Text style={styles.bodySmall}>
         box-shadow is not supported. Use a subtle border or an offset nested View:
       </Text>
-      <CodeBlock language="tsx">{`// Fake shadow with border + offset background
+      <CodeBlock language="tsx">{`// Fake shadow via darker bottom/right borders
 <View style={{
   borderWidth: borders.medium,
   borderColor: colors.neutral[200],

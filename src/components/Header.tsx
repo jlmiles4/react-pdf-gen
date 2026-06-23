@@ -7,7 +7,7 @@
  */
 import React from 'react';
 import { View, Text, StyleSheet } from '@react-pdf/renderer';
-import { colors, fonts, page, borders, fontScale, typography, letterSpacing, fontWeight } from '../styles/theme';
+import { colors, fonts, page, borders, fontScale, typography, letterSpacing, fontWeight, spacing } from '../styles/theme';
 
 interface HeaderProps {
   sectionTitle?: string;
@@ -16,14 +16,17 @@ interface HeaderProps {
 const headerStyles = StyleSheet.create({
   container: {
     position: 'absolute',
-    top: 20,
-    left: 0,
-    right: 0,
+    // Header sits in the top margin. Lift it by spacing.md so its bottom border
+    // clears the content top (60pt) instead of touching it – the page's top
+    // breathing room, at no cost to content height. Inset left/right to the page
+    // margins so the rule matches the footer's line (not edge-to-edge).
+    top: page.margin.top - page.headerHeight - spacing.md,
+    left: page.margin.left,
+    right: page.margin.right,
     height: page.headerHeight,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: page.margin.left,
     borderBottomWidth: borders.thin,
     borderBottomColor: colors.neutral[200],
   },
