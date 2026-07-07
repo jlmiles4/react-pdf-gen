@@ -44,7 +44,7 @@ function findAllPageFiles(): string[] {
   }
 
   walk(PAGES_DIR);
-  return files.sort();
+  return files.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
 }
 
 function sync() {
@@ -86,7 +86,7 @@ function sync() {
       const chDir = path.dirname(entryPath);
       allFiles
         .filter((f) => f.startsWith(chDir + '/') && !claimed.has(f))
-        .sort()
+        .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
         .forEach((f) => {
           middlePaths.push(f);
           claimed.add(f);
@@ -99,7 +99,9 @@ function sync() {
 
   // 4. Anything not claimed by chrome or the manifest (defensive — keeps the page
   //    in the book rather than dropping it silently, just before the conclusion).
-  const leftovers = allFiles.filter((f) => !claimed.has(f)).sort();
+  const leftovers = allFiles
+    .filter((f) => !claimed.has(f))
+    .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
   if (leftovers.length > 0) {
     console.warn(`sync: ${leftovers.length} page(s) not in manifest or chrome, placed before conclusion: ${leftovers.join(', ')}`);
   }

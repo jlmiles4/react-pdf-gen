@@ -15,7 +15,7 @@ import React from 'react';
 import ReactPDF from '@react-pdf/renderer';
 import path from 'path';
 import fs from 'fs';
-import { execSync } from 'child_process';
+import { execSync, execFileSync } from 'child_process';
 import './fonts';
 import EbookDocument from './Document';
 import { MANIFEST } from './manifest';
@@ -48,7 +48,7 @@ function checkPdftotext(): void {
 }
 
 function extractTocPositions(): Record<string, number> {
-  const text = execSync(`pdftotext -layout "${OUTPUT_FILE}" -`, { encoding: 'utf8' });
+  const text = execFileSync('pdftotext', ['-layout', OUTPUT_FILE, '-'], { encoding: 'utf8' });
   const pages = text.split('\f');
   const positions: Record<string, number> = {};
   for (let i = 0; i < pages.length; i++) {
@@ -62,6 +62,38 @@ function extractTocPositions(): Record<string, number> {
     }
   }
   return positions;
+}
+
+const LETTER_WIDTH = 612;
+const LETTER_HEIGHT = 792;
+
+// A wrap={false} page whose content overflows silently grows the page box instead
+// of erroring, so this must be checked after render rather than relying on react-pdf.
+function checkPageSizes(): void {
+  const info = execFileSync('pdfinfo', [OUTPUT_FILE], { encoding: 'utf8' });
+  const pagesMatch = info.match(/^Pages:\s+(\d+)$/m);
+  if (!pagesMatch) {
+    console.error('Error: could not determine page count from pdfinfo output.');
+    process.exit(1);
+  }
+  const pageCount = Number(pagesMatch[1]);
+
+  const perPage = execFileSync('pdfinfo', ['-f', '1', '-l', String(pageCount), OUTPUT_FILE], {
+    encoding: 'utf8',
+  });
+  const offenders: string[] = [];
+  for (const raw of perPage.split('\n')) {
+    const match = raw.match(/^Page\s+(\d+)\s+size:\s+([\d.]+)\s+x\s+([\d.]+)\s+pts/);
+    if (!match) continue;
+    const [, page, width, height] = match;
+    if (Number(width) !== LETTER_WIDTH || Number(height) !== LETTER_HEIGHT) {
+      offenders.push(`page ${page} (${width}x${height})`);
+    }
+  }
+  if (offenders.length > 0) {
+    console.error(`Error: ${offenders.length} page(s) are not uniform LETTER size (${LETTER_WIDTH}x${LETTER_HEIGHT}): ${offenders.join(', ')}`);
+    process.exit(1);
+  }
 }
 
 async function main(): Promise<void> {
@@ -83,10 +115,13 @@ async function main(): Promise<void> {
     .filter((c) => !(c.num in positions))
     .map((c) => c.num);
   if (missing.length > 0) {
-    console.warn(`⚠ TOC: ${missing.length} chapter(s) had no detected page and will render blank: ${missing.join(', ')}`);
+    console.error(`Error: TOC: ${missing.length} chapter(s) had no detected page and will render blank: ${missing.join(', ')}`);
+    process.exit(1);
   }
 
   await renderPdf();
+
+  checkPageSizes();
 
   const elapsed = Date.now() - start;
   const stats = fs.statSync(OUTPUT_FILE);

@@ -35,4 +35,4 @@ PAGE_COUNT=$(ls "$PNG_DIR"/page-*.png 2>/dev/null | wc -l)
 echo ""
 echo "Exported $PAGE_COUNT pages to $PNG_DIR/"
 echo ""
-ls -lh "$PNG_DIR"/page-*.png
+ls -lh "$PNG_DIR"/page-*.png 2>/dev/null || true
