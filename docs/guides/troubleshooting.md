@@ -87,7 +87,7 @@ Run `pnpm build` first, or use `pnpm pipeline` to chain both.
 
 ### TypeScript "errors" during build
 
-`tsx` does not type-check; it transpiles. To type-check, run `pnpm exec tsc --noEmit`. The build still succeeds even when types fail — catching this requires the explicit `tsc` step.
+`tsx` does not type-check; it transpiles. To type-check, run `pnpm typecheck`. The build still succeeds even when types fail — catching this requires the explicit step. (Plain `tsc --noEmit` fails on a fresh clone: `src/registry.ts` is gitignored and only exists after `pnpm typecheck`/`pnpm sync` regenerates it.)
 
 ### Hot reload doesn't update the PDF viewer
 

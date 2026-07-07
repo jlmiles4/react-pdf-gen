@@ -18,7 +18,7 @@ Registered via `src/fonts.ts` with weights 400, 500, 600, 700, plus italics for 
 | `h4`        | 13pt  | 600    | Labels, callout titles                 |
 | `body`      | 11pt  | 400    | Main reading text, line-height 1.6     |
 | `bodySmall` | 9.5pt | 400    | Secondary text, table cells            |
-| `caption`   | 8.5pt | 400    | Footer text, fine print                |
+| `caption`   | 8.5pt | 400    | Fine print (reserved; footer uses `fontScale.navSmall`/`typography.codeSmall`) |
 | `code`      | 9pt   | —      | Code blocks (Courier)                  |
 | `codeSmall` | 8pt   | —      | Inline code labels                     |
 
@@ -158,6 +158,18 @@ Left-bordered callout boxes with `wrap={false}` to prevent splitting across page
 ### CodeBlock
 Dark navy background (`primary[900]`), rounded corners, Courier font. Optional language label in gold (`accent[400]`). `wrap={false}` prevents splitting.
 
+Syntax highlighting tokens (`syntax.*` in `theme.ts`), tuned for readability on the `primary[900]` background:
+
+| Token         | Hex       | Role                          |
+|---------------|-----------|-------------------------------|
+| `keyword`     | `#F5B733` | Reserved words (gold)         |
+| `string`      | `#7EC89F` | String literals (soft green)  |
+| `comment`     | `#7A7A91` | Comments (muted)              |
+| `tag`         | `#6E8DC4` | JSX/HTML tags (light blue)    |
+| `number`      | `#F8CB66` | Numeric literals (warm gold)  |
+| `punctuation` | `#9BB3DB` | Brackets/operators (subtle)   |
+| `default`     | `#D0D0DB` | Base code text                |
+
 ### BulletList
 Gold SVG circle dots (`accent[500]`, 6px diameter) with body text. Each item is a flex row.
 
@@ -179,7 +191,7 @@ SVG-based Lucide icons. Never use emoji. Available: `CheckIcon`, `XIcon`, `Alert
 
 4. **Components, not inline styles.** Every visual pattern has a component (`SectionHeading`, `TipBox`, `BulletList`, `Table`, `CodeBlock`). Page files should import and compose these — never recreate patterns with inline styles.
 
-5. **Design tokens, not magic numbers.** Colors from `colors.*`, sizes from `typography.*`/`fontScale.*`, font weights from `fontWeight.*`, line heights from `lineHeight.*`, spacing from `spacing.*`, borders from `borders.*`, icon sizes from `iconSize.*`, opacity from `opacity.*`, layout constants from `layout.*`. Local `StyleSheet.create()` for page-specific styles that reference tokens.
+5. **Design tokens, not magic numbers.** Colors from `colors.*`, sizes from `typography.*`/`fontScale.*`, font weights from `fontWeight.*`, line heights from `lineHeight.*`, spacing from `spacing.*`, borders from `borders.*`, icon sizes from `iconSize.*`, opacity from `opacity.*`, layout constants from `layout.*`, letter spacing from `letterSpacing.*` (`tight`/`normal`/`wide`/`wider` — tracked-out uppercase labels: cover kicker, TOC group headers, header section title, CHAPTER XX label). Local `StyleSheet.create()` for page-specific styles that reference tokens.
 
 6. **SVG icons, never emoji.** Icons are vector-sharp, color-matched, and consistent across renderers.
 

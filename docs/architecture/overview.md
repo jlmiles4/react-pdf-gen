@@ -63,7 +63,7 @@ Four folders look similar (mostly markdown, mostly unread by `build.tsx`) but ex
 |---|---|---|---|
 | `content/chapters/` | The author drafting prose | One markdown file per chapter, in narrative form | Mostly no — only `12-markdown-demo.md` is loaded (by `src/pages/14-markdown-automation/01-markdown-automation.tsx` via `MarkdownRenderer`). The other drafts are reference material the author worked from before re-typing into TSX. |
 | `reference/` | An AI agent helping the author | Long-form research notes (react-pdf API, AI patterns, design) | No |
-| `prompts/` | The author + AI working on *this* project | Project-specific prompts referencing Inter and the conventions of this repo | No |
+| `prompts/` | An AI scaffolding a *new*, unrelated react-pdf project | Generic starter prompts (flat `pages/Page01-Cover.tsx` files, manual registration in `Document.tsx`) predating this repo's manifest + generated-`registry.ts` architecture — not updated to match it | No |
 | `templates/` | A reader of the published ebook | Generalized prompts (`YourFont`, `[YOUR-PROJECT]`) plus a project-instructions template and a starter `README.md` | No |
 
-If you're editing this project, prefer `prompts/`. If you're shipping a new revision of the starter pack, edit `templates/`. The two diverge intentionally — don't try to deduplicate them.
+If you're editing *this* project, follow `CLAUDE.md` and the docs in this folder — `prompts/` describes an older, simpler architecture and will steer you wrong on manifest/registry conventions. If you're shipping a new revision of the starter pack, edit `templates/`. `prompts/` and `templates/` overlap in purpose (both scaffold a *new* project) and haven't been reconciled — don't treat either as authoritative for this repo.

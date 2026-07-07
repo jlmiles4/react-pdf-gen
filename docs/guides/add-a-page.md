@@ -48,6 +48,8 @@ Three edits.
 
 `entryPage` is the path to the chapter-divider file under `src/pages/` (no `.tsx` extension). Groups currently in use: `FOUNDATIONS`, `DESIGN_SYSTEM`, `CRAFT`, `SHIPPING`. To add a new group, append a `Group` entry to `MANIFEST` and add a `GROUP_CONFIG` entry in [`src/pages/02-toc/01-toc.tsx`](../../src/pages/02-toc/01-toc.tsx) to give it a badge color.
 
+The `16` dir prefix below is just the next free number after `15-conclusion` — sync pins the conclusion as the last page regardless of directory number, so the new chapter's actual book position comes from where you place its entry in the manifest, not from this dir number.
+
 **2. Create the divider file.** Path matches `entryPage`. It renders just `<ChapterTitle>`. Skeleton — matches [`src/pages/03-introduction/00-title.tsx`](../../src/pages/03-introduction/00-title.tsx):
 
 ```tsx
