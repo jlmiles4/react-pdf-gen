@@ -1,23 +1,26 @@
 /**
  * Footer — Fixed page footer
  *
- * Brand and page number both rendered as `<Text fixed>` siblings with absolute
- * positioning. Border drawn as a `<View fixed>` line above them. Both texts'
- * vertical positions are computed as `pageHeight - footerHeight + (footerHeight
- * - fontSize) / 2` so their visual centers land on the same baseline regardless
- * of their (slightly different) font sizes.
+ * Brand, page number, and the border above them are all rendered as `<View
+ * fixed>`/`<Text fixed>` siblings anchored with `top` from the same reference
+ * edge (`page.height - page.footerHeight`), so they can never diverge even
+ * when overflowing content grows the page's layout box past `page.height`.
+ * Both texts' vertical positions are computed as `pageHeight - footerHeight +
+ * (footerHeight - fontSize) / 2` so their visual centers land on the same
+ * baseline regardless of their (slightly different) font sizes.
  */
 import React from 'react';
 import { View, Text, StyleSheet } from '@react-pdf/renderer';
 import { colors, fonts, page, borders, fontScale, typography, fontWeight } from '../styles/theme';
 
+const borderTop = page.height - page.footerHeight;
 const brandTop = page.height - page.footerHeight + (page.footerHeight - fontScale.navSmall) / 2;
 const pageNumberTop = page.height - page.footerHeight + (page.footerHeight - typography.codeSmall.fontSize) / 2;
 
 const footerStyles = StyleSheet.create({
   border: {
     position: 'absolute',
-    bottom: page.footerHeight,
+    top: borderTop,
     left: page.margin.left,
     right: page.margin.right,
     borderTopWidth: borders.thin,

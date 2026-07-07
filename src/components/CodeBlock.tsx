@@ -29,7 +29,8 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ children, language }) => {
         <Text key={lineIdx} style={styles.codeText}>
           {lineTokens.map((token, i) => (
             <Text key={i} style={{ color: syntaxColor[token.type] }}>
-              {token.text}
+              {/* blank lines must still occupy a line-height, or they collapse to 0 and adjacent code merges visually */}
+              {token.text || ' '}
             </Text>
           ))}
         </Text>

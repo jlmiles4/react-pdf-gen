@@ -4,9 +4,9 @@
  * Wraps children in a LETTER-sized Page with shared page styles, fixed Header
  * (book title + section name), and fixed Footer (brand + page numbers).
  *
- * Per-page architecture: each .tsx renders one PDF page, so wrap is default
- * (we don't expect wrapping to happen). The `wrap` prop is retained as an
- * escape hatch for the rare multi-page section.
+ * Per-page architecture: each .tsx renders one PDF page, so non-wrapping is
+ * the default (we don't expect wrapping to happen). `wrap={true}` is the
+ * opt-in escape hatch for the rare multi-page section.
  *
  * The Header is positioned so its rule sits a little above the content top
  * (see Header.tsx), giving every page a consistent gap below the header without
@@ -26,7 +26,7 @@ interface ContentPageProps {
   wrap?: boolean;
 }
 
-const ContentPage: React.FC<ContentPageProps> = ({ children, sectionTitle, wrap = true }) => (
+const ContentPage: React.FC<ContentPageProps> = ({ children, sectionTitle, wrap = false }) => (
   <Page size="LETTER" style={[styles.page, { minHeight: pageTokens.height }]} wrap={wrap}>
     <Header sectionTitle={sectionTitle} />
     {children}

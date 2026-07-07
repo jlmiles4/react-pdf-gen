@@ -16,6 +16,7 @@
 import React from 'react';
 import { View, Text } from '@react-pdf/renderer';
 import { styles } from '../styles/shared';
+import { spacing } from '../styles/theme';
 
 interface TableProps {
   headers: string[];
@@ -32,7 +33,13 @@ const Table: React.FC<TableProps> = ({ headers, rows, columnWidths, wrap = false
     <View wrap={wrap} style={styles.tableContainer}>
       <View wrap={false} style={styles.tableHeader}>
         {headers.map((header, i) => (
-          <Text key={i} style={[styles.tableHeaderText, { width: widths[i] }]}>
+          <Text
+            key={i}
+            style={[
+              styles.tableHeaderText,
+              { width: widths[i], paddingRight: i < headers.length - 1 ? spacing.sm : 0 },
+            ]}
+          >
             {header}
           </Text>
         ))}
@@ -40,7 +47,13 @@ const Table: React.FC<TableProps> = ({ headers, rows, columnWidths, wrap = false
       {rows.map((row, rowIdx) => (
         <View key={rowIdx} wrap={false} style={rowIdx % 2 === 1 ? styles.tableRowAlt : styles.tableRow}>
           {row.map((cell, cellIdx) => (
-            <Text key={cellIdx} style={[styles.tableCell, { width: widths[cellIdx] }]}>
+            <Text
+              key={cellIdx}
+              style={[
+                styles.tableCell,
+                { width: widths[cellIdx], paddingRight: cellIdx < row.length - 1 ? spacing.sm : 0 },
+              ]}
+            >
               {cell}
             </Text>
           ))}
