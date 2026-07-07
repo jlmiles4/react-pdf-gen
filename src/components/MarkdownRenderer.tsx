@@ -13,8 +13,8 @@ interface MarkdownRendererProps {
 
 const renderSpans = (spans: InlineSpan[]): React.ReactNode =>
   spans.map((span, i) => {
-    if (span.type === 'bold') return <Text key={i} style={styles.bold}>{span.text}</Text>;
-    if (span.type === 'italic') return <Text key={i} style={styles.italic}>{span.text}</Text>;
+    if (span.type === 'bold') return <Text key={i} style={styles.bold}>{renderSpans(span.children)}</Text>;
+    if (span.type === 'italic') return <Text key={i} style={styles.italic}>{renderSpans(span.children)}</Text>;
     if (span.type === 'code') return <Text key={i} style={styles.inlineCode}>{span.text}</Text>;
     return <Text key={i}>{span.text}</Text>;
   });

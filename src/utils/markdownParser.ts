@@ -1,7 +1,7 @@
 export type InlineSpan =
   | { type: 'plain'; text: string }
-  | { type: 'bold'; text: string }
-  | { type: 'italic'; text: string }
+  | { type: 'bold'; children: InlineSpan[] }
+  | { type: 'italic'; children: InlineSpan[] }
   | { type: 'code'; text: string };
 
 export type MarkdownNode =
@@ -16,18 +16,20 @@ export type MarkdownNode =
  * line of body text. Bold is matched before italic so `**x**` is not seen as
  * a stray italic. Underscore-italics require non-alphanumeric boundaries so
  * `snake_case` identifiers are left alone — wrap real identifiers in backticks.
+ * Bold/italic content is parsed recursively so runs nest (`**a *b* c**`); code
+ * spans are terminal and stay literal.
  */
 export function parseInline(line: string): InlineSpan[] {
   const spans: InlineSpan[] = [];
-  const re = /\*\*([^*]+)\*\*|`([^`]+)`|\*([^*\n]+)\*|(?<![A-Za-z0-9])_([^_\n]+)_(?![A-Za-z0-9])/g;
+  const re = /\*\*(.+?)\*\*|`([^`]+)`|\*([^*\n]+)\*|(?<![A-Za-z0-9])_([^_\n]+)_(?![A-Za-z0-9])/g;
   let last = 0;
   let m: RegExpExecArray | null;
   while ((m = re.exec(line)) !== null) {
     if (m.index > last) spans.push({ type: 'plain', text: line.slice(last, m.index) });
-    if (m[1] !== undefined) spans.push({ type: 'bold', text: m[1] });
+    if (m[1] !== undefined) spans.push({ type: 'bold', children: parseInline(m[1]) });
     else if (m[2] !== undefined) spans.push({ type: 'code', text: m[2] });
-    else if (m[3] !== undefined) spans.push({ type: 'italic', text: m[3] });
-    else if (m[4] !== undefined) spans.push({ type: 'italic', text: m[4] });
+    else if (m[3] !== undefined) spans.push({ type: 'italic', children: parseInline(m[3]) });
+    else if (m[4] !== undefined) spans.push({ type: 'italic', children: parseInline(m[4]) });
     last = m.index + m[0].length;
   }
   if (last < line.length) spans.push({ type: 'plain', text: line.slice(last) });
@@ -113,9 +115,19 @@ export function parseMarkdown(md: string): MarkdownNode[] {
       }
     }
 
+    // Blockquote / unrecognized callout (e.g. `> [!NOTE]`, malformed `> [!TIP`,
+    // or a plain `> quote`): blockquotes aren't a supported feature, so strip the
+    // `> ` marker and degrade to body text. Always advances i so `> [!`-prefixed
+    // lines that miss the callout branch above can't spin the outer loop.
+    if (line.startsWith('>')) {
+      nodes.push({ type: 'text', spans: parseInline(line.replace(/^>\s*/, '')) });
+      i++;
+      continue;
+    }
+
     // Default: Body Text (group consecutive lines)
     const textLines: string[] = [];
-    while (i < lines.length && lines[i].trim() && !lines[i].trim().match(/^(#{1,3}\s|[*+-]\s|```|> \[!)/)) {
+    while (i < lines.length && lines[i].trim() && !lines[i].trim().match(/^(#{1,3}\s|[*+-]\s|```|>)/)) {
       textLines.push(lines[i].trim());
       i++;
     }
