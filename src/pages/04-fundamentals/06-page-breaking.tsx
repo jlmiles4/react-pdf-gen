@@ -6,9 +6,6 @@ import { ContentPage, BulletList, TipBox, CodeBlock, SectionHeading } from '../.
 const Page: React.FC = () => (
   <ContentPage sectionTitle="Fundamentals" wrap={false}>
     <SectionHeading>Page Breaking</SectionHeading>
-    <Text style={styles.body}>
-      Control how content flows across pages with these props:
-    </Text>
     <BulletList items={[
       'wrap={true} on Page – allows content to overflow to next page (default)',
       'break={true} on View/Text – forces a page break before this element',
@@ -30,11 +27,9 @@ const Page: React.FC = () => (
     <Text render={({ pageNumber, totalPages }) =>
       \`\${pageNumber} / \${totalPages}\`} />
   </View>
-
   <View break>
     <Text>Chapter 2 starts on a fresh page</Text>
   </View>
-
   <View wrap={false}>
     {/* This card stays whole or moves down */}
   </View>

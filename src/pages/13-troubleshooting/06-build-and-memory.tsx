@@ -14,7 +14,6 @@ const Page: React.FC = () => (
     </Text>
     <CodeBlock language="bash">{`# Increase Node.js memory limit
 NODE_OPTIONS=--max-old-space-size=4096 pnpm build
-
 # Or add to package.json scripts:
 "build": "NODE_OPTIONS=--max-old-space-size=4096 tsx src/build.tsx"`}</CodeBlock>
     <BulletList items={[

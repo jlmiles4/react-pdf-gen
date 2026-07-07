@@ -7,13 +7,12 @@ const Page: React.FC = () => {
   const mdPath = path.join(process.cwd(), 'content/chapters/12-markdown-demo.md');
   const content = fs.readFileSync(mdPath, 'utf-8');
   const body = content.replace(/^---[\s\S]*?---/, '').trim();
-  // Split on the authored page-break marker so each half is its own LETTER page;
-  // the parser never sees the marker.
-  const [partOne] = body.split('<!-- page-break -->');
+  // Render the half after the authored page-break marker; the parser never sees it.
+  const [, partTwo] = body.split('<!-- page-break -->');
 
   return (
     <ContentPage sectionTitle="Automation" wrap={false}>
-      <MarkdownRenderer content={partOne.trim()} />
+      <MarkdownRenderer content={partTwo.trim()} />
     </ContentPage>
   );
 };

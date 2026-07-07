@@ -9,9 +9,7 @@ const Page: React.FC = () => (
     <Text style={styles.body}>
       Three font families are built in: Courier, Helvetica, and Times-Roman, each with bold and italic variants. For anything else, you register fonts explicitly.
     </Text>
-    <CodeBlock language="tsx">{`import { Font } from '@react-pdf/renderer';
-
-Font.register({
+    <CodeBlock language="tsx">{`Font.register({
   family: 'Inter',
   fonts: [
     { src: '/fonts/Inter-Regular.ttf' },
@@ -21,12 +19,12 @@ Font.register({
 });`}</CodeBlock>
 
     <WarningBox label="Font Limitations">
-      Only TTF and WOFF formats work. OTF files and variable fonts are not supported. Register every weight and style you need – the renderer won't synthesize bold or italic from a regular font.
+      Only TTF and WOFF formats work – OTF files and variable fonts are not supported. Register every weight and style you need; the renderer won't synthesize them.
     </WarningBox>
 
     <SectionHeading>Using Registered Fonts</SectionHeading>
     <Text style={styles.body}>
-      Reference a registered family by name and request a weight or style – the numeric weight you pass must line up with one you actually registered.
+      Reference a registered family by name and request a weight or style – the numeric weight must match one you registered.
     </Text>
     <Table
       headers={['Style', 'Resolves to', 'Common use']}

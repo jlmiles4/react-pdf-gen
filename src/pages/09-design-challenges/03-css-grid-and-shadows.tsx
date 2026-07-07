@@ -15,15 +15,11 @@ const Page: React.FC = () => (
       </Text>
       <CodeBlock language="tsx">{`// Three-column "grid" using flexbox
 <View style={{ flexDirection: 'row' }}>
-  <View style={{ width: '33%', padding: spacing.sm }}>
-    <Text>Column 1</Text>
-  </View>
-  <View style={{ width: '33%', padding: spacing.sm }}>
-    <Text>Column 2</Text>
-  </View>
-  <View style={{ width: '33%', padding: spacing.sm }}>
-    <Text>Column 3</Text>
-  </View>
+  {['Column 1', 'Column 2', 'Column 3'].map((label) => (
+    <View key={label} style={{ width: '33%', padding: spacing.sm }}>
+      <Text>{label}</Text>
+    </View>
+  ))}
 </View>`}</CodeBlock>
     </RecipeCard>
 

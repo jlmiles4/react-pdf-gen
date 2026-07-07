@@ -35,6 +35,8 @@ const Page = () => (
 > [!TIP] label="Pro Tip"
 > You can mix and match Markdown with custom JSX for complex layouts that Markdown can't handle.
 
+<!-- page-break -->
+
 ## Supported Elements
 
 The current parser supports:

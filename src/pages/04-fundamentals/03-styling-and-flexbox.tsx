@@ -11,7 +11,6 @@ const Page: React.FC = () => (
     </Text>
     <CodeBlock language="tsx">{`import { StyleSheet } from '@react-pdf/renderer';
 import { colors, spacing, borders } from '../../styles/theme';
-
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',

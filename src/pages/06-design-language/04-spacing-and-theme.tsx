@@ -7,7 +7,7 @@ const Page: React.FC = () => (
   <ContentPage sectionTitle="Design Language" wrap={false}>
     <SectionHeading>Spacing Scale</SectionHeading>
     <Text style={styles.body}>
-      Use a spacing scale based on a 4-point grid. Every margin, padding, and gap should come from it (this book also keeps hairline micro: 1 and xxs: 2 below the grid):
+      Use a spacing scale on a 4-point grid. Every margin, padding, and gap comes from it:
     </Text>
     <CodeBlock language="typescript">{`export const spacing = {
   xs:   4,    // Tight gaps, inline spacing
@@ -24,9 +24,7 @@ const Page: React.FC = () => (
       <Text style={styles.body}>
         All tokens live in a single theme.ts file. Every page component imports from here – never hardcodes values.
       </Text>
-      <CodeBlock language="typescript">{`import { colors, fonts, typography, spacing }
-  from '../../styles/theme';
-
+      <CodeBlock language="typescript">{`import { colors, fonts, typography, spacing } from '../../styles/theme';
 const s = StyleSheet.create({
   title: {
     ...typography.h1,

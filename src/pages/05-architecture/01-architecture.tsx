@@ -23,7 +23,6 @@ const Page: React.FC = () => (
     02-toc/01-toc.tsx
     03-introduction/00-title.tsx       # chapter divider
     03-introduction/01-introduction.tsx
-    ...
   components/   # Header, Footer, ChapterTitle, CodeBlock, Table, ...
   styles/
     theme.ts        # design tokens

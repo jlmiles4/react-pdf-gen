@@ -16,20 +16,16 @@ import Page01Cover from './pages/Page01-Cover';
 import Page02TOC from './pages/Page02-TOC';
 import Page03Ch01 from './pages/Page03-Ch01-Intro';
 // ... more imports
-
 const EbookDocument: React.FC = () => (
   <Document
     title="React-PDF + AI: The Builder's Guide"
     author="Landon Miles"
-    subject="PDF Generation Best Practices"
   >
     <Page01Cover />
     <Page02TOC />
     <Page03Ch01 />
-    {/* ... more pages */}
   </Document>
 );
-
 export default EbookDocument;`}</CodeBlock>
 
     <SectionHeading>Build Script</SectionHeading>
@@ -39,7 +35,6 @@ export default EbookDocument;`}</CodeBlock>
     <CodeBlock language="tsx">{`// build.tsx
 import ReactPDF from '@react-pdf/renderer';
 import EbookDocument from './Document';
-
 ReactPDF.render(<EbookDocument />, './output/ebook.pdf')
   .then(() => console.log('PDF generated: output/ebook.pdf'));`}</CodeBlock>
   </ContentPage>

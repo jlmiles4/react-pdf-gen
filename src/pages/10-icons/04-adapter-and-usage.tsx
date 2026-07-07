@@ -14,8 +14,7 @@ const Page: React.FC = () => (
     <CodeBlock language="tsx">{`import { Svg, Path, Circle, Line } from '@react-pdf/renderer';
 import type { IconType } from 'react-icons';
 
-const TAG_MAP = { svg: Svg, path: Path,
-  circle: Circle, line: Line /* ...etc */ };
+const TAG_MAP = { svg: Svg, path: Path, circle: Circle, line: Line /* ...etc */ };
 
 const Icon = ({ icon, size = 16, color }) => {
   const { attr, children } = icon({}).props;
@@ -28,10 +27,6 @@ const Icon = ({ icon, size = 16, color }) => {
 };`}</CodeBlock>
 
     <SectionHeading>Using Icons in Context</SectionHeading>
-    <Text style={styles.body}>
-      Icons work best when paired with text in a row layout:
-    </Text>
-
     <View style={[styles.iconRow, { marginBottom: spacing.sm, paddingLeft: spacing.sm }]}>
       <CheckIcon size={iconSize.md} color={colors.success} />
       <Text style={styles.body}>Vector-sharp at any zoom level</Text>
