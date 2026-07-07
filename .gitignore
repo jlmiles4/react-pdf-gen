@@ -40,3 +40,4 @@ src/registry.ts
 # Internal maintainer guidance for the templates/ folder — kept local, not shipped
 # in the customer starter kit (the customer deliverable is templates/CLAUDE.md.template).
 /templates/CLAUDE.md
+.batou/
