@@ -65,10 +65,9 @@ const Page: React.FC = () => (
     </Text>
 
     <CodeBlock language="tsx">{`export const typography = {
-  display: { fontSize: 36, fontWeight: 700 },
-  h1:      { fontSize: 26, fontWeight: 700 },
-  h2:      { fontSize: 20, fontWeight: 600 },
-  body:    { fontSize: 11, fontWeight: 400 },
+  display: { fontSize: 36, fontFamily: fonts.heading, fontWeight: fontWeight.bold },
+  h2:      { fontSize: 20, fontFamily: fonts.heading, fontWeight: fontWeight.semibold },
+  body:    { fontSize: 11, fontFamily: fonts.body, fontWeight: fontWeight.regular },
 } as const;`}</CodeBlock>
   </ContentPage>
 );

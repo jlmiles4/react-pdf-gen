@@ -7,7 +7,7 @@ const Page: React.FC = () => (
   <ContentPage sectionTitle="Icons over Emojis" wrap={false}>
     <SectionHeading>Skip the Path Data – Use react-icons</SectionHeading>
     <Text style={styles.body}>
-      The book's source ships an Icon adapter that takes any react-icons IconType and renders it through @react-pdf/renderer's Svg primitives. You get 50,000+ vetted icons (Lucide, Heroicons, Feather, Tabler, Font Awesome) with one import – no path-string copying, no SVG hand-tuning.
+      The book's source ships an Icon adapter that takes any react-icons IconType and renders it through @react-pdf/renderer's Svg primitives. You get nearly 50,000 vetted icons (Lucide, Heroicons, Feather, Tabler, Font Awesome) with one import – no path-string copying, no SVG hand-tuning.
     </Text>
     <CodeBlock language="tsx">{`import { LuCheck, LuTriangleAlert } from 'react-icons/lu';
 import Icon from './components/Icon';

@@ -64,7 +64,7 @@ const Page: React.FC = () => (
     </View>
 
     <Text style={styles.body}>
-      These icons come from Lucide via the react-icons package (MIT license). A small adapter rewrites react-icons' browser SVG output as @react-pdf/renderer Svg/Path nodes – so size, color, and stroke all stay under your control.
+      These icons come from Lucide via the react-icons package (ISC license). A small adapter rewrites react-icons' browser SVG output as @react-pdf/renderer Svg/Path nodes – so size, color, and stroke all stay under your control.
     </Text>
 
     <SectionHeading>Why Not Emojis?</SectionHeading>

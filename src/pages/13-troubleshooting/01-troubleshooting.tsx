@@ -27,7 +27,7 @@ const Page: React.FC = () => (
         Text renders in Helvetica instead of your registered font, or the PDF shows blank text where custom fonts should appear.
       </WarningBox>
       <Text style={styles.body}>
-        Font issues are silent – react-pdf falls back to Helvetica without warning. Common causes: wrong file path, unregistered weight, or mismatched fontFamily name.
+        Font issues are silent, with no warning. A wrong file path or a mismatched fontFamily name drops you all the way to Helvetica; an unregistered weight falls back to the nearest weight within the same family instead.
       </Text>
   </ContentPage>
 );

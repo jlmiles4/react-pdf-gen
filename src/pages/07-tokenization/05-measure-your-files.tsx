@@ -6,7 +6,7 @@ import { ContentPage, CodeBlock, TipBox, InfoBox, SectionHeading } from '../../c
 const Page: React.FC = () => (
   <ContentPage sectionTitle="Tokenization" wrap={false}>
     <Text style={styles.body}>
-      Total context: roughly 2,500 tokens. The AI has everything it needs to produce code that matches your design system, uses the correct component wrapper, and fits the existing page structure. No guesswork required.
+      Total context: roughly 2,650 tokens. The AI has everything it needs to produce code that matches your design system, uses the correct component wrapper, and fits the existing page structure. No guesswork required.
     </Text>
 
     <InfoBox label="The Reference Folder">
