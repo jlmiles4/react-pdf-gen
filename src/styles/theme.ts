@@ -55,7 +55,6 @@ export const colors = {
   infoLight: '#EDF1F8',
   // Base
   white: '#FFFFFF',
-  black: '#0B1426',
 } as const;
 
 export const fonts = {
@@ -73,7 +72,7 @@ export const fontWeight = {
   bold: 700,
 } as const;
 
-/** Line-height multipliers for text outside the typography presets. */
+/** Line-height multipliers, for standalone use and for the typography presets below whose steps fit the scale (heading presets use bespoke tighter values instead). */
 export const lineHeight = {
   tight: 1.2,
   snug: 1.4,
@@ -139,13 +138,13 @@ export const page = {
 
 // Syntax highlighting — designed for readability on primary[900] background
 export const syntax = {
-  keyword: '#F5B733',   // accent[400] — gold for reserved words
-  string: '#7EC89F',    // soft green — readable on dark navy
-  comment: '#7A7A91',   // neutral[500] — muted for comments
-  tag: '#6E8DC4',       // primary[300] — light blue for JSX/HTML tags
-  number: '#F8CB66',    // accent[300] — warm gold for literals
-  punctuation: '#9BB3DB', // primary[200] — subtle for brackets/operators
-  default: '#D0D0DB',   // neutral[200] — base code text
+  keyword: colors.accent[400],      // gold for reserved words
+  string: '#7EC89F',                // soft green — readable on dark navy
+  comment: colors.neutral[500],     // muted for comments
+  tag: colors.primary[300],         // light blue for JSX/HTML tags
+  number: colors.accent[300],       // warm gold for literals
+  punctuation: colors.primary[200], // subtle for brackets/operators
+  default: colors.neutral[200],     // base code text
 } as const;
 
 export const borders = {
