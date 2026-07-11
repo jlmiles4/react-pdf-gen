@@ -58,13 +58,12 @@ See [page-anatomy](page-anatomy.md) for what a chapter folder looks like inside,
 
 ## Authoring inputs vs. build inputs
 
-Four folders look similar (mostly markdown, mostly unread by `build.tsx`) but exist for different reasons:
+Three folders look similar (mostly markdown, mostly unread by `build.tsx`) but exist for different reasons:
 
 | Folder | Audience | Contents | Read by the build? |
 |---|---|---|---|
 | `content/chapters/` | The author drafting prose | One markdown file per chapter, in narrative form | Mostly no — only `12-markdown-demo.md` is loaded. Its marker-delimited halves are rendered by `14-markdown-automation/01-markdown-automation.tsx` and `03-supported-elements.tsx` via `MarkdownRenderer`. The other drafts are reference material the author worked from before re-typing into TSX. |
 | `reference/` | An AI agent helping the author | Long-form research notes (react-pdf API, AI patterns, design) | No |
-| `prompts/` | An AI scaffolding a *new*, unrelated react-pdf project | Generic starter prompts (flat `pages/Page01-Cover.tsx` files, manual registration in `Document.tsx`) predating this repo's manifest + generated-`registry.ts` architecture — not updated to match it | No |
 | `templates/` | A reader of the published ebook | Generalized prompts (`YourFont`, `[YOUR-PROJECT]`) plus a project-instructions template and a starter `README.md` | No |
 
-If you're editing *this* project, follow the docs in this folder — `prompts/` describes an older, simpler architecture and will steer you wrong on manifest/registry conventions. If you're shipping a new revision of the starter pack, edit `templates/`. `prompts/` and `templates/` overlap in purpose (both scaffold a *new* project) and haven't been reconciled — don't treat either as authoritative for this repo.
+If you're editing *this* project, follow the docs in this folder. If you're shipping a new revision of the reader-facing starter pack, edit `templates/`.

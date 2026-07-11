@@ -68,3 +68,15 @@ Hyphenation is disabled globally with `Font.registerHyphenationCallback((word) =
 - **Core spacing is on a 4pt grid.** `micro` (1pt) and `xxs` (2pt) are intentional fine-adjustment exceptions; prefer composing named tokens (`spacing.xxs + spacing.micro`) over inventing a new value.
 - **Icon sizes go through `iconSize`.** `<CheckIcon size={iconSize.sm} />`, not `size={12}`. The presets are tuned for the 6 contexts icons appear in (inline body, callout label, showcase, etc.).
 - **No scattered design literals.** Reusable values belong in `theme.ts`; token composition (`spacing.lg + spacing.xs`) and structural anchors (`top: 0`, `flex: 1`) remain local. A unique dimension may use a named local constant, but hex codes, font sizes, and reusable padding values stay tokenized.
+
+## Design principles
+
+The philosophy the token and component rules above serve:
+
+- **Consistency over creativity.** Every page should read as one document — same heading style, spacing, and callout patterns throughout. Reuse beats novelty.
+- **Whitespace is intentional.** Generous page margins (54pt horizontal, 60pt vertical) and at least `spacing.lg` (16pt) between sections. Pages should breathe, not feel cramped.
+- **Hierarchy through contrast, not size alone.** Three levels are enough — heading (`h2`, 20pt navy semibold), body (11pt slate regular), caption/label (8–9.5pt light gray). Color and weight carry the distinction.
+- **Components, not inline styles.** Every visual pattern is a component (see [components reference](../reference/components.md)); page files import and compose them rather than re-deriving styles locally.
+- **Tokens, not magic numbers.** Reusable design decisions come from `theme.ts` — see [Conventions](#conventions) above and [theme-tokens](../reference/theme-tokens.md).
+- **SVG icons, never emoji.** Vector-sharp, color-matched, and consistent across renderers.
+- **No orphans.** A callout, table, or heading stranded alone at the bottom of a page is a layout bug — add content above or restructure to fill the page. See [pagination](../build/pagination.md).

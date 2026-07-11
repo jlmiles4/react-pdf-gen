@@ -28,7 +28,6 @@
 | `src/fonts.ts` | Inter font registration (7 weight/style variants) |
 | `src/Document.tsx` | Root Document component, assembles all pages |
 | `src/build.tsx` | Build script |
-| `STYLE.md` | Complete visual style guide |
 
 ## Component API Quick Reference
 ```tsx
@@ -73,8 +72,6 @@ Model APIs hard-cap images per conversation (the Claude API fails at **100** wit
 ## Reference Docs
 - `docs/` — Project docs: `architecture/`, `guides/`, `reference/` (start at `docs/README.md`)
 - `reference/react-pdf-api/` — Upstream react-pdf API docs
-- `STYLE.md` — Visual style guide with color palette, typography, spacing
 - `TASK.md` — Project roadmap and chapter status
 - `content/chapters/` — author Markdown drafts; **not** loaded by the build except `12-markdown-demo.md` (split on its `<!-- page-break -->` marker and rendered by `14-markdown-automation/01-…` and `03-supported-elements`). Editing the others does not change the PDF.
 - `templates/` — reader-facing starter pack (generalized prompts + `CLAUDE.md.template`); edit here when revising the shipped starter pack.
-- `prompts/` — internal authoring prompts; they describe an **older, pre-manifest architecture** (flat `pages/`, manual `Document.tsx` registration) — do **not** follow them when editing *this* repo. See `docs/architecture/overview.md#authoring-inputs-vs-build-inputs`.

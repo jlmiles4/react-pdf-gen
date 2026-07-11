@@ -66,11 +66,8 @@ content/chapters/        author drafts. One file (12-markdown-demo.md) is split 
                          the rest are reference material.
 reference/               long-form research notes referenced while authoring (not loaded by the build)
 templates/               readers' starter pack — generalized prompt files + project-instructions template
-prompts/                 internal authoring prompts — same structure as templates/, project-specific
 output/                  generated PDF, toc-positions.json, and PNGs (gitignored)
 ```
-
-`templates/` and `prompts/` look similar but serve different audiences. See [`docs/architecture/overview.md`](architecture/overview.md#authoring-inputs-vs-build-inputs) for the distinction.
 
 ## License
 

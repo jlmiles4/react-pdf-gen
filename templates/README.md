@@ -27,7 +27,7 @@ The full source of the ebook you purchased is in the `src/` directory of this re
 - `src/pages/` — 71 page files in 15 folders (cover, TOC, 12 chapters, conclusion)
 - `src/fonts.ts` — Font registration pattern
 - `src/build.tsx` — Build script
-- `STYLE.md` — Design system documentation
+- `docs/` — architecture, build, and reference documentation (design system: `docs/architecture/design-system.md`)
 
 Run `pnpm install && pnpm build` to generate the PDF yourself. Run `pnpm pipeline` to also export every page as a PNG for AI visual review.
 

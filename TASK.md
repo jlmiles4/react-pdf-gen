@@ -40,8 +40,7 @@ An ebook (71 pages) covering best practices for using `@react-pdf/renderer` with
 react-pdf-gen/
 ├── CLAUDE.md                       # Build commands + architecture rules for Claude
 ├── TASK.md                         # This file - project roadmap
-├── STYLE.md                        # Visual style guide (typography, palette, spacing)
-├── docs/                           # Project documentation (humans + AI agents)
+├── docs/                           # Project documentation (humans + AI agents; design system in docs/architecture/)
 ├── src/
 │   ├── manifest.ts                 # Chapter structure (source of truth)
 │   ├── registry.ts                 # AUTO-GENERATED page registry (gitignored)
