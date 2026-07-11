@@ -31,7 +31,7 @@ const ContentPage: React.FC<ContentPageProps> = ({ children, sectionTitle }) => 
 ```
 
 ### Header / Footer — Fixed Elements
-Use `fixed` prop so they repeat on every page. Use `position: 'absolute'` for fixed positioning.
+`ContentPage` inserts them in each source page. Use `fixed` so they also repeat on every subpage a wrapping `<Page>` generates; use `position: 'absolute'` for anchoring.
 
 ```tsx
 // Footer with dynamic page numbers
@@ -47,7 +47,7 @@ const Footer: React.FC = () => (
 ```
 
 ### SectionHeading — Gold Bar + h2
-Always use `wrap={false}` and `minPresenceAhead={40}` to prevent orphaned headings.
+Use `wrap={false}` to keep the heading together. Add `minPresenceAhead={40}` when the ancestor Page wraps; fixed pages must be authored to fit.
 
 ```tsx
 const SectionHeading: React.FC<{ children: string }> = ({ children }) => (
@@ -178,7 +178,7 @@ export const CheckIcon: React.FC<{ size?: number; color?: string }> = ({ size = 
 
 ## Critical Rules
 1. Every component that should not split across pages gets `wrap={false}`
-2. Headings get `minPresenceAhead={40}` so they're never orphaned
+2. Headings carry `minPresenceAhead={40}` for wrapping contexts; fixed pages are visually balanced by editing or splitting the source
 3. All styles come from shared.ts or local `StyleSheet.create()` — never inline objects
 4. `fontWeight` must always be present when `fontFamily` is set
 5. Icons are SVG with `fill="none"` and `stroke={color}` — never filled shapes for line icons

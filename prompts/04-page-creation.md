@@ -103,7 +103,7 @@ pnpm pipeline
 
 - **Target:** 3-5 SectionHeadings per ContentPage
 - **Body text:** 2-4 sentences per paragraph, never wall-of-text
-- **Code blocks:** Keep under 15 lines. Longer code should be split into explained chunks
+- **Code blocks:** Fit each block to the page height left by surrounding content. Split or move code when it would overflow
 - **Tables:** Maximum 3 columns for readability. 4-8 rows ideal
 - **Callout boxes:** 1-2 per page. End with a TipBox when possible
 - **BulletLists:** 3-8 items. Trim to essentials

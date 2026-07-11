@@ -1,9 +1,10 @@
 /**
  * SectionHeading — Gold accent bar + h2 heading
  *
- * The primary section heading used on every content page. Renders a 4px-wide
+ * The primary section-heading pattern for content pages. Renders a 4px-wide
  * gold bar (accent[500]) beside the heading text. Uses wrap={false} to prevent
- * splitting and minPresenceAhead={40} to avoid orphaned headings at page bottom.
+ * splitting and minPresenceAhead={40} for orphan protection when the ancestor
+ * Page wraps. Fixed pages still must be authored to fit.
  */
 import React from 'react';
 import { View, Text } from '@react-pdf/renderer';

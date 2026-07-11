@@ -6,7 +6,7 @@
 
 Without a design language, every page an AI generates looks different. The AI picks whatever colors, sizes, and spacing feel right in the moment. Page 3 uses 12pt body text, page 7 uses 11pt, page 14 uses 10pt. The primary color drifts from `#1a1a2e` to `#1b1c30` to `#2a2a3e`. Spacing is 16pt here, 20pt there, 12pt somewhere else.
 
-A design language is a set of explicit, named tokens that constrain every visual decision. When the AI knows the body text is always `tokens.fontSize.body` (11pt) and the primary color is always `tokens.colors.primary` (`#1a1a2e`), every page it generates is consistent with every other page.
+A design language is a set of explicit, named tokens that constrain every reusable visual decision. When the AI knows the body text is always `tokens.fontSize.body` (11pt) and the primary color is always `tokens.colors.primary` (`#1a1a2e`), every page it generates starts from the same system; unique structural geometry can remain a named local constant.
 
 ---
 
@@ -212,7 +212,7 @@ export const sharedStyles = StyleSheet.create({
 
 ## Color Palette
 
-Limit your palette. Three to five colors create a professional look. More than that creates noise.
+Limit your palette to three to five core roles. Tonal shades within those roles add depth without turning the palette into unrelated colors.
 
 ### Minimum Viable Palette
 

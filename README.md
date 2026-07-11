@@ -1,6 +1,6 @@
 # react-pdf-gen
 
-A `@react-pdf/renderer` project that builds a 71-page ebook ("React-PDF + AI: The Builder's Guide to Premium PDF Generation") from React/TSX components. The build script auto-syncs a registry of pages, renders the PDF in two passes (the second pass populates the TOC with real page numbers), and a shell script rasterizes the PDF to PNG pages for visual review.
+A `@react-pdf/renderer` project that builds a 71-page ebook ("React-PDF + AI: The Builder's Guide to Premium PDF Generation") from React/TSX components. The build script auto-syncs a registry of pages, renders the PDF in two passes (the second pass populates the clickable TOC with real page numbers), and a shell script rasterizes the PDF to PNG pages for visual review.
 
 ## Quick start
 
@@ -8,7 +8,7 @@ Prerequisites: Node 22+, pnpm (`corepack enable`), and poppler-utils (`pdftotext
 
 ```bash
 pnpm install
-pnpm build       # sync registry + render PDF -> output/ebook.pdf (two passes)
+pnpm build       # sync registry + render PDF -> output/react-pdf-ai-builders-guide.pdf (two passes)
 pnpm export      # rasterize PDF -> output/pages/page-NN.png (needs poppler-utils)
 pnpm pipeline    # build + export
 pnpm dev         # watch inputs; sync + rebuild after each relevant change
@@ -23,7 +23,7 @@ pnpm dev         # watch inputs; sync + rebuild after each relevant change
   - [Page anatomy](docs/architecture/page-anatomy.md) — what a page file looks like, multi-file chapters, chrome pages
   - [Design system](docs/architecture/design-system.md) — token shapes, shared styles, font registration, conventions
 - Build
-  - [Pipeline](docs/build/pipeline.md) — sync → two-pass render → PNG export
+  - [Pipeline](docs/build/pipeline.md) — sync → two-pass render, clickable TOC wiring, and PNG export
   - [Registry sync](docs/build/registry-sync.md) — `scripts/sync-project.ts`, how `manifest.ts` + the pages tree become `registry.ts`
   - [Pagination and layout](docs/build/pagination.md) — `wrap={false}`, `minPresenceAhead`, fixed headers, orphan avoidance
 - Guides

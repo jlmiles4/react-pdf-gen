@@ -15,7 +15,7 @@ const Page: React.FC = () => (
       'Use short but descriptive variable names – "s" for local styles is fine',
       'Don\'t add comments that restate the obvious – "// Render the title" above a title render',
       'Keep page components focused – if a section could be its own page, make it one',
-      'Use the reference/ folder pattern – AI reads concise docs instead of loading all source',
+      'Use docs/ for concise project guidance; keep long-form research in reference/',
     ]} />
 
     <SectionHeading>Prompt Sizing in Practice</SectionHeading>

@@ -7,22 +7,18 @@ const Page: React.FC = () => (
   <ContentPage sectionTitle="Design Language" wrap={false}>
     <SectionHeading>Spacing Scale</SectionHeading>
     <Text style={styles.body}>
-      Use a spacing scale on a 4-point grid. Every margin, padding, and gap comes from it:
+      Use a mostly 4-point grid with named 1pt and 2pt micro exceptions. Reusable gaps and padding come from it; page geometry has separate named tokens:
     </Text>
     <CodeBlock language="typescript">{`export const spacing = {
-  xs:   4,    // Tight gaps, inline spacing
-  sm:   8,    // List item gaps, small padding
-  md:   12,   // Standard padding, paragraph gaps
-  lg:   16,   // Section spacing, card padding
-  xl:   24,   // Major section breaks
-  xxl:  32,   // Chapter-level spacing
-  xxxl: 48,   // Cover page spacing
+  none: 0, micro: 1, xxs: 2,       // zero + micro exceptions
+  xs: 4, sm: 8, md: 12, lg: 16,    // 4pt core
+  xl: 24, xxl: 32, xxxl: 48,       // major spacing
 };`}</CodeBlock>
 
     <View wrap={false}>
       <SectionHeading>Theme File</SectionHeading>
       <Text style={styles.body}>
-        All tokens live in a single theme.ts file. Every page component imports from here – never hardcodes values.
+        Tokens live in theme.ts. Pages consume them directly or through shared styles/components; reusable design values are not hardcoded.
       </Text>
       <CodeBlock language="typescript">{`import { colors, fonts, typography, spacing } from '../../styles/theme';
 const s = StyleSheet.create({

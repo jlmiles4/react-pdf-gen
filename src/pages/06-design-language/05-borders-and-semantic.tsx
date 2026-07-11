@@ -8,13 +8,14 @@ const Page: React.FC = () => (
     <View wrap={false}>
       <SectionHeading>Border and Radius Tokens</SectionHeading>
       <Text style={styles.body}>
-        Define border widths and corner radii alongside your other tokens. Without these, AI mixes 4px rounded corners on one card with 8px on another – subtle but noticeable.
+        Define border widths and corner radii alongside your other tokens. Without these, AI mixes 4pt rounded corners on one card with 8pt on another – subtle but noticeable.
       </Text>
       <CodeBlock language="typescript">{`export const borders = {
   thin: 0.5,     // Dividers, table cell borders
   medium: 1,     // Card borders, table header rules
   thick: 2,      // Callout left borders, emphasis
   radius: {
+    xs: 1.5,     // Fine details, compact elements
     sm: 3,       // Callout boxes, badges, tags
     md: 6,       // Cards, code blocks, tables
     lg: 10,      // Feature cards, hero elements

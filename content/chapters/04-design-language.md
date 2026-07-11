@@ -4,7 +4,7 @@ You can have the cleanest project architecture in the world, and your AI-generat
 
 ## What a Design Language Is (In This Context)
 
-For our purposes, a design language is a single TypeScript file – `theme.ts` – that defines every visual value your document uses:
+For our purposes, a design language is a single TypeScript file – `theme.ts` – that defines every reusable visual value your document uses:
 
 - Colors (primary, accent, neutrals, semantic)
 - Typography (font families, sizes, weights, line heights)
@@ -12,7 +12,7 @@ For our purposes, a design language is a single TypeScript file – `theme.ts` �
 - Border treatments (widths, radii, colors)
 - Opacity values
 
-When an AI generates a page component, it imports this file and pulls values from it. It never invents a color. It never guesses a font size. Every visual decision is already made.
+When an AI generates a page component, it imports this file and pulls reusable values from it. It never invents a color or guesses a font size; unique structural geometry can be named locally.
 
 ## Why AI Needs Explicit Tokens
 
@@ -264,7 +264,7 @@ The key constraint: your primary and accent should have enough contrast to be di
 Two rules:
 
 1. **Maximum two font families.** One for headings, one for body. Using more than two creates visual noise.
-2. **Register only the weights you use.** Each font file adds to build time and file size. Four weights per family is usually sufficient: Regular (400), Medium (500), SemiBold (600), Bold (700).
+2. **Register the weights you intend to use.** Used variants are loaded and subset-embedded; four weights per family are usually sufficient: Regular (400), Medium (500), SemiBold (600), Bold (700).
 
 ### Recommended combinations
 
@@ -475,8 +475,8 @@ const styles = StyleSheet.create({
     borderTopColor: theme.colors.accent,
   },
   metricValue: {
-    fontSize: 24,
-    fontWeight: 700,
+    fontSize: theme.typography.h1.fontSize,
+    fontWeight: theme.typography.h1.fontWeight,
     color: theme.colors.primary,
     marginBottom: theme.spacing[1],
   },
@@ -492,7 +492,7 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing[2],
   },
   bullet: {
-    width: 16,
+    width: theme.spacing[4],
     fontSize: theme.typography.body.fontSize,
     color: theme.colors.accent,
   },
@@ -670,9 +670,9 @@ Same structure, different values. Every page component works unchanged. The enti
 
 A design language for AI-generated PDFs comes down to:
 
-1. **One `theme.ts` file** that defines every visual value.
+1. **One `theme.ts` file** that defines every reusable visual value.
 2. **One `shared.ts` file** that maps tokens to reusable style objects.
 3. **One design brief** (optional but recommended) that summarizes the visual direction in plain language.
-4. **Zero hardcoded values** in page components.
+4. **Zero hardcoded reusable values** in page components; name unique structural geometry locally.
 
 Build the theme first, before any pages. When you hand an AI a theme file and say "build a page that shows quarterly revenue data," it has everything it needs to produce output that matches the rest of your document. That's the goal.

@@ -1,12 +1,12 @@
 ---
 number: "12"
 title: "Markdown Automation"
-subtitle: "Writing your book in Markdown and rendering it to premium PDF automatically."
+subtitle: "Markdown authoring with shared components and explicit page breaks."
 group: "SHIPPING"
 ---
 ## The Power of Markdown
 
-Writing content in React components is powerful but tedious. By using a Markdown-to-JSX pipeline, you can focus on writing while the system handles the layout.
+Writing content in React components is powerful but tedious. With a Markdown-to-JSX pipeline, you can focus on writing while shared components handle styling; explicit markers still control physical page breaks.
 
 ### Why Markdown?
 
@@ -24,7 +24,6 @@ import fs from 'fs';
 const content = fs.readFileSync('content/chapters/12-markdown-demo.md', 'utf-8');
 const body = content.replace(/^---[\s\S]*?---/, '').trim();
 const pages = body.split('\n<!-- page-break -->\n');
-if (pages.length !== 2) throw new Error('Expected one page-break marker');
 const page = (index: 0 | 1) => (
   <ContentPage sectionTitle="Automation" wrap={false}>
     <MarkdownRenderer content={pages[index].trim()} />
@@ -48,7 +47,7 @@ The current parser supports:
 * **Callouts** (Tip, Warning, Info boxes)
 
 > [!WARNING] label="Keep code blocks short"
-> Fenced blocks render through `CodeBlock`, which uses `wrap={false}` – a block that outgrows the page cannot split, so keep code samples under ~15 lines.
+> Fenced blocks render through `CodeBlock`, which uses `wrap={false}` – a block that outgrows the page cannot split, so size each sample to the remaining page height.
 
 ## Inline Formatting
 

@@ -14,8 +14,8 @@ const Page: React.FC = () => (
       rows={[
         ['Text not in <Text>', 'Wrap all strings', 'Ch2: Fundamentals'],
         ['Wrong font', 'Check family/path; register intended weights', 'Ch2: Fundamentals'],
-	        ['Content overflow', 'Shorten or split the source page', 'Ch2: Fundamentals'],
-        ['Orphaned heading', 'minPresenceAhead={40}', 'Ch2: Fundamentals'],
+        ['Content overflow', 'Shorten/split the fixed source page', 'Ch2: Fundamentals'],
+        ['Orphaned heading', 'Edit/split the fixed source page', 'Ch2: Fundamentals'],
         ['Split callout', 'wrap={false} on outer View', 'Ch2: Fundamentals'],
         ['Styles ignored', 'Use camelCase, check support', 'Ch2: Fundamentals'],
         ['Wrong layout', 'Set flexDirection: "row"', 'Ch7: Challenges'],

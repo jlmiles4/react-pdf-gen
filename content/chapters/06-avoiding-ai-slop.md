@@ -199,7 +199,7 @@ const border = { borderColor: "#9C27B0" };  // Material Purple
 
 Four colors from four different families. No relationship between them. It looks like a children's birthday party.
 
-**The fix:** Define a palette of 3-5 colors and use nothing else.
+**The fix:** Define 3-5 core color roles, use tonal shades deliberately, and reserve semantic colors for meaning.
 
 ```tsx
 const colors = {
@@ -330,7 +330,7 @@ Here's the loop that produces premium output:
 
 1. **Generate.** Prompt your AI to build the page component. Provide the design tokens, a description of the content, and a reference to an existing page if you have one.
 
-2. **Render.** Run your build script to produce the PDF. This takes 1-5 seconds.
+2. **Render.** Run your build script to produce the PDF. Time varies with page count, assets, hardware, and cache state.
 
 3. **Export to PNG.** Convert the PDF page to a 300 DPI image. (Chapter 9 covers the tooling for this.)
 
@@ -533,7 +533,7 @@ Current code at line [N]: [PASTE 5-10 RELEVANT LINES]
 Constraints:
 - Do not change content, only layout
 - Do not remove existing wrap={false} props
-- Use minPresenceAhead={40} for orphaned headings
+- On a wrapping Page, use minPresenceAhead={40} for orphaned headings; on a fixed page, rebalance or split the source
 - Check flexDirection is 'row' for side-by-side layouts
 ```
 

@@ -2,17 +2,18 @@
  * Page 2 – Table of Contents
  *
  * Custom layout with four category groups (Foundations, Design System, Craft, Shipping),
- * each with a colored badge and chapter entries showing number, title, subtitle, and
- * page number (via src/tocPositions.ts reading output/toc-positions.json, populated by
- * the two-pass build). Uses its own Page (not ContentPage) with Footer only.
+ * each with a colored badge and clickable chapter entries showing number, title,
+ * subtitle, and page number (via src/tocPositions.ts reading
+ * output/toc-positions.json, populated by the two-pass build). Each row links to the
+ * matching ChapterTitle destination. Uses its own Page (not ContentPage) with Footer only.
  *
  * Renders from src/manifest.ts (Top-Down Architecture)
  */
 import React from 'react';
-import { Page, View, Text, StyleSheet } from '@react-pdf/renderer';
+import { Link, Page, View, Text, StyleSheet } from '@react-pdf/renderer';
 import { colors, fonts, spacing, page, borders, typography, fontScale, letterSpacing, layout, fontWeight, lineHeight } from '../../styles/theme';
 import { Footer, AccentBar } from '../../components';
-import { MANIFEST } from '../../manifest';
+import { chapterDestinationId, MANIFEST } from '../../manifest';
 import { getTocPositions } from '../../tocPositions';
 
 // Define the order and styles for groups
@@ -66,6 +67,8 @@ const s = StyleSheet.create({
     paddingLeft: spacing.sm,
     borderBottomWidth: borders.thin,
     borderBottomColor: colors.neutral[100],
+    color: colors.primary[800],
+    textDecoration: 'none',
   },
   entryNum: {
     width: layout.tocEntryNumWidth,
@@ -120,14 +123,19 @@ const Page02TOC: React.FC = () => {
               </View>
             </View>
             {group.chapters.map((ch) => (
-              <View key={ch.num} wrap={false} style={s.entry}>
+              <Link
+                key={ch.num}
+                src={`#${chapterDestinationId(ch.num)}`}
+                wrap={false}
+                style={s.entry}
+              >
                 <Text style={s.entryNum}>{ch.num}</Text>
                 <View style={s.entryText}>
                   <Text style={s.entryTitle}>{ch.title}</Text>
                   <Text style={s.entrySubtitle}>{ch.subtitle}</Text>
                 </View>
                 <Text style={s.entryPage}>{positions[ch.num] ?? ''}</Text>
-              </View>
+              </Link>
             ))}
           </View>
         );

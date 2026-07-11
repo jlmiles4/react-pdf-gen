@@ -1,7 +1,7 @@
 # React-PDF Project — Claude Code Instructions
 
 ## Commands
-- **Build PDF:** `pnpm build` (syncs registry, then `tsx src/build.tsx` does a two-pass render: render → `pdftotext` extracts chapter page positions to `output/toc-positions.json` → render again so the TOC reflects them → `pdfinfo` validates uniform LETTER pages. Outputs `output/ebook.pdf`, ~10s.)
+- **Build PDF:** `pnpm build` (syncs registry, then `tsx src/build.tsx` does a two-pass render: render → `pdftotext` extracts chapter page positions to `output/toc-positions.json` → render again so the TOC reflects them → `pdfinfo` validates uniform LETTER pages. Outputs `output/react-pdf-ai-builders-guide.pdf`; elapsed time varies by machine.)
 - **Sync Registry:** `pnpm sync` (regenerates `src/registry.ts` from `src/pages/`)
 - **Export PNGs:** `pnpm export` (runs `scripts/export-pages.sh`, outputs to `output/pages/`)
 - **Full pipeline:** `pnpm pipeline` (build + export)
@@ -12,12 +12,13 @@
 1. **One file per page.** Each `.tsx` under `src/pages/` renders exactly one PDF page. Layout is directory-based: one folder per chapter, `src/pages/NN-chapter/NN-page.tsx`. Each chapter folder starts with `00-title.tsx` (renders `<ChapterTitle>` only), then `01-<chapter>.tsx` (first `<ContentPage>`), then continuation pages `03-…`, `04-…` (continuations start at `03-` by convention). Book chrome (Cover, TOC, Conclusion) live in their own folders — `01-cover/`, `02-toc/`, `15-conclusion/` — each with a single `01-…tsx` file and no divider.
 2. **Manifest, not metadata comments.** Chapter structure lives in `src/manifest.ts` — a `Group[]`, where each group has `id`/`title`/`chapters` and each chapter has `num`/`title`/`subtitle`/`entryPage`. `scripts/sync-project.ts` reads it plus the `src/pages/` tree to generate `src/registry.ts` (auto-generated, gitignored). Page files contain only React — no `// Group:` / `// Number:` / `// Title:` directives. To add a chapter, edit the manifest; to add a page within a chapter, just drop a file in the folder.
 3. **Dir-number vs chapter-number.** The page directories are `01`–`15` (book-position order); manifest chapter numbers run `01`–`12`. The gap is the three chrome folders (`01-cover`, `02-toc`, `15-conclusion`). Chapter directory `NN` maps to manifest chapter `NN - 2`. This offset holds for the current 12 chapters only — it's a consequence of dir order, not a rule sync enforces. `scripts/sync-project.ts` pins `15-conclusion` (`CHROME_END`) as the last page regardless of directory number, so a new chapter simply takes the next free dir number after `15-` (i.e. `16-`, `17-`, …); its book position is driven entirely by where its entry sits in the manifest, not by that dir number.
-4. **Design tokens only.** Never hardcode colors, fonts, weights, sizes, line heights, icon sizes, or spacing. Import from `src/styles/theme.ts`. Tokens cover: `colors`, `fonts`, `fontWeight`, `lineHeight`, `typography`, `fontScale`, `letterSpacing`, `spacing`, `page`, `borders`, `iconSize`, `opacity`, `accentBar`, `layout`, `syntax`.
-5. **Shared components.** Use existing components from `src/components/` — never recreate patterns inline.
-6. **No Helvetica.** All body and heading text uses Inter; code blocks and inline code use the monospace `fonts.mono`/`fonts.monoBold` (Courier) tokens. Always pair `fontFamily` with `fontWeight` from the `fontWeight` token (`fontWeight.regular`/`semibold`/`bold`) — never inline literals like `fontWeight: 700 as const`.
-7. **Markdown support.** Use `<MarkdownRenderer content={body} />` to render a Markdown string. Supports `#`/`##`/`###` headings, `**bold**`, `*italic*`/`_italic_`, `` `code` ``, lists, fenced code blocks, and `> [!TIP|WARNING|INFO]` callouts. (Only `14-markdown-automation/01-…` and `14-markdown-automation/03-supported-elements` actually read from a `.md` file; the rest of the book is hand-authored TSX.)
-8. **wrap={false}** on any element that must not split across pages.
-9. **minPresenceAhead={40}** on section headings.
+4. **Clickable TOC contract.** `chapterDestinationId` in `src/manifest.ts` owns destination names. `ChapterTitle` puts that ID on its `<Page>`; `src/pages/02-toc/01-toc.tsx` uses the same helper in each row's `<Link src="#…">`. A manifest chapter `num` and its `<ChapterTitle number>` must match. Displayed page numbers remain a separate concern supplied by `tocPositions.ts`; never use physical page numbers as destination IDs or hand-build `chapter-...` strings elsewhere.
+5. **Tokenize reusable design decisions.** Colors, fonts, weights, text/icon sizes, line heights, spacing, borders, and repeated layout values come from `src/styles/theme.ts`. One-off structural geometry may use a named local constant; never scatter raw design literals through JSX or style objects. Tokens cover: `colors`, `fonts`, `fontWeight`, `lineHeight`, `typography`, `fontScale`, `letterSpacing`, `spacing`, `page`, `borders`, `iconSize`, `opacity`, `accentBar`, `layout`, `syntax`.
+6. **Shared components.** Use existing components from `src/components/` — never recreate patterns inline.
+7. **No Helvetica.** All body and heading text uses Inter; code blocks and inline code use the monospace `fonts.mono`/`fonts.monoBold` (Courier) tokens. Always pair `fontFamily` with `fontWeight` from the `fontWeight` token (`fontWeight.regular`/`semibold`/`bold`) — never inline literals like `fontWeight: 700 as const`.
+8. **Markdown support.** Use `<MarkdownRenderer content={body} />` to render a Markdown string. Supports `#`/`##`/`###` headings, `**bold**`, `*italic*`/`_italic_`, `` `code` ``, lists, fenced code blocks, and `> [!TIP|WARNING|INFO]` callouts. (Only `14-markdown-automation/01-…` and `14-markdown-automation/03-supported-elements` actually read from a `.md` file; the rest of the book is hand-authored TSX.)
+9. **wrap={false}** on any element that must not split across pages.
+10. **minPresenceAhead={40}** on section headings for reuse in wrapping pages. It cannot create a new physical page inside the project's default `ContentPage wrap={false}`; fixed pages still must be authored to fit or split into another source file.
 
 ## Key Files
 | File | Purpose |
@@ -47,7 +48,7 @@
 
 ## When Adding a New Page
 1. **Continuation page in an existing chapter:** create `src/pages/<chapter-folder>/NN-topic.tsx` exporting a component that returns a single `<ContentPage sectionTitle="…" wrap={false}>…</ContentPage>`. Sync picks it up automatically.
-2. **New chapter:** add a `Chapter` entry to `src/manifest.ts` with `entryPage: 'NN-new-chapter/00-title'`, then create `00-title.tsx` (renders `<ChapterTitle>` only) and `01-<new-chapter>.tsx` (the first content page).
+2. **New chapter:** add a `Chapter` entry to `src/manifest.ts` with `entryPage: 'NN-new-chapter/00-title'`, then create `00-title.tsx` (renders `<ChapterTitle>` only, with `number` matching the manifest so the TOC link resolves) and `01-<new-chapter>.tsx` (the first content page).
 3. Build and visually verify: `pnpm pipeline`.
 
 See `docs/guides/add-a-page.md` for full skeletons.
@@ -66,6 +67,7 @@ Model APIs hard-cap images per conversation (the Claude API fails at **100** wit
   - No split callout boxes (empty colored boxes)
   - No orphaned bullet dots
   - TOC fits on one page
+  - Every TOC row jumps to its matching chapter divider
   - Consistent spacing between sections
 
 ## Reference Docs

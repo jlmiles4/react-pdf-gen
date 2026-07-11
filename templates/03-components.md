@@ -31,7 +31,7 @@ const ContentPage: React.FC<ContentPageProps> = ({ children, sectionTitle }) => 
 ```
 
 ### Header — Fixed Page Header
-Use `fixed` prop so it repeats on every page. `position: 'absolute'` for fixed positioning.
+`ContentPage` inserts it in each source page. Use `fixed` so it also repeats on every subpage a wrapping `<Page>` generates; use `position: 'absolute'` for anchoring.
 
 ```tsx
 const Header: React.FC<{ sectionTitle?: string }> = ({ sectionTitle }) => (
@@ -58,7 +58,7 @@ const Footer: React.FC = () => (
 ```
 
 ### SectionHeading — Accent Bar + Heading
-Always use `wrap={false}` and `minPresenceAhead={40}` to prevent orphaned headings.
+Use `wrap={false}` to keep the heading together. Add `minPresenceAhead={40}` when the ancestor Page wraps; fixed pages must be authored to fit.
 
 ```tsx
 const SectionHeading: React.FC<{ children: string }> = ({ children }) => (
@@ -88,7 +88,7 @@ export const TipBox: React.FC<{ children: React.ReactNode; label?: string }> = (
 ```
 
 ### CodeBlock — Dark Code Display
-Always `wrap={false}`. Keep code blocks under ~15 lines.
+Always `wrap={false}`. Keep each code block within the vertical space available on its page; split or move it when surrounding content makes it too tall.
 
 ```tsx
 const CodeBlock: React.FC<{ children: string; language?: string }> = ({
@@ -174,7 +174,7 @@ export const CheckIcon: React.FC<IconProps> = ({ size = 16, color = colors.succe
 
 ## Rules
 1. Every component that should not split across pages gets `wrap={false}`
-2. Headings get `minPresenceAhead={40}` to prevent orphaned headings
+2. Headings carry `minPresenceAhead={40}` for wrapping contexts; fixed pages are visually balanced by editing or splitting the source
 3. All styles come from shared.ts or local `StyleSheet.create()` — never inline objects
 4. `fontWeight` must always be present when `fontFamily` is set
 5. Icons use `fill="none"` and `stroke={color}` for line icons

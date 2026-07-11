@@ -170,6 +170,7 @@ Works for clipping child content within rounded containers. Useful for tables:
 ```
 
 ### Keep Heading With Content
+Requires a wrapping ancestor `<Page>`; on a fixed page, rebalance or split the source instead.
 ```tsx
 <View wrap={false} minPresenceAhead={40}>
   {/* Won't render at bottom of page unless 40pt of space follows */}
@@ -185,7 +186,7 @@ Works for clipping child content within rounded containers. Useful for tables:
 
 ## Performance Tips
 - Keep page files under 250 lines for AI context window efficiency
-- Use `StyleSheet.create()` over inline objects — it's memoized
+- Use `StyleSheet.create()` for reusable named styles; inline objects and arrays are valid for one-off overrides
 - Limit SVG complexity (simple icons, not illustrations)
 - Prefer text over images where possible
-- Build time scales linearly with page count (~60ms per page is good)
+- Build time generally scales with page count; investigate unexpected jumps rather than enforcing a universal per-page target

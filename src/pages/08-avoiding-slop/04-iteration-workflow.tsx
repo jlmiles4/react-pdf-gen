@@ -26,7 +26,7 @@ const Page: React.FC = () => (
     </Text>
     <BulletList items={[
       'The page renders cleanly with no orphaned headings, split callouts, or stray bullet dots',
-      'Every color, font, and spacing value traces back to a token in theme.ts',
+      'Every reusable color, font, and spacing value traces back to a named token',
       'The layout reads at a glance – clear hierarchy, comfortable density, balanced whitespace',
       'A fresh read surfaces only nitpicks you would not pay to fix',
     ]} />

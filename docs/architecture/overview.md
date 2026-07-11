@@ -1,13 +1,13 @@
 # Architecture overview
 
-The project renders one PDF (`output/ebook.pdf`) from a tree of React components. Four layers:
+The project renders one PDF (`output/react-pdf-ai-builders-guide.pdf`) from a tree of React components. Four layers:
 
 1. **Manifest** (`src/manifest.ts`) — the source of truth for chapter structure: groups, chapter numbers, titles, subtitles, and the entry page file for each chapter. The TOC reads it directly; the sync script reads it to order pages.
 2. **Pages** (`src/pages/`) — one folder per chapter, one file per PDF page. Path shape: `src/pages/NN-chapter/NN-page.tsx`. The first file in each chapter folder (`00-title.tsx`) is the *chapter-divider page* and renders `<ChapterTitle>` only; the second (`01-<chapter>.tsx`) is the chapter's first `<ContentPage>`; siblings (`03-…`, `04-…`, …) render additional content pages in the same chapter (continuations start at `03-` by convention; the `02-` slot is skipped).
 
 The directories are numbered `01`–`15` (book-position order); the manifest's chapter numbers run `01`–`12`. The gap is the three chrome folders: `01-cover/`, `02-toc/`, and `15-conclusion/` exist on disk but don't appear in `MANIFEST`. Chapter directory `NN` corresponds to manifest chapter `NN - 2` (e.g. `04-fundamentals/` = chapter 02).
 3. **Components** (`src/components/`) — the building blocks every page composes: `ContentPage`, `ChapterTitle`, `SectionHeading`, `SectionBanner`, `TipBox`/`WarningBox`/`InfoBox`, `CodeBlock`, `BulletList`, `Table`, `RecipeCard`, `ChecklistItem`/`ChecklistCategory`, `IconList`, `MarkdownRenderer`, `AccentBar`, `CoverDecor`, `Header`, `Footer`, `Icons`. See [components reference](../reference/components.md).
-4. **Styles** (`src/styles/`) — `theme.ts` holds design tokens (colors, fonts, typography, spacing, page geometry, syntax colors, borders); `shared.ts` is a `StyleSheet.create()` instance every page imports. See [design system](design-system.md).
+4. **Styles** (`src/styles/`) — `theme.ts` holds design tokens (colors, fonts, typography, spacing, page geometry, syntax colors, borders); `shared.ts` is a `StyleSheet.create()` instance consumed by content pages directly or through shared components. See [design system](design-system.md).
 
 `src/registry.ts` is the assembled page list used by `Document.tsx`. It's auto-generated (gitignored) by `scripts/sync-project.ts` from `src/manifest.ts` + a directory walk of `src/pages/`. Adding a page = (1) drop the file in the right chapter folder, (2) if it's a new chapter, add a manifest entry. Sync wires it.
 
@@ -23,13 +23,13 @@ pnpm build
                  └─ imports each src/pages/NN-chapter/NN-page.tsx
                       └─ each page imports from src/components/ and src/styles/
 
-       ReactPDF.render(<EbookDocument/>, 'output/ebook.pdf')   pass 1
-       pdftotext -layout output/ebook.pdf  →  output/toc-positions.json
-       ReactPDF.render(<EbookDocument/>, 'output/ebook.pdf')   pass 2 (TOC numbers filled)
-       pdfinfo output/ebook.pdf              validates page count + LETTER sizes
+       ReactPDF.render(<EbookDocument/>, 'output/react-pdf-ai-builders-guide.pdf')   pass 1
+       pdftotext -layout output/react-pdf-ai-builders-guide.pdf  →  output/toc-positions.json
+       ReactPDF.render(<EbookDocument/>, 'output/react-pdf-ai-builders-guide.pdf')   pass 2 (TOC numbers filled)
+       pdfinfo output/react-pdf-ai-builders-guide.pdf              validates page count + LETTER sizes
 
 scripts/export-pages.sh
-  └─ pdfinfo + pdftoppm -png -r 200 output/ebook.pdf output/pages/page
+  └─ pdfinfo + pdftoppm -png -r 200 output/react-pdf-ai-builders-guide.pdf output/pages/page
 ```
 
 See [build pipeline](../build/pipeline.md) for the two-pass mechanics and [registry-sync](../build/registry-sync.md) for how the manifest and the filesystem combine into `registry.ts`.

@@ -7,7 +7,7 @@ const Page: React.FC = () => (
   <ContentPage sectionTitle="Fundamentals" wrap={false}>
       <SectionHeading>Component Hierarchy</SectionHeading>
       <Text style={styles.body}>
-        Every react-pdf document follows a strict component hierarchy. Break it and the renderer throws errors.
+        Every react-pdf document has a required root and page structure. Inside a Page, supported react-pdf primitives can be direct children. Invalid trees may warn, omit content, or fail to render.
       </Text>
       <CodeBlock language="tsx">{`import { Document, Page, View, Text, Image }
   from '@react-pdf/renderer';
@@ -16,7 +16,7 @@ const MyDoc = () => (
   <Document>
     <Page size="LETTER">
       <View>
-        <Text>All visible text must be in a Text component.</Text>
+        <Text>Ordinary visible copy belongs in Text.</Text>
         <Image src="photo.png" />
       </View>
     </Page>
@@ -25,16 +25,16 @@ const MyDoc = () => (
 
       <Text style={styles.body}>The rules:</Text>
       <BulletList items={[
-        'Document is the root – only Page elements can be direct children',
+        'Document is the root – its rendered direct children must be Page elements',
         'Page defines a physical page – size, orientation, margins',
-        'View is the container (like div) – handles layout via flexbox',
-        'Text renders text – all visible text must be inside Text',
+        'View is an optional container (like div) – it handles layout via flexbox',
+        'Text renders ordinary visible copy – Page can contain Text directly',
         'Image renders PNG and JPG – no SVG files (use Svg components instead)',
-        'No HTML elements allowed inside Document – only react-pdf components',
+        'No DOM elements inside Document – custom components must resolve to react-pdf primitives',
       ]} />
 
       <WarningBox label="Common Mistake">
-        A raw string outside of a Text component triggers a console warning and is omitted from the PDF. Wrap every visible string in Text so content is not silently lost.
+        A raw string directly under Page or View triggers a console warning and is omitted. Put ordinary copy in Text; text-capable primitives such as Link are exceptions.
       </WarningBox>
   </ContentPage>
 );

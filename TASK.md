@@ -12,7 +12,7 @@ An ebook (approx. 70 pages) covering best practices for using `@react-pdf/render
 
 ## Status Tracker
 
-71 source `.tsx` files in `src/pages/` render to 71 PDF pages in `output/ebook.pdf`. Layout is directory-based: one folder per chapter, `NN-chapter/NN-page.tsx`, with `00-title.tsx` as the chapter divider. Chapter structure is defined in `src/manifest.ts`. Verify the rendered count with `pdfinfo output/ebook.pdf` (or count `output/pages/*.png` after `pnpm pipeline`).
+71 source `.tsx` files in `src/pages/` render to 71 PDF pages in `output/react-pdf-ai-builders-guide.pdf`. Layout is directory-based: one folder per chapter, `NN-chapter/NN-page.tsx`, with `00-title.tsx` as the chapter divider. Chapter structure is defined in `src/manifest.ts`. Verify the rendered count with `pdfinfo output/react-pdf-ai-builders-guide.pdf` (or count `output/pages/*.png` after `pnpm pipeline`).
 
 | Group | Chapter | Folder | Status |
 |-------|---------|--------|--------|

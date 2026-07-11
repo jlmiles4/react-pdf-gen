@@ -30,7 +30,7 @@ The rules:
 - `Text` can be nested inside `Text` for inline styling (bold a single word, change color mid-sentence).
 - `Image` and `Svg` go inside `View` or directly inside `Page`.
 
-Breaking these rules produces silent failures or cryptic errors. The most common mistake: putting a bare string inside a `View` without wrapping it in `Text`.
+Breaking these rules produces warnings, omitted content, or render errors. The most common mistake is putting a bare string directly under `Page` or `View`; this version warns and omits it unless it is wrapped in `Text`.
 
 ## The Styling System
 
@@ -405,14 +405,14 @@ Several react-pdf components accept a `render` prop – a function that receives
 />
 ```
 
-The `render` prop is available on `Text`, `View`, and `Page`. The callback receives an object with:
+The `render` prop is available on `Text` and `View` in this installed version. `Text.render` receives:
 
 - `pageNumber` – current page number (1-indexed)
 - `totalPages` – total number of pages in the document
 - `subPageNumber` – page number within the current `<Page>` component (for wrapped pages)
 - `subPageTotalPages` – total sub-pages within the current `<Page>` component
 
-**Important:** Components using `render` props are evaluated in a second pass. The first pass determines pagination, the second pass fills in the render prop values. This means `totalPages` is always accurate.
+`View.render` receives only `pageNumber` and `subPageNumber`. **Important:** render callbacks are evaluated after pagination; `Text.render` can therefore report an accurate `totalPages`.
 
 ## Fixed Elements
 
@@ -503,14 +503,14 @@ Specify the minimum height (in points) of content that must remain on the curren
 </Text>
 ```
 
-This prevents orphaned headings – a section title sitting at the bottom of a page with all its content on the next page. A value of 80-120 works well for most cases.
+On a wrapping `<Page>`, this prevents orphaned headings – a section title sitting at the bottom of a page with all its content on the next page. A value of 80-120 works well for many wrapping layouts. It cannot push content to a new physical page when the ancestor page itself has `wrap={false}`; fixed-page projects must rebalance or split the authored page.
 
 ### Practical page break strategy
 
 For reports and long documents:
 
 1. Wrap each logical section in a `<View wrap={false}>` if it should stay together.
-2. Add `minPresenceAhead={100}` to section headings.
+2. On wrapping pages, add `minPresenceAhead={100}` to section headings.
 3. Use `<View break>` for chapter breaks or major sections.
 4. Set `wrap={false}` on table rows that shouldn't split.
 
@@ -721,7 +721,7 @@ Notice there's no `<table>` for the metadata rows. It's a flexbox row with a fix
 The building blocks of react-pdf are small and predictable:
 
 - 6 core components: `Document`, `Page`, `View`, `Text`, `Image`, `Svg`
-- Flexbox-only layout (no Grid, no float)
+- Flexbox for normal flow (no Grid or float; relative/absolute positioning is supported)
 - JavaScript style objects (no CSS files, no className)
 - Points as the default unit (72pt = 1 inch)
 - TTF/WOFF fonts registered via `Font.register()`

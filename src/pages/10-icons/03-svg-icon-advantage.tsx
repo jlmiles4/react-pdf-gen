@@ -9,7 +9,7 @@ const local = StyleSheet.create({
   iconShowcase: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: spacing.lg,
+    gap: spacing.sm,
     marginVertical: spacing.lg,
     padding: spacing.lg,
     backgroundColor: colors.neutral[50],
@@ -33,7 +33,7 @@ const Page: React.FC = () => (
   <ContentPage sectionTitle="Icons over Emojis" wrap={false}>
     <SectionHeading>SVG Icon Advantage</SectionHeading>
     <Text style={styles.body}>
-      React-PDF has extensive SVG support. SVG icons are vector graphics – they scale perfectly at any zoom level, match any color, and render identically on every platform with zero external dependencies.
+      React-PDF has extensive SVG support. SVG icons are vector graphics – they scale cleanly at any zoom level, match any color, and render consistently across PDF viewers with no network or CDN dependency at render time.
     </Text>
 
     <View wrap={false} style={local.iconShowcase}>
@@ -64,7 +64,7 @@ const Page: React.FC = () => (
     </View>
 
     <Text style={styles.body}>
-      These icons come from Lucide via the react-icons package (ISC license). A small adapter rewrites react-icons' browser SVG output as @react-pdf/renderer Svg/Path nodes – so size, color, and stroke all stay under your control.
+      These icons come from Lucide via the react-icons package (ISC license). A small adapter rewrites react-icons' browser SVG output as @react-pdf/renderer Svg/Path nodes. Size and color stay under your control; stroke weight follows the source icon unless you expose it as another adapter prop.
     </Text>
 
     <SectionHeading>Why Not Emojis?</SectionHeading>
@@ -72,9 +72,9 @@ const Page: React.FC = () => (
       headers={['Property', 'SVG icon', 'Emoji glyph']}
       columnWidths={['34%', '33%', '33%']}
       rows={[
-        ['Color', 'Any token you want', 'Fixed by the font'],
-        ['Rendering', 'Identical everywhere', 'Varies per platform'],
-        ['Stroke weight', 'Tunable', 'None'],
+        ['Color', 'Any token you want', 'Fixed by the artwork'],
+        ['Rendering', 'Consistent vector path', 'Depends on chosen source'],
+        ['Stroke weight', 'Set by source icon', 'None'],
         ['Print fidelity', 'Crisp vectors', 'Often missing'],
       ]}
     />

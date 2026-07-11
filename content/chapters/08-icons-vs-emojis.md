@@ -6,7 +6,7 @@ This happens because emojis are the path of least resistance. The AI knows emoji
 
 ## The Problem with Emojis in PDF
 
-### Font.registerEmojiSource() Requires Internet at Render Time
+### Remote Emoji Sources Require Internet at Render Time
 
 react-pdf doesn't include emoji glyphs in its built-in fonts. To render emojis, you need to register an emoji source:
 
@@ -19,14 +19,14 @@ Font.registerEmojiSource({
 });
 ```
 
-This fetches individual emoji PNGs from a CDN at render time. That means:
+This remote configuration fetches individual emoji PNGs from a CDN at render time. `Font.registerEmojiSource()` can also use a builder that resolves vendored local images, which avoids the network entirely. With a remote source:
 
 - Your build process requires an internet connection
-- Render time increases by 100-500ms per emoji (network latency)
+- Render time gains variable network latency for uncached emoji assets
 - The CDN could go down, breaking your PDF generation
 - CI/CD environments behind firewalls may not have access
 
-If you're generating PDFs on a server, in a Docker container, or in a CI pipeline, depending on an external CDN for visual elements is a liability.
+If you're generating PDFs on a server, in a Docker container, or in a CI pipeline, depending on an external CDN for visual elements is a liability. Vendor the chosen emoji artwork if you need deterministic offline rendering; use SVG icons when you also need direct control over vector color and geometry.
 
 ### Emojis Render as Raster Images
 

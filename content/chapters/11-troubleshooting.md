@@ -4,7 +4,7 @@ The errors you'll hit, why they happen, and how to fix them fast. This chapter c
 
 ## 1. "Text string must be rendered inside a `<Text>` component"
 
-The most common react-pdf content warning. Raw strings placed directly inside a `View` (or any non-Text component) are omitted from the PDF.
+The most common react-pdf content warning. In this version, raw strings placed directly under `Page` or `View` trigger a warning and are omitted from the PDF; text-capable primitives such as `Link` are exceptions.
 
 ```tsx
 // Broken — raw string inside View
@@ -48,6 +48,8 @@ Font.register({ family: 'Inter', fonts: [
 
 **Symptom:** Content runs off the bottom of the page, disappearing below the margin.
 
+First decide which pagination architecture you are using. In this book's one-source-file-per-page project, `ContentPage` defaults to `wrap={false}`: shorten the page or split it into another source file. The wrapping example below applies to documents where an ancestor `<Page wrap>` is deliberately allowed to create additional physical pages.
+
 Two common causes:
 - A parent `View` has `wrap={false}` (preventing page breaks)
 - Fixed heights constrain the layout
@@ -79,7 +81,7 @@ Two common causes:
 </View>
 ```
 
-`minPresenceAhead={40}` tells react-pdf: "Only render this heading on the current page if at least 40pt of content can fit below it." Otherwise, move it to the next page.
+On a wrapping ancestor page, `minPresenceAhead={40}` tells react-pdf: "Only render this heading on the current page if at least 40pt of content can fit below it." Otherwise, move it to the next page. It cannot create a next page inside this project's default `ContentPage wrap={false}`; for fixed pages, rebalance the authored content or split the source page.
 
 ## 5. Split Callout Boxes
 

@@ -7,20 +7,20 @@ const Page: React.FC = () => (
   <ContentPage sectionTitle="Premium Deliverables & Recipes" wrap={false}>
     <SectionHeading>Putting It All Together</SectionHeading>
     <BulletList items={[
-      'Review Chapter 3 (Architecture) for file-per-page structure that makes these recipes composable',
-      'Use Chapter 4\'s design tokens – never hardcode colors or spacing in recipe code',
+      'Use Chapter 3\'s file-per-page structure to keep recipes composable',
+      'Use Chapter 4\'s tokens for reusable colors and spacing in recipe code',
       'Apply Chapter 2\'s wrap={false} patterns to keep recipe cards from splitting across pages',
-      'Clone the source code for this book – every pattern here is used in the pages you\'re reading',
+      'Clone the source – every pattern here follows conventions used throughout the book',
       'Explore the react-pdf GitHub repo for additional component examples and API updates',
     ]} />
 
     <Text style={styles.body}>
-      Every recipe in this chapter follows the same principle: typed data in, styled PDF out. The interface defines the contract, the component handles layout, and the design tokens enforce visual consistency. Start with the recipe closest to your use case, adapt the interface to your data, and build from there.
+      The invoice and report recipes follow typed data in, styled PDF out: interfaces define the contract, components handle layout, and tokens enforce consistency. The layout recipes instead demonstrate reusable composition without a data model. Start with the pattern closest to your use case and build from there.
     </Text>
 
-    <SectionHeading>The Shape of Every Recipe</SectionHeading>
+    <SectionHeading>The Shape of a Data-Driven Recipe</SectionHeading>
     <Text style={styles.body}>
-      Strip away the specifics and each recipe reduces to the same three lines. Hand your AI this skeleton and the recipe page it should follow – it will fill in the interface and the layout against your real data.
+      Strip away the specifics and each data-driven recipe reduces to the same three lines. Hand your AI this skeleton and the recipe page it should follow – it will fill in the interface and layout against your real data.
     </Text>
     <CodeBlock language="tsx">{`interface ReportData { /* your typed contract */ }
 

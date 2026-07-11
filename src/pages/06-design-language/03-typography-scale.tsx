@@ -36,6 +36,7 @@ const scale = [
   { name: 'bodySmall', size: '9.5pt', use: 'Secondary text' },
   { name: 'caption', size: '8.5pt', use: 'Footnotes, captions' },
   { name: 'code', size: '9pt', use: 'Code blocks' },
+  { name: 'codeSmall', size: '8pt', use: 'Dense code, labels' },
 ];
 
 const Page: React.FC = () => (

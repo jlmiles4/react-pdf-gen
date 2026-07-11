@@ -74,7 +74,7 @@ The core components:
 | `<Document>` | Root wrapper. Contains one or more Pages. |
 | `<Page>` | A single PDF page. Has a size (LETTER, A4, custom). |
 | `<View>` | The `<div>` equivalent. A flexbox container. |
-| `<Text>` | Renders text. All visible text must be inside a Text component. |
+| `<Text>` | Renders ordinary visible copy; text-capable primitives such as Link are exceptions. |
 | `<Image>` | Renders PNG or JPG images. |
 | `<Svg>` | Container for SVG primitives. |
 | `<Link>` | Clickable hyperlink. |

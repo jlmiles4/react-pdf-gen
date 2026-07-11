@@ -9,6 +9,7 @@
  */
 import React from 'react';
 import { Page, Text, StyleSheet, Svg, Circle, G } from '@react-pdf/renderer';
+import { chapterDestinationId } from '../manifest';
 import { colors, fonts, spacing, page, fontScale, typography, letterSpacing, layout, fontWeight, opacity } from '../styles/theme';
 import AccentBar from './AccentBar';
 
@@ -82,7 +83,7 @@ const ctStyles = StyleSheet.create({
 });
 
 const ChapterTitle: React.FC<ChapterTitleProps> = ({ number, title, subtitle }) => (
-  <Page size="LETTER" style={ctStyles.page} wrap={false}>
+  <Page id={chapterDestinationId(number)} size="LETTER" style={ctStyles.page} wrap={false}>
     <AccentBar size="lg" mb={spacing.lg} />
     <Text style={ctStyles.chapterLabel}>Chapter {number}</Text>
     <Text style={ctStyles.title} hyphenationCallback={noHyphenation}>{title}</Text>

@@ -81,7 +81,7 @@ If the page looks like a wall of text with no visual breaks, you need more white
 
 ### Limited palette
 
-Limit your document to 3-5 colors. A primary color for headings, an accent for highlights, a text color for body, and one or two supporting colors for backgrounds or borders.
+Limit your document to 3-5 core color roles. Use tonal shades within those roles, plus semantic colors where status needs distinct meaning.
 
 ```tsx
 // Three-color palette is sufficient for most documents
@@ -215,7 +215,7 @@ An orphan is a single line of a paragraph left alone at the bottom of a page. A 
 
 ### Heading never appears alone at page bottom
 
-If a section heading appears at the bottom of a page with no body text after it, the heading should move to the next page.
+If a section heading appears at the bottom of a wrapping page with no body text after it, the heading should move to the next page. On a fixed page, rebalance or split the authored source instead.
 
 ```tsx
 <Text style={sharedStyles.h2} minPresenceAhead={60}>

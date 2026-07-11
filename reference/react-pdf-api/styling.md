@@ -17,7 +17,7 @@ import { View, Text, StyleSheet } from '@react-pdf/renderer';
 
 ### StyleSheet.create()
 
-Use `StyleSheet.create()` to define named style groups. This is the recommended approach – it provides better performance and keeps your styles organized.
+Use `StyleSheet.create()` to define named, reusable style groups. Inline objects and style arrays are also supported; `StyleSheet.create()` primarily keeps styles organized and type-checkable in this renderer version.
 
 ```tsx
 import { StyleSheet } from '@react-pdf/renderer';
@@ -59,9 +59,9 @@ Pass an array to `style` to merge multiple style objects. Later items in the arr
 
 ---
 
-## Layout: Flexbox Only
+## Layout: Flexbox First
 
-React-pdf uses **flexbox as its only layout system**. There is no CSS Grid, no floats, no `display: inline`, no `display: table`. Everything is flexbox.
+React-pdf uses flexbox for normal flow. Relative and absolute positioning are also supported, but there is no CSS Grid, floats, `display: inline`, or `display: table`.
 
 The default flex direction is `column` (not `row` like the web). This means children stack vertically by default.
 

@@ -11,7 +11,7 @@ const Page: React.FC = () => (
     <Text style={styles.body}>
       Wire the export into package.json: "pnpm build" generates the PDF, "pnpm export" rasterizes it to PNGs, and "pnpm pipeline" chains both. The script below is simplified – the full version also checks for a missing PDF or pdftoppm.
     </Text>
-    <CodeBlock language="bash">{'#!/bin/bash\n# scripts/export-pages.sh (simplified)\nset -e\nPDF_FILE="output/ebook.pdf"\nPNG_DIR="output/pages"\nDPI="${1:-200}"  # DPI argument, default 200\nmkdir -p "$PNG_DIR"\nrm -f "$PNG_DIR"/page-*.png  # clear stale pages\npdftoppm -png -r "$DPI" "$PDF_FILE" "$PNG_DIR/page"\necho "Exported to $PNG_DIR/"\nls -lh "$PNG_DIR"/page-*.png'}</CodeBlock>
+    <CodeBlock language="bash">{'#!/bin/bash\n# scripts/export-pages.sh (simplified)\nset -e\nPDF_FILE="output/react-pdf-ai-builders-guide.pdf"\nPNG_DIR="output/pages"\nDPI="${1:-200}"  # DPI argument, default 200\nmkdir -p "$PNG_DIR"\nrm -f "$PNG_DIR"/page-*.png  # clear stale pages\npdftoppm -png -r "$DPI" "$PDF_FILE" "$PNG_DIR/page"\necho "Exported to $PNG_DIR/"\nls -lh "$PNG_DIR"/page-*.png'}</CodeBlock>
 
     <SectionHeading>What AI Can Spot</SectionHeading>
     <Text style={styles.body}>

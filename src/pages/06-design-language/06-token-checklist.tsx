@@ -9,10 +9,10 @@ const Page: React.FC = () => (
     <Table
       headers={['Category', 'Count', 'Example']}
       rows={[
-        ['Colors (primary + accent)', '8-13 shades', '#121F3D navy, #F0A000 gold'],
+        ['Colors (primary + accent)', '20 shades (10 each)', '#121F3D navy, #F0A000 gold'],
         ['Neutrals + semantic', '5-10 + 4 pairs', 'Gray scale + success/warning/error/info'],
-        ['Typography', '7-9 sizes', '8.5pt caption to 36pt display'],
-        ['Spacing', '7-9 values', '1pt (micro) to 48pt (xxxl)'],
+        ['Typography', '10 presets', '8pt codeSmall to 36pt display'],
+        ['Spacing', '9 positive + zero', '1pt micro to 48pt xxxl'],
         ['Borders', '3 widths + 4 radii', '0.5pt thin to 10pt lg radius'],
       ]}
       columnWidths={['35%', '20%', '45%']}
@@ -26,10 +26,10 @@ const Page: React.FC = () => (
     </View>
     <BulletList
       items={[
-        'Every value is named – no raw hex codes, point sizes, or pixel margins survive outside theme.ts.',
-        'Each scale has a clear step (4pt grid for spacing, a consistent ratio for type) so values feel intentional, not arbitrary.',
+        'Reusable design values live in theme.ts; unique geometry uses named local constants instead of scattered literals.',
+        'Each scale has an intentional progression – a mostly 4pt spacing grid with micro exceptions and a curated type hierarchy.',
         'Semantic colors map to meaning – success, warning, error, info – not to a specific shade you might want to swap later.',
-        'Names describe role, not appearance – primary[800] over navyDark, so a rebrand is a one-line change.',
+        'Names describe role, not appearance – primary[800] over navyDark, so a rebrand is a centralized palette change.',
       ]}
     />
   </ContentPage>

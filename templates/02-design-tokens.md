@@ -6,7 +6,7 @@ Paste this into your AI agent to create a centralized design token file. Replace
 
 ## Prompt
 
-Create a `src/styles/theme.ts` file that exports all design tokens for the project. This is the single source of truth — no page or component should hardcode colors, fonts, spacing, or borders.
+Create a `src/styles/theme.ts` file that exports all reusable design tokens for the project. Pages and components must use it for colors, fonts, spacing, and borders; unique structural geometry may use a named local constant.
 
 ### Structure
 
@@ -116,6 +116,6 @@ export const borders = {
 ### Rules
 - `as const` on every export for TypeScript type safety
 - `fontWeight` is always `700 as const`, `600 as const`, or `400 as const` — never a plain number
-- Spacing follows a 4pt grid
+- Core spacing follows a 4pt grid; named micro tokens may handle 1pt/2pt fine adjustments
 - Never add a color without a documented purpose
 - This file should be under 130 lines — if it's growing, you're over-engineering

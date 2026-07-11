@@ -8,14 +8,14 @@ const Page: React.FC = () => (
     <SectionHeading>Page Breaking</SectionHeading>
     <BulletList items={[
       'wrap={true} on Page – allows content to overflow to next page (default)',
-      'break={true} on View/Text – forces a page break before this element',
-      'fixed={true} on View – repeats this element on every page (headers/footers)',
-      'minPresenceAhead={number} – breaks to next page unless this many points of space remain after it',
-      'orphans/widows on Text – minimum lines at bottom/top of page split',
+      'break={true} on View/Text – forces a break when the ancestor Page wraps',
+      'fixed={true} on View – repeats on each subpage produced by its Page',
+      'minPresenceAhead={number} – moves forward when too little can follow on a wrapping Page',
+      'orphans/widows on Text – minimum lines around a split on wrapping pages',
     ]} />
 
     <TipBox>
-      Use the render prop on View or Text to access pageNumber and totalPages for dynamic content like page numbers. Example: <Text style={styles.inlineCode}>{'render={({ pageNumber }) => pageNumber}'}</Text>
+      Use Text's render prop for pageNumber and totalPages. View's typed render prop exposes pageNumber and subPageNumber. Example: <Text style={styles.inlineCode}>{'render={({ pageNumber }) => pageNumber}'}</Text>
     </TipBox>
 
     <SectionHeading>A Complete Example</SectionHeading>

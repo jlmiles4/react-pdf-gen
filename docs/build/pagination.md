@@ -14,13 +14,13 @@ Non-wrapping overflow can grow the PDF page box beyond LETTER rather than creati
 
 ## `wrap={false}` on a `<View>`
 
-When `wrap={false}` is set on a child `<View>`, react-pdf treats that view as a single unit. If it doesn't fit in the remaining space, the entire view is pushed to the next page. Used in this project on:
+When `wrap={false}` is set on a child `<View>`, react-pdf treats that view as a single unit. On a wrapping ancestor `<Page>`, a unit that does not fit is pushed to the next physical page. On this project's default non-wrapping `ContentPage`, it still prevents an internal split but cannot create another page; shorten the source page or split it into another file if the unit does not fit. Used in this project on:
 
 | Component | Why |
 |---|---|
 | `SectionHeading` | The gold bar + title must stay together |
 | `TipBox` / `WarningBox` / `InfoBox` | Empty colored boxes look broken when split |
-| `CodeBlock` | Splitting a code listing across pages destroys readability — keep blocks under ~15 lines |
+| `CodeBlock` | Splitting a code listing across pages destroys readability — size each block for the vertical space remaining around it |
 | `BulletList` items | Each item is `wrap={false}` so the gold dot never separates from its text |
 | `Table` | Header row plus body must stay together; tables split mid-row look like rendering bugs |
 | `SectionBanner` | Hero card splits look broken |
@@ -29,7 +29,7 @@ When you build a new layout primitive that includes a colored background or a le
 
 ## `minPresenceAhead`
 
-`minPresenceAhead={N}` on a `<View>` says: "if there are fewer than N points of vertical space remaining, push me to the next page." `SectionHeading` uses `minPresenceAhead={40}` so a section heading never lands at the very bottom of a page with its body content stranded on the next.
+`minPresenceAhead={N}` on a `<View>` says: "if there are fewer than N points of vertical space remaining, push me to the next page." That behavior requires a wrapping ancestor `<Page>`. `SectionHeading` carries `minPresenceAhead={40}` for wrapping contexts, but the project's default `ContentPage wrap={false}` cannot create a next page; there, heading placement is controlled by fitting the authored page or splitting it into another source file.
 
 Raise the value (~60) for headings that are followed by tall mandatory content (a banner, a code block). Lower values rarely help.
 
@@ -39,7 +39,7 @@ Raise the value (~60) for headings that are followed by tall mandatory content (
 
 ## Avoiding the common failure modes
 
-- **Orphaned heading** — gold bar appears at the bottom of a page with no body underneath. Fix: confirm `minPresenceAhead` is set, or shorten the previous section.
+- **Orphaned heading** — gold bar appears at the bottom of a page with no body underneath. On a wrapping page, confirm `minPresenceAhead` is set. On the default fixed page, shorten/restructure the page or split later content into another source file.
 - **Split callout** — empty cream/red box at the top or bottom of a page. Fix: confirm `wrap={false}` on the callout. If it's still too tall, split the content into two callouts.
 - **Orphan bullet** — single bullet pushed alone to the next page. `BulletList` items are `wrap={false}` individually, so the symptom is usually the *whole list* needing to move, which the engine won't do. Fix: shorten content above so the entire list fits, or break the list into two with intervening prose.
 - **Table split mid-row** — only happens if you bypass `Table` and roll your own. The `Table` component sets `wrap={false}` on the container and on each row.

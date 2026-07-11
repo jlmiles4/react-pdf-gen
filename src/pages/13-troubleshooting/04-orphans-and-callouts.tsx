@@ -10,9 +10,10 @@ const Page: React.FC = () => (
       A section heading appears at the very bottom of a page with no content following it. The body text starts on the next page.
     </WarningBox>
     <Text style={styles.body}>
-      The fix is minPresenceAhead – it tells react-pdf to move the heading to the next page if there isn't enough room for both the heading and some content.
+      On a wrapping Page, minPresenceAhead moves the heading forward when too little content can follow it. This project's ContentPage is non-wrapping, so prevent orphans by shortening or splitting the source page during visual QA.
     </Text>
-    <CodeBlock language="tsx">{`<View wrap={false} minPresenceAhead={40}>
+    <CodeBlock language="tsx">{`{/* Use inside a wrapping Page */}
+<View wrap={false} minPresenceAhead={40}>
   <Text style={styles.h2Text}>Section Title</Text>
 </View>`}</CodeBlock>
 

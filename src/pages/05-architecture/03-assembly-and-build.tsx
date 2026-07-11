@@ -7,23 +7,18 @@ const Page: React.FC = () => (
   <ContentPage sectionTitle="Architecture" wrap={false}>
     <SectionHeading>Assembly File</SectionHeading>
     <Text style={styles.body}>
-      Document.tsx imports all pages and wraps them in a Document component – the one place that knows about every page. In a small project you write these imports by hand; this book auto-generates them into a registry so the list never drifts.
+      The generated registry imports every page. Document.tsx imports that ordered list and maps it into one Document, so the assembly never drifts from the page tree.
     </Text>
-    <CodeBlock language="tsx">{`// Document.tsx
+    <CodeBlock language="tsx">{`// Document.tsx (metadata abridged)
 import React from 'react';
 import { Document } from '@react-pdf/renderer';
-import Page01Cover from './pages/Page01-Cover';
-import Page02TOC from './pages/Page02-TOC';
-import Page03Ch01 from './pages/Page03-Ch01-Intro';
-// ... more imports
+import { allPages } from './registry';
 const EbookDocument: React.FC = () => (
   <Document
     title="React-PDF + AI: The Builder's Guide"
     author="Landon Miles"
   >
-    <Page01Cover />
-    <Page02TOC />
-    <Page03Ch01 />
+    {allPages.map((Page, index) => <Page key={index} />)}
   </Document>
 );
 export default EbookDocument;`}</CodeBlock>
@@ -35,8 +30,8 @@ export default EbookDocument;`}</CodeBlock>
     <CodeBlock language="tsx">{`// build.tsx
 import ReactPDF from '@react-pdf/renderer';
 import EbookDocument from './Document';
-ReactPDF.render(<EbookDocument />, './output/ebook.pdf')
-  .then(() => console.log('PDF generated: output/ebook.pdf'));`}</CodeBlock>
+ReactPDF.render(<EbookDocument />, './output/react-pdf-ai-builders-guide.pdf')
+  .then(() => console.log('PDF generated: output/react-pdf-ai-builders-guide.pdf'));`}</CodeBlock>
   </ContentPage>
 );
 

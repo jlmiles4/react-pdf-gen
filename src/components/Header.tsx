@@ -1,7 +1,8 @@
 /**
  * Header — Fixed page header
  *
- * Renders at the top of every content page via `fixed` prop.
+ * ContentPage inserts it on each source page; `fixed` repeats it on any
+ * subpages produced when that Page wraps.
  * Shows book title ("React-PDF + AI") on the left and the current
  * section title on the right, separated by a subtle bottom border.
  */

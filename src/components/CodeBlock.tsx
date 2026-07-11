@@ -5,7 +5,7 @@
  * label in gold (accent[400]) above the code. Syntax highlighting colors
  * keywords (gold), strings (green), comments (muted), JSX tags (blue),
  * and numbers (warm gold). Uses wrap={false} to prevent splitting across
- * pages — keep code blocks under ~15 lines.
+ * pages — size each block to the vertical space remaining on its page.
  *
  * Props: children (string — the code), language (optional string label)
  */

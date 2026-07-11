@@ -5,7 +5,7 @@
 
 set -euo pipefail
 
-PDF_FILE="output/ebook.pdf"
+PDF_FILE="output/react-pdf-ai-builders-guide.pdf"
 PNG_DIR="output/pages"
 DPI="${1:-200}"
 

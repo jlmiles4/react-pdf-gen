@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: theme.typography.h3.fontSize,
     color: theme.colors.neutral[600],
-    lineHeight: 1.4,
+    lineHeight: theme.typography.h3.lineHeight,
   },
 });
 
@@ -165,7 +165,7 @@ The pattern:
 3. **Component** – a single exported component that returns a `<Page>`.
 4. **Default export** – so the assembly file can import it cleanly.
 
-Notice: the component uses `theme.colors.primary` instead of `"#1a2b4a"`. Every visual value comes from the theme. This is how you prevent the AI from inventing colors.
+Notice: the component uses `theme.colors.primary` instead of `"#1a2b4a"`. Reusable visual values come from the theme; unique structural geometry can use named local constants. This is how you prevent the AI from inventing colors.
 
 ## Shared Components
 

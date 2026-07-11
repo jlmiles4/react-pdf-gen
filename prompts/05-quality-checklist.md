@@ -26,7 +26,7 @@ pnpm export
 - [ ] No table header row separated from its data
 - [ ] No code block split across pages
 
-**Fix:** Add `wrap={false}` to the element. Add `minPresenceAhead={40}` to headings.
+**Fix:** Keep the element together with `wrap={false}`. On wrapping pages, add `minPresenceAhead={40}` to headings; on fixed pages, rebalance or split the source page.
 
 ### Page Overflow
 - [ ] TOC fits on a single page

@@ -5,7 +5,7 @@ const Page: React.FC = () => (
   <ChapterTitle
     number="12"
     title="Markdown Automation"
-    subtitle="Writing your book in Markdown and rendering it to premium PDF automatically."
+    subtitle="Markdown authoring with shared components and explicit page breaks."
   />
 );
 

@@ -39,7 +39,7 @@ const Page: React.FC = () => (
   <ContentPage sectionTitle="AI Visual Analysis" wrap={false}>
       <SectionHeading>Why PNGs Beat Raw PDFs for AI Review</SectionHeading>
       <Text style={styles.body}>
-        AI tools preprocess PDFs differently, often combining extracted text with page images. For visual QA, control that conversion: export PNGs at a chosen DPI so the model reviews the same rendered pixels your reader sees.
+        AI tools preprocess PDFs differently, often combining extracted text with page images. For visual QA, control that conversion: export PNGs at a chosen DPI so the model reviews a consistent rasterization of the same PDF layout your readers receive.
       </Text>
 
       <SectionHeading>Visual QA Workflow</SectionHeading>

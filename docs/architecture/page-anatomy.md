@@ -25,7 +25,7 @@ export default Page;
 
 `<ChapterTitle>` renders a full-bleed dark-navy `<Page>` (no `<Header>`/`<Footer>` components; it renders its own page number bottom-left) with the chapter label, large white title, and optional subtitle. The divider is its own file so the "one source file = one PDF page" rule actually holds — and so an AI agent can edit a chapter's first content page without touching the divider.
 
-The `number`/`title`/`subtitle` props on `<ChapterTitle>` should match the matching `Chapter` entry in [`src/manifest.ts`](../../src/manifest.ts). Sync does not enforce the match — the manifest is what drives the TOC; the JSX props are what the chapter title page actually displays.
+The `number` prop on `<ChapterTitle>` must match the corresponding `Chapter` entry in [`src/manifest.ts`](../../src/manifest.ts), because it also creates the destination used by the clickable TOC. `title` and `subtitle` should match as well: the manifest drives the TOC text while the JSX props drive the rendered divider. Sync validates the manifest itself but does not compare these JSX props with it.
 
 ## First content page
 
@@ -61,7 +61,7 @@ Continuation files are picked up automatically: `scripts/sync-project.ts` walks 
 Cover, TOC, and Conclusion each live in their own folder with a single `01-` file: `01-cover/01-cover.tsx`, `02-toc/01-toc.tsx`, `15-conclusion/01-conclusion.tsx`. Chrome folders use the `NN-…/01-…tsx` shape directly — no separate `00-title.tsx`, because chrome pages aren't chapters and don't have a `<ChapterTitle>` divider. They render a custom `<Page>` rather than going through `<ContentPage>` because their layouts are unique:
 
 - **Cover** — full-bleed dark `<Page>`, large display title, gold accent bar; no `<Header>`/`<Footer>` components, just a brand + year row along the bottom.
-- **TOC** — custom layout that imports `MANIFEST` from `src/manifest.ts` and `getTocPositions()` from `src/tocPositions.ts` (which reads `output/toc-positions.json`). Sequence of group badges, then per-chapter rows of `num · title/subtitle · page-number`.
+- **TOC** — custom layout that imports `MANIFEST` from `src/manifest.ts` and `getTocPositions()` from `src/tocPositions.ts` (which reads `output/toc-positions.json`). Sequence of group badges, then per-chapter rows of `num · title/subtitle · page-number`; each row is an internal link to the stable destination on its `<ChapterTitle>` page.
 - **Conclusion** — a single full-bleed dark hero page matching the cover's visual weight. No `<Header>` component, but a footer-style brand + page-number row along the bottom, echoing the cover's bottom band.
 
 Chrome pages are not listed in `MANIFEST`. Cover and TOC are hard-coded at the start of the registry's page array; Conclusion is appended at the end. See [registry-sync](../build/registry-sync.md).
@@ -76,7 +76,7 @@ src/build.tsx
             └─ imports each src/pages/NN-chapter/NN-page.tsx
                  └─ each page imports from src/components/ and src/styles/
 
-ReactPDF.render(<EbookDocument/>, 'output/ebook.pdf')
+ReactPDF.render(<EbookDocument/>, 'output/react-pdf-ai-builders-guide.pdf')
   └─ writes PDF, runs pdftotext for chapter positions, re-renders, validates with pdfinfo
 ```
 

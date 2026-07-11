@@ -67,7 +67,7 @@ const Page: React.FC = () => (
 export default Page;
 ```
 
-The `number`/`title`/`subtitle` props should match the manifest entry — sync doesn't enforce the match, but the manifest drives the TOC and the JSX drives the rendered title page, so divergence shows up visually.
+The `number` prop must match the manifest entry: it feeds `chapterDestinationId`, so a mismatch breaks the clickable TOC link. `title` and `subtitle` should also match because the manifest drives the TOC text while the JSX props drive the rendered divider. Sync rejects duplicate manifest chapter numbers, but it does not compare these JSX props with the manifest entry.
 
 **3. Create the first content page.** Path: `src/pages/16-new-chapter/01-new-chapter.tsx`. Use the continuation-page skeleton above.
 
@@ -90,6 +90,14 @@ This does, in order:
 
 You don't edit `Document.tsx` or `registry.ts` — both follow from the manifest plus the page files.
 
+For a new chapter, also confirm its stable internal destination appears on the divider page:
+
+```bash
+pdfinfo -dests output/react-pdf-ai-builders-guide.pdf
+```
+
+Then open the PDF and click the chapter's complete TOC row. The row should jump to the divider page, and that page should match the number printed in the TOC. See [Rendering pipeline: Clickable TOC wiring](../build/pipeline.md#clickable-toc-wiring) for the `Link`/`id` code pattern.
+
 ## Visually verify
 
 Open the relevant PNG(s) in `output/pages/`. Check for:
@@ -98,16 +106,17 @@ Open the relevant PNG(s) in `output/pages/`. Check for:
 - Callouts and tables not split across page boundaries
 - Bullet lists where a single item didn't get isolated at the top of the next page
 - Footer page number is consistent with the TOC entry
+- Every TOC chapter row jumps to the matching divider page
 - Header section title matches the `sectionTitle` prop on `ContentPage`
 - Chapter title page shows the correct page number bottom-left
 - Content fits within one physical page when `wrap={false}` is set — overflow can enlarge the page box, and the build's `pdfinfo` guard rejects non-LETTER output; shorten the content or split it into a continuation file
 
-If a section is breaking awkwardly, see [pagination](../build/pagination.md) — the usual fixes are `wrap={false}` on the offending block, `minPresenceAhead={40}`, or restructuring content density.
+If a fixed page is balanced awkwardly, see [pagination](../build/pagination.md) — keep indivisible blocks at `wrap={false}`, then restructure content density or split the source page. `minPresenceAhead` can move headings only when the ancestor `<Page>` is allowed to wrap.
 
 ## Conventions to keep
 
 - One source file = one PDF page. Set `wrap={false}` on `<ContentPage>` and split into a continuation file rather than letting one source file flow.
-- Import styles only from `../../styles/shared` and tokens only from `../../styles/theme`. Don't reach into `theme.ts` for raw values inside JSX — use the named token (`colors.accent[500]`, not `'#F0A000'`).
+- Import styles only from `../../styles/shared` and tokens only from `../../styles/theme`. Use named tokens for reusable decisions (`colors.accent[500]`, not `'#F0A000'`); a one-off structural dimension may use a named local constant rather than a literal scattered through JSX.
 - Reuse components from `src/components/`. If a visual pattern repeats, promote it to a component instead of duplicating local styles.
 - Pair every `fontFamily` with a `fontWeight` token (`fontWeight.regular`, `fontWeight.semibold`, `fontWeight.bold`) — never inline literals like `fontWeight: 700 as const`. An unavailable weight resolves to the nearest registered weight in the same family, so tokens keep the rendered hierarchy intentional.
 - Use SVG icons from `src/components/Icons.tsx` sized via `iconSize.*` tokens, never emoji — Inter doesn't ship emoji glyphs and `pdftoppm` won't pull them from the system.

@@ -5,7 +5,7 @@ const Page: React.FC = () => (
   <ContentPage sectionTitle="Premium Deliverables & Recipes" wrap={false}>
     <ChecklistCategory>Layout & Spacing</ChecklistCategory>
     <ChecklistItem>Generous page margins (50-70pt on all sides)</ChecklistItem>
-    <ChecklistItem>Consistent spacing scale used throughout (4pt grid)</ChecklistItem>
+    <ChecklistItem>Consistent spacing scale used throughout (4pt base with micro-adjustments)</ChecklistItem>
     <ChecklistItem>Whitespace used intentionally – pages don't feel cramped</ChecklistItem>
     <ChecklistItem>No orphaned single lines at page breaks</ChecklistItem>
     <ChecklistItem>Visual breaks between major sections</ChecklistItem>

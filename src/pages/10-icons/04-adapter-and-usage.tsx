@@ -13,10 +13,10 @@ const Page: React.FC = () => (
     </Text>
     <CodeBlock language="tsx">{`import { Svg, Path, Circle, Line } from '@react-pdf/renderer';
 import type { IconType } from 'react-icons';
-
+import { iconSize } from '../styles/theme';
 const TAG_MAP = { svg: Svg, path: Path, circle: Circle, line: Line /* ...etc */ };
 
-const Icon = ({ icon, size = 16, color }) => {
+const Icon = ({ icon, size = iconSize.lg, color }) => {
   const { attr, children } = icon({}).props;
   const svgProps = coerceProps(attr, color);
   return (
@@ -37,7 +37,7 @@ const Icon = ({ icon, size = 16, color }) => {
     </View>
     <View style={[styles.iconRow, { marginBottom: spacing.sm, paddingLeft: spacing.sm }]}>
       <CheckIcon size={iconSize.md} color={colors.success} />
-      <Text style={styles.body}>Zero external dependencies – no CDN, no internet</Text>
+      <Text style={styles.body}>Zero network dependencies at render time – no CDN, no internet</Text>
     </View>
 
     <TipBox label="When Emojis Are Acceptable">

@@ -19,7 +19,7 @@ const Page: React.FC = () => (
     </Text>
 
     <TipBox label="The Design System Payoff">
-      If you built your theme.ts correctly and every page imports from it, most of this checklist is satisfied automatically. The design system isn't extra work – it's the shortcut that makes every page look premium by default.
+      If you built your theme.ts correctly and pages consume it directly or through shared styles and components, most of this checklist is satisfied automatically. The design system isn't extra work – it's the shortcut that makes every page look premium by default.
     </TipBox>
   </ContentPage>
 );

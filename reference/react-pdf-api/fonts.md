@@ -299,7 +299,7 @@ Font.registerHyphenationCallback((word) => [word]);
 
 4. **Test with real content.** Some fonts have poor support for special characters, ligatures, or non-Latin scripts. Render a test PDF with your actual content before committing to a font.
 
-5. **Check file sizes.** Each registered font file is embedded in the PDF. If you register 6 weights of a font at 200KB each, that is 1.2MB added to every PDF you generate. Only register the weights you actually use.
+5. **Check file sizes.** Variants actually used by rendered text are subset-embedded; registering a variant does not by itself guarantee it appears in the PDF. Inspect the finished artifact with `pdffonts`, and avoid carrying registrations you never intend to use.
 
 6. **Use two font families maximum.** One for body text, one for headings. A monospace font for code blocks is optional but common. More than that creates visual noise.
 

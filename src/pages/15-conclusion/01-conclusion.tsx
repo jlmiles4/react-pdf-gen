@@ -2,16 +2,16 @@
  * Conclusion / Back Cover
  *
  * Full-bleed dark navy page matching the cover's visual weight.
- * Seven key takeaways referencing specific chapters, next steps call to action,
- * and author branding. No standard Header/Footer components – a cover-style bottom
- * strip carries the brand and page number.
+ * Seven key takeaways referencing specific chapters, a bulleted list of what
+ * ships with the book, and a closing call to action. No standard Header/Footer
+ * components – a cover-style bottom strip carries the brand and page number.
  *
  * Renders: 1 page
  */
 import React from 'react';
 import { Page, View, Text, StyleSheet } from '@react-pdf/renderer';
 import { colors, fonts, spacing, page, borders, fontScale, typography, layout, accentBar, fontWeight, opacity } from '../../styles/theme';
-import { AccentBar, CoverDecor } from '../../components';
+import { AccentBar, BulletList, CoverDecor } from '../../components';
 
 const s = StyleSheet.create({
   page: {
@@ -80,18 +80,31 @@ const s = StyleSheet.create({
     marginVertical: spacing.lg,
     borderRadius: borders.radius.xs,
   },
-  ctaText: {
+  ctaIntro: {
     fontSize: typography.h4.fontSize,
+    fontFamily: fonts.bodyBold,
+    fontWeight: fontWeight.semibold,
+    color: colors.white,
+    lineHeight: typography.h4.lineHeight,
+    marginBottom: spacing.sm,
+  },
+  ctaItem: {
+    fontSize: fontScale.bodyMedium,
     fontFamily: fonts.body,
     fontWeight: fontWeight.regular,
     color: colors.neutral[300],
-    lineHeight: typography.body.lineHeight,
-    marginBottom: spacing.lg,
+    lineHeight: typography.bodySmall.lineHeight,
     maxWidth: layout.maxTextWidth,
   },
-  ctaBold: {
+  ctaClose: {
+    fontSize: fontScale.contentTitle,
     fontFamily: fonts.bodyBold,
     fontWeight: fontWeight.semibold,
+    color: colors.white,
+    lineHeight: typography.h4.lineHeight,
+    marginTop: spacing.md,
+  },
+  ctaCloseAccent: {
     color: colors.accent[400],
   },
   bottomInfo: {
@@ -115,10 +128,10 @@ const takeaways = [
   'Structure your project for AI – one file per page, design tokens in one place, components that compose (Ch 3).',
   'Define your design language once – colors, typography, spacing, borders. The theme file enforces consistency so you don\'t have to (Ch 4).',
   'Optimize for token budgets – small, focused files mean small, focused prompts that keep AI in its high-attention zone (Ch 5).',
-  'Export to PNG for visual QA – controlled rasterization shows AI the same rendered pixels readers see. The loop is generate, export, review, fix (Ch 9).',
+  'Export to PNG for visual QA – controlled rasterization gives AI a consistent view of reader-visible layout. The loop is generate, export, review, fix (Ch 9).',
   'Iterate past the first draft – premium output takes 2-3 passes. Use the recipes and checklists from Chapter 10 to close the gap.',
-  'Use the troubleshooting playbook – most issues trace to three things: missing wrap, missing Text wrappers, or flexDirection defaulting to column (Ch 11).',
-  'Automate your workflow – use Markdown for content and let the rendering pipeline handle the layout, so you focus on writing (Ch 12).',
+  'Troubleshoot methodically – check fixed-page overflow, missing Text wrappers, unsupported styles, and column-default flexbox (Ch 11).',
+  'Automate your workflow – use Markdown for content, shared components for styling, and explicit markers for page breaks (Ch 12).',
 ];
 
 const Conclusion: React.FC = () => (
@@ -142,14 +155,18 @@ const Conclusion: React.FC = () => (
 
     <View style={s.divider} />
 
-    <Text style={s.ctaText}>
-      The source code for this entire book is included:{'\n'}
-      A design token system (theme.ts) ready to customize.{'\n'}
-      A reusable component library – ContentPage, CodeBlock, Table, TipBox, Icons.{'\n'}
-      A build and PNG export pipeline.{'\n'}
-      AI-optimized reference documentation.{'\n'}
-      Clone it. Change the colors. Build your own.{'\n'}
-      <Text style={s.ctaBold}>landonmiles.com</Text>
+    <Text style={s.ctaIntro}>The source code for this entire book is included:</Text>
+    <BulletList
+      keepTogether
+      items={[
+        <Text style={s.ctaItem}>A design token system (theme.ts) ready to customize.</Text>,
+        <Text style={s.ctaItem}>A reusable component library – ContentPage, CodeBlock, Table, TipBox, Icons.</Text>,
+        <Text style={s.ctaItem}>A build and PNG export pipeline.</Text>,
+        <Text style={s.ctaItem}>AI-optimized reference documentation.</Text>,
+      ]}
+    />
+    <Text style={s.ctaClose}>
+      Clone it. Change the colors. <Text style={s.ctaCloseAccent}>Build your own.</Text>
     </Text>
 
     <CoverDecor opacity={opacity.decorSubtle} />

@@ -20,12 +20,65 @@ Order matters: `fonts.ts` must be imported before any `<Page>` renders; otherwis
 
 1. Creates `output/` if it doesn't exist.
 2. Pass 1: renders via `ReactPDF.render(...)`. The TOC reserves its page-number column but renders empty strings on first build (or stale positions from a prior run).
-3. Spawns `pdftotext -layout output/ebook.pdf -`, splits on form-feed (`\f`) for one block per page, and matches `^CHAPTER\s+(\d{1,2})$` line-by-line. The first page each chapter number appears on is recorded into `output/toc-positions.json`.
+3. Spawns `pdftotext -layout output/react-pdf-ai-builders-guide.pdf -`, splits on form-feed (`\f`) for one block per page, and matches `^CHAPTER\s+(\d{1,2})$` line-by-line. The first page each chapter number appears on is recorded into `output/toc-positions.json`.
 4. Pass 2: re-renders. `src/pages/02-toc/01-toc.tsx` reads `toc-positions.json` via `src/tocPositions.ts` and fills the page-number column.
 5. Runs `pdfinfo` across every rendered page and rejects any page whose dimensions differ from 612 × 792pt LETTER. This catches non-wrapping content that silently grows a page box.
 6. Logs file size and total elapsed ms (~10s for both passes on a current laptop). Exits 1 on failure.
 
 The TOC layout is identical between passes (column reserved either way), so positions extracted from pass 1 are still correct for pass 2 — no convergence iteration needed.
+
+### Clickable TOC wiring
+
+The implementation uses React-pdf's [destination navigation](https://react-pdf.org/advanced#document-navigation): a target node gets an `id`, and a `Link` points to that ID with a leading `#`. The TOC combines two independent navigation concerns. Keep them separate: physical page numbers can change whenever content moves, while destination IDs must stay stable so links do not break.
+
+| Concern | Source | Consumer |
+|---|---|---|
+| Displayed page number | `output/toc-positions.json`, generated between render passes | `positions[ch.num]` in `src/pages/02-toc/01-toc.tsx` |
+| Click target | `chapterDestinationId(ch.num)` from `src/manifest.ts` | `<Link src="#chapter-NN">` on the TOC row and `<Page id="chapter-NN">` in `ChapterTitle` |
+
+`src/manifest.ts` owns the naming function so the link and destination cannot invent different formats:
+
+```ts
+export const chapterDestinationId = (num: string) => `chapter-${num}`;
+```
+
+`ChapterTitle` places the destination on the divider's `<Page>`. The `id` has no leading hash:
+
+```tsx
+<Page
+  id={chapterDestinationId(number)}
+  size="LETTER"
+  style={ctStyles.page}
+  wrap={false}
+>
+  ...
+</Page>
+```
+
+The TOC wraps each complete row in a `Link`, making the number, title, subtitle, whitespace, and displayed page number one click target. A destination reference does include the leading hash:
+
+```tsx
+<Link
+  src={`#${chapterDestinationId(ch.num)}`}
+  wrap={false}
+  style={s.entry}
+>
+  <Text style={s.entryNum}>{ch.num}</Text>
+  <View style={s.entryText}>...</View>
+  <Text style={s.entryPage}>{positions[ch.num] ?? ''}</Text>
+</Link>
+```
+
+React-pdf links default to blue underlined text, so `s.entry` explicitly restores the book's colors and sets `textDecoration: 'none'`. Do not use a physical page number as the destination ID and do not hand-build `chapter-...` strings in page files; use `chapterDestinationId` on both sides.
+
+When adding a chapter, the manifest `num` and `<ChapterTitle number>` must match. That single value drives the TOC lookup, the link target, and the divider destination. After building, verify the named destinations and then click each row in a PDF viewer:
+
+```bash
+pnpm build
+pdfinfo -dests output/react-pdf-ai-builders-guide.pdf
+```
+
+The destination listing should contain one `chapter-NN` entry per manifest chapter, pointing at the same page displayed in the TOC. For a lower-level optional check, `pdftohtml -xml -hidden -f 2 -l 2 output/react-pdf-ai-builders-guide.pdf /tmp/toc-check` reports the page targeted by each link annotation. Use `pnpm pipeline` and inspect `output/pages/page-02.png` after style changes; link wrappers must not change the one-page TOC layout.
 
 `ReactPDF.render` is the Node-side API from `@react-pdf/renderer`. It walks the React tree synchronously, lays out pages with the embedded layout engine (Yoga flexbox), and streams the PDF to the given path. There is no separate "server" — `tsx` runs the file directly.
 
@@ -36,7 +89,7 @@ Chapter title pages render their own page number bottom-left via `<Text render={
 `scripts/export-pages.sh` wraps `pdftoppm` (from `poppler-utils`):
 
 ```bash
-pdftoppm -png -r 200 output/ebook.pdf output/pages/page
+pdftoppm -png -r 200 output/react-pdf-ai-builders-guide.pdf output/pages/page
 ```
 
 Defaults:
@@ -54,13 +107,13 @@ Use this whenever you want to verify visual output. PDF first; if the build fail
 
 ## Dev watch (`pnpm dev`)
 
-`tsx watch` runs `scripts/dev.ts` for relevant source, manifest, page-tree, sync-script, and authored-Markdown changes. Every restart re-syncs the registry and runs the two-pass build in the watched process, so added or renamed pages are picked up without a manual sync. There is no PDF live-reload — open the regenerated `output/ebook.pdf` in a viewer that reloads on file change (most macOS Preview-style viewers do not; Zathura and Skim do).
+`tsx watch` runs `scripts/dev.ts` for relevant source, manifest, page-tree, sync-script, and authored-Markdown changes. Every restart re-syncs the registry and runs the two-pass build in the watched process, so added or renamed pages are picked up without a manual sync. There is no PDF live-reload — open the regenerated `output/react-pdf-ai-builders-guide.pdf` in a viewer that reloads on file change (most macOS Preview-style viewers do not; Zathura and Skim do).
 
 ## Performance notes
 
-- A full 71-page two-pass render takes ~10s on a current laptop (~0.27 MB PDF). One render is ~5s of layout; the second pass plus `pdftotext` extraction adds the rest. Most of the cost is the layout engine, not I/O.
-- PDF size is ~270 KB; the dominant cost would be embedded font subsets (Inter × 7 variants) plus any raster images. Removing unused weights from `src/fonts.ts` shrinks the file.
-- PNG export at 200 DPI produces ~40–320 KB per page (text-heavy pages compress smaller). 150 DPI is enough for layout review; 200 DPI is what the book itself recommends for AI vision analysis.
+- The full 71-page build renders twice, so layout dominates elapsed time; the script logs the measured duration because hardware and cache state vary.
+- The current PDF is about 290 KB. `pdffonts` shows subset-embedded Inter variants actually used by visible text; Courier is a standard PDF base font. Raster images would add substantially more.
+- PNG size at 200 DPI varies with page complexity (roughly 48–330 KB in the current export). 150 DPI is enough for layout review; 200 DPI is what the book itself recommends for AI vision analysis.
 
 ## Generated artifacts
 
@@ -68,8 +121,8 @@ Use this whenever you want to verify visual output. PDF first; if the build fail
 
 | File | Generator | Notes |
 |---|---|---|
-| `output/ebook.pdf` | `tsx src/build.tsx` | Final PDF |
-| `output/toc-positions.json` | pass 1 of `build.tsx` | `{ "01": 3, "02": 7, ... }` — chapter → first page |
+| `output/react-pdf-ai-builders-guide.pdf` | `tsx src/build.tsx` | Final PDF |
+| `output/toc-positions.json` | pass 1 of `build.tsx` | `{ "01": 3, "02": 6, ... }` — chapter → first page |
 | `output/pages/page-NN.png` | `scripts/export-pages.sh` | One per PDF page, 200 DPI |
 
 `src/registry.ts` is also auto-generated (by `pnpm sync`) and gitignored.

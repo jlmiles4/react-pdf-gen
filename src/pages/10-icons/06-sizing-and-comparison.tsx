@@ -13,7 +13,7 @@ const Page: React.FC = () => (
       headers={['Context', 'Icon Size', 'Text Size']}
       rows={[
         ['Inline with body text', '12-14pt', '11pt body'],
-        ['Bullet list markers', '10-12pt', '9.5-11pt'],
+        ['List markers', '6pt dot / 10-12pt icon', '9.5-11pt'],
         ['Section headers', '16pt', '20pt h2'],
         ['Feature showcases', '24pt', 'Display or standalone'],
         ['Callout box labels', '13pt', '13pt label'],
@@ -25,11 +25,11 @@ const Page: React.FC = () => (
     <Table
       headers={['Property', 'Emoji', 'SVG Icon']}
       rows={[
-        ['Rendering', 'Platform-dependent', 'Identical everywhere'],
+        ['Rendering', 'Source-dependent', 'Consistent vector path'],
         ['Sizing', 'Fixed to font size', 'Any size, precise control'],
         ['Color', 'Cannot be changed', 'Any color from your palette'],
         ['Print quality', 'May rasterize poorly', 'Vector – infinite resolution'],
-        ['AI consistency', 'Unpredictable', 'Deterministic output'],
+        ['AI consistency', 'Depends on source setup', 'Deterministic output'],
       ]}
       columnWidths={['25%', '35%', '40%']}
     />

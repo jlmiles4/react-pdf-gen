@@ -7,7 +7,7 @@ const Page: React.FC = () => (
   <ContentPage sectionTitle="Fundamentals" wrap={false}>
     <SectionHeading>Styling System</SectionHeading>
     <Text style={styles.body}>
-      React-PDF uses JavaScript objects for styles, similar to React Native. No CSS strings, no className props. Always reference your theme tokens to ensure consistency.
+      React-PDF styles are JavaScript objects, like React Native – not CSS strings or className props. Tokenize reusable choices; name one-off geometry locally.
     </Text>
     <CodeBlock language="tsx">{`import { StyleSheet } from '@react-pdf/renderer';
 import { colors, spacing, borders } from '../../styles/theme';
@@ -21,9 +21,9 @@ const styles = StyleSheet.create({
 });`}</CodeBlock>
 
     <View wrap={false}>
-      <Text style={styles.h3}>Supported Layout: Flexbox Only</Text>
+      <Text style={styles.h3}>Supported Layout: Flexbox First</Text>
       <Text style={styles.body}>
-        Default flex direction is column (top to bottom), not row – which catches people coming from web CSS. React-PDF's only layout engine is flexbox: no CSS Grid, no floats, no inline/block.
+        Column is the default. Normal flow uses flexbox – no Grid, floats, or inline/block display. Relative and absolute positioning, plus inline style objects, are valid.
       </Text>
 
       <Table

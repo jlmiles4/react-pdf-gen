@@ -10,11 +10,11 @@ const Page: React.FC = () => (
         "Invalid '...' string child outside &lt;Text&gt; component"
       </WarningBox>
       <Text style={styles.body}>
-        This is the most common react-pdf mistake. Raw strings placed inside a View (or any non-Text component) are silently dropped from the PDF – the only trace is a console warning. Every visible string must be wrapped in a Text component.
+        This is the most common react-pdf mistake. In this version, a raw string directly under Page or View triggers a warning and is omitted. Put ordinary copy in Text; text-capable primitives such as Link are exceptions.
       </Text>
       <CodeBlock language="tsx">{`// Broken – raw string inside View
 <View>
-  This text silently disappears
+  This raw string is invalid
 </View>
 
 // Fixed – wrap in Text
@@ -27,7 +27,7 @@ const Page: React.FC = () => (
         The build reports an unregistered family or unreadable font file, or text uses a different weight than expected.
       </WarningBox>
       <Text style={styles.body}>
-        An unknown family or bad file path fails the build. An unavailable weight is quieter: react-pdf selects the nearest registered weight in that family. Helvetica appears when fontFamily is omitted.
+        An unknown family or bad file path fails the build. For an unavailable weight, react-pdf selects the nearest registered weight. Helvetica is the default only when neither Text nor an ancestor sets fontFamily; this project's ContentPage inherits Inter from its Page style.
       </Text>
   </ContentPage>
 );

@@ -1,7 +1,8 @@
 /**
  * Build Script
  *
- * Renders the complete ebook Document to a PDF file at output/ebook.pdf.
+ * Renders the complete ebook Document to a PDF file at
+ * output/react-pdf-ai-builders-guide.pdf.
  *
  * Two-pass: pass 1 renders the PDF, then `pdftotext` extracts the page where
  * each "CHAPTER NN" title page lands. Those positions get written to
@@ -22,7 +23,7 @@ import { MANIFEST } from './manifest';
 import { allPages } from './registry';
 
 const OUTPUT_DIR = path.resolve(__dirname, '../output');
-const OUTPUT_FILE = path.join(OUTPUT_DIR, 'ebook.pdf');
+const OUTPUT_FILE = path.join(OUTPUT_DIR, 'react-pdf-ai-builders-guide.pdf');
 const POSITIONS_FILE = path.join(OUTPUT_DIR, 'toc-positions.json');
 
 if (!fs.existsSync(OUTPUT_DIR)) {

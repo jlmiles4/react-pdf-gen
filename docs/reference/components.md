@@ -22,7 +22,7 @@ Every component lives in `src/components/` and is re-exported from `src/componen
 
 ### `ChapterTitle`
 
-[`src/components/ChapterTitle.tsx`](../../src/components/ChapterTitle.tsx) — full-bleed dark-navy `<Page>` (no `<Header>`/`<Footer>`; renders its own page number bottom-left) with a gold accent bar, "CHAPTER NN" label, large white title, optional subtitle, and decorative SVG circles in the corner.
+[`src/components/ChapterTitle.tsx`](../../src/components/ChapterTitle.tsx) — full-bleed dark-navy `<Page>` (no `<Header>`/`<Footer>`; renders its own page number bottom-left) with a gold accent bar, "CHAPTER NN" label, large white title, optional subtitle, and decorative SVG circles in the corner. Its `number` also creates the stable `chapter-NN` destination used by the clickable TOC.
 
 ```tsx
 <ChapterTitle number="03" title="Project Architecture" subtitle="..." />
@@ -38,7 +38,7 @@ Every component lives in `src/components/` and is re-exported from `src/componen
 
 ### `SectionHeading`
 
-[`src/components/SectionHeading.tsx`](../../src/components/SectionHeading.tsx) — gold accent bar + h2 text. Uses `wrap={false}` and `minPresenceAhead={40}`. The primary section heading on every content page.
+[`src/components/SectionHeading.tsx`](../../src/components/SectionHeading.tsx) — gold accent bar + h2 text. Uses `wrap={false}` and `minPresenceAhead={40}`. The primary section-heading pattern for hand-authored content pages.
 
 ```tsx
 <SectionHeading>Section Title</SectionHeading>
@@ -90,7 +90,7 @@ All use `wrap={false}`. Body text is rendered as a single `<Text>` with `styles.
 
 ### `CodeBlock`
 
-[`src/components/CodeBlock.tsx`](../../src/components/CodeBlock.tsx) — dark-navy block, Courier font, optional gold language label, syntax highlighting via `src/utils/syntaxHighlight.ts`. `wrap={false}`. Keep code under ~15 lines so it doesn't overflow the page when pushed past a break.
+[`src/components/CodeBlock.tsx`](../../src/components/CodeBlock.tsx) — dark-navy block, Courier font, optional gold language label, syntax highlighting via `src/utils/syntaxHighlight.ts`. `wrap={false}`. Keep each block within the vertical space left by the surrounding page content; a dedicated code-heavy page can fit substantially more than a block placed below several sections.
 
 ```tsx
 <CodeBlock language="tsx">{`const x = 1;`}</CodeBlock>
@@ -243,7 +243,7 @@ const [partOne, partTwo] = body.split('\n<!-- page-break -->\n');
 
 ### `Header`, `Footer`
 
-[`src/components/Header.tsx`](../../src/components/Header.tsx) and [`Footer.tsx`](../../src/components/Footer.tsx). Used internally by `ContentPage` and rendered as `fixed` so they repeat on every page. The footer renders the dynamic `pageNumber / totalPages` via the `Text render={({pageNumber, totalPages}) => ...}` API. Not typically composed directly.
+[`src/components/Header.tsx`](../../src/components/Header.tsx) and [`Footer.tsx`](../../src/components/Footer.tsx). `ContentPage` inserts them in every source page; their `fixed` props also repeat them on each subpage if that `<Page>` wraps. The footer renders dynamic `pageNumber / totalPages` through `Text.render`. Not typically composed directly.
 
 ## Icons
 

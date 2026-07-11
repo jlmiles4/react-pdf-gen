@@ -29,11 +29,11 @@ const Page: React.FC = () => (
     shared.ts       # shared StyleSheet
   manifest.ts       # chapter structure (source of truth)
   Document.tsx      # maps the generated registry into one <Document>
-  build.tsx         # two-pass render to output/ebook.pdf`}</CodeBlock>
+  build.tsx         # two-pass render to output/react-pdf-ai-builders-guide.pdf`}</CodeBlock>
 
       <Text style={styles.h3}>Why This Works</Text>
       <BulletList items={[
-        'Each file is 50-200 lines – well within AI effective attention',
+        'Page files stay small and focused – often a few dozen lines',
         'AI can edit one page (e.g. 05-architecture/05-naming-conventions.tsx) without touching the others',
         'You give AI context: the page file + theme.ts + relevant components = ~3,000 tokens',
         'Components enforce consistency – every content page uses the same Header and Footer',

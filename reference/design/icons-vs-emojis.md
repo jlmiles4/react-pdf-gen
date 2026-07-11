@@ -10,7 +10,7 @@ Emojis seem convenient. A quick `checkmark` or `warning sign` added directly to 
 
 ## Emoji Limitations
 
-### 1. Requires internet at render time
+### 1. Remote emoji sources require internet at render time
 
 To render emojis, react-pdf needs `Font.registerEmojiSource()` pointing to a CDN:
 

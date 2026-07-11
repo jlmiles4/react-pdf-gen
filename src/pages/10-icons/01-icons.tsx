@@ -5,7 +5,7 @@ import { ContentPage, Table, WarningBox, SectionHeading } from '../../components
 
 const Page: React.FC = () => (
   <ContentPage sectionTitle="Icons over Emojis" wrap={false}>
-      <SectionHeading>Why Emojis Fail in PDFs</SectionHeading>
+      <SectionHeading>Emoji Trade-offs in PDFs</SectionHeading>
       <Text style={styles.body}>
         Emojis look harmless. They're quick to type and AI agents love inserting them. But in react-pdf, they introduce real problems:
       </Text>
@@ -13,18 +13,18 @@ const Page: React.FC = () => (
       <Table
         headers={['Issue', 'Impact']}
         rows={[
-          ['Requires Font.registerEmojiSource()', 'Internet connection needed at render time'],
+          ['Needs an emoji image source', 'Remote sources add network risk; vendored sources work offline'],
           ['Raster images at fixed resolution', 'Blurry when zoomed – PDFs are vector-first'],
-          ['Platform-dependent rendering', 'Looks different on Mac, Windows, Linux, mobile'],
-          ['Can\'t match your color scheme', 'Always renders in original colors'],
+          ['Source-dependent artwork', 'A fixed source renders consistently across platforms'],
+          ['Color baked into the artwork', 'Cannot be recolored with document tokens'],
           ['Informal appearance', 'Undercuts professional documents'],
-          ['CDN dependency', 'Build fails if CDN is down or blocked'],
+          ['Remote CDN outage', 'Breaks builds only when the selected source is remote'],
         ]}
         columnWidths={['40%', '60%']}
       />
 
-      <WarningBox label="The CDN Problem">
-        Font.registerEmojiSource() points to a CDN like Twemoji. If that CDN is down, behind a firewall, or the URL changes, your PDF build breaks. In production, this is an unacceptable dependency for a static document.
+      <WarningBox label="Remote Source Risk">
+        Font.registerEmojiSource() can use a remote set such as Twemoji or a vendored local image set. A remote source makes builds depend on the network and its host; vendor the assets when offline and reproducible rendering matter.
       </WarningBox>
   </ContentPage>
 );

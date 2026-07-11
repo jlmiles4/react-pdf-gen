@@ -11,7 +11,7 @@ const Page: React.FC = () => (
       rows={[
         ['Fonts', 'Default Helvetica', 'Custom registered typeface'],
         ['Colors', 'Random hex values', 'Systematic palette with intent'],
-        ['Spacing', 'Inconsistent margins', 'Spacing scale (4pt grid)'],
+        ['Spacing', 'Inconsistent margins', '4pt base with micro tokens'],
         ['Components', 'Plain text + emoji', 'Styled boxes with SVG icons'],
         ['Hierarchy', 'Everything same size', 'Clear heading scale with accents'],
       ]}
@@ -20,7 +20,7 @@ const Page: React.FC = () => (
 
     <SectionHeading>Recipes & Templates</SectionHeading>
     <Text style={styles.body}>
-      The checklist tells you what premium looks like. These recipes show you how to build it. Each pattern uses the design tokens from Chapter 4, the shared components from Chapter 3, and the Table component (Chapter 7's table recipe) – if you're starting here, review those chapters first or clone the source code.
+      These recipes turn the checklist into code. They use Chapter 4's tokens and Chapter 3's shared components; the invoice also reuses Chapter 7's Table. Review those chapters or clone the source if you're starting here.
     </Text>
     <Text style={styles.body}>
       Three recipes follow: an invoice component (the most-requested PDF use case), a data-driven page generator, and a layout patterns cheat sheet. Each is a self-contained pattern you can copy into your project and customize.

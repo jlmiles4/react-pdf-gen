@@ -17,7 +17,7 @@ const Page: React.FC = () => (
         'Consistent card patterns: bordered View with padding and borderRadius',
         'SVG decorative elements (lines, circles, icons)',
         'Bullet lists and tables built with flexbox rows',
-        'Fixed headers/footers via fixed={true} and dynamic page numbers via render prop',
+        'Page wrapper inserts headers/footers; fixed={true} repeats them on wrapped pages',
       ]} />
 
       <SectionHeading>What to Avoid</SectionHeading>
@@ -27,13 +27,13 @@ const Page: React.FC = () => (
 
       <BulletList items={[
         'Percentage heights in an unsized parent – they resolve against nothing and collapse',
-        'Floated or grid layouts – only flexbox is supported, so stick to row and column',
+        'Floated or grid layouts – use flexbox rows and columns for normal flow',
         'position: "fixed" – no such style value; repetition comes from the fixed={true} prop',
         'Deeply nested Views chasing pixel-perfect alignment – flatten and let flex do the work',
       ]} />
 
       <WarningBox label="Watch out">
-        When a layout misbehaves, the cause is almost always an unsupported CSS property failing silently rather than a bug in your component – check against the supported-style list before you start bisecting.
+        When a layout misbehaves, an unsupported CSS property is a common cause. Check the supported-style list before you start bisecting, then inspect wrapping, content height, and flex constraints.
       </WarningBox>
   </ContentPage>
 );

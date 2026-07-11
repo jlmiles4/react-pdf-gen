@@ -18,14 +18,14 @@ const Page: React.FC = () => (
       <ChecklistItem>Code blocks in monospace font with background color</ChecklistItem>
 
       <ChecklistCategory>Color & Visual</ChecklistCategory>
-      <ChecklistItem>Color palette limited to 3-5 intentional colors</ChecklistItem>
+      <ChecklistItem>Palette limited to 3-5 core color roles plus intentional tonal shades</ChecklistItem>
       <ChecklistItem>Primary color for headings and emphasis areas</ChecklistItem>
       <ChecklistItem>Accent color for highlights, callout borders, interactive elements</ChecklistItem>
       <ChecklistItem>Neutral scale for body text, borders, and backgrounds</ChecklistItem>
-      <ChecklistItem>Color used for meaning, not decoration</ChecklistItem>
+      <ChecklistItem>Semantic colors carry meaning; decorative accents stay within the brand palette</ChecklistItem>
 
       <ChecklistCategory>Production & Polish</ChecklistCategory>
-      <ChecklistItem>Fonts embedded so output renders identically everywhere</ChecklistItem>
+      <ChecklistItem>Custom fonts embedded; standard PDF base fonts used intentionally</ChecklistItem>
       <ChecklistItem>File size kept lean – images compressed, no unused assets</ChecklistItem>
       <ChecklistItem>Selectable, copyable text (not rasterized into images)</ChecklistItem>
       <ChecklistItem>Final PDF proofed at 100% zoom and at print scale</ChecklistItem>

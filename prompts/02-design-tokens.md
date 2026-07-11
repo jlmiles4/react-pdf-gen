@@ -6,7 +6,7 @@ Use this prompt to create a centralized design token system for a react-pdf proj
 
 ## Prompt
 
-Create a `src/styles/theme.ts` file that exports all design tokens for the project. This is the single source of truth — no page or component should hardcode colors, fonts, spacing, or borders.
+Create a `src/styles/theme.ts` file that exports all reusable design tokens for the project. Pages and components must use it for colors, fonts, spacing, and borders; unique structural geometry may use a named local constant.
 
 ### Token Structure
 
@@ -102,6 +102,6 @@ export const borders = {
 - `as const` on every export for type safety
 - `fontWeight` is always `700 as const`, `600 as const`, or `400 as const` — never a plain number
 - All font tokens point to the same family name (e.g., 'Inter') — weight selects the variant
-- Spacing follows a 4pt grid
+- Core spacing follows a 4pt grid, with named 1pt/2pt micro exceptions
 - Color palette limited to 3 groups: primary, accent, neutral, plus semantics
 - Never add a color that doesn't have a clear purpose documented in comments

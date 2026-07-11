@@ -79,7 +79,7 @@ Body text, borders, subtle backgrounds, secondary information.
 | `warning`     | `#D98E00` | Alert triangle icons   |
 
 **Rules:**
-- Maximum 3-5 colors on any page. Navy + gold + one neutral shade covers most layouts.
+- Aim for 3-5 core color roles on a page; tonal shades and semantic states may add controlled variation.
 - Color carries meaning: primary = structure, accent = emphasis, semantic = status.
 - Never use random hex values. Always reference `colors.*` from `theme.ts`.
 
@@ -192,7 +192,7 @@ SVG-based Lucide icons. Never use emoji. Available: `CheckIcon`, `XIcon`, `Alert
 
 4. **Components, not inline styles.** Every visual pattern has a component (`SectionHeading`, `TipBox`, `BulletList`, `Table`, `CodeBlock`). Page files should import and compose these — never recreate patterns with inline styles.
 
-5. **Design tokens, not magic numbers.** Colors from `colors.*`, sizes from `typography.*`/`fontScale.*`, font weights from `fontWeight.*`, line heights from `lineHeight.*`, spacing from `spacing.*`, borders from `borders.*`, icon sizes from `iconSize.*`, opacity from `opacity.*`, layout constants from `layout.*`, letter spacing from `letterSpacing.*` (`tight`/`normal`/`wide`/`wider` — tracked-out uppercase labels: cover kicker, TOC group headers, header section title, CHAPTER XX label). Local `StyleSheet.create()` for page-specific styles that reference tokens.
+5. **Design tokens, not magic numbers.** Reusable colors, sizes, weights, line heights, spacing, borders, icon sizes, opacity, layout, and letter spacing come from the corresponding theme tokens. Local `StyleSheet.create()` may use named constants for one-off structural geometry; do not scatter raw literals through JSX or repeat them across pages.
 
 6. **SVG icons, never emoji.** Icons are vector-sharp, color-matched, and consistent across renderers.
 

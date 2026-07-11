@@ -257,12 +257,12 @@ One comment that explains a non-obvious behavior. Everything else is evident fro
 
 The token count is similar, but the second version gives the AI (and you) semantic meaning. `spacing[6]` communicates "medium section gap" in a way that `24` does not.
 
-## The Reference Folder Pattern
+## The Project Docs Pattern
 
-For larger projects, create a `reference/` folder with concise documentation the AI can read without loading all source code:
+For larger projects, create a `docs/` folder with concise project documentation the AI can read without loading all source code. Reserve `reference/` for long-form research that is useful during authoring but too broad for routine edit context:
 
 ```
-reference/
+docs/
   ARCHITECTURE.md     # File structure, naming conventions, build command
   DESIGN_BRIEF.md     # Visual style summary (the 10-line brief from Ch4)
   COMPONENTS.md       # List of shared components with props and usage
@@ -289,7 +289,7 @@ npm run build:pdf → outputs to ./output/report.pdf
 - Import: React, react-pdf components, theme, shared, needed components
 - Local StyleSheet.create() for page-specific styles
 - Single default-exported component returning <Page>
-- All visual values from theme – no hardcoded colors/sizes
+- Reusable visual values from theme; named local constants only for unique geometry
 ```
 
 ### COMPONENTS.md
@@ -308,7 +308,7 @@ npm run build:pdf → outputs to ./output/report.pdf
 ## SectionTitle
 - Props: label?: string, title: string, showDivider?: boolean
 - Uppercase label in accent color, title in h2, optional gold divider.
-- Has minPresenceAhead={100} to prevent orphaned headings.
+- Uses minPresenceAhead={100} for orphan protection when its parent Page wraps.
 
 ## CalloutBox
 - Props: title?: string, children: string, variant?: "info"|"success"|"warning"|"neutral"

@@ -166,7 +166,7 @@ export const pageDefaults = {
 
 Every component imports from `theme.ts`. When you want to change the primary color from navy to forest green, you change one value in one file, and every page updates.
 
-When prompting your AI to build a new page, include this file in the context. The AI now has exact values for every design decision. No guessing.
+When prompting your AI to build a new page, include this file in the context. The AI now has exact values for every reusable design decision; name unique geometry locally instead of scattering literals.
 
 ## Testing Quality
 
@@ -356,7 +356,7 @@ That's it. You don't need gradients, animations, or complex graphics. You need a
 
 ## Recipes & Templates
 
-The checklist tells you what premium looks like. These recipes show you how to build it. Each pattern uses the design tokens (Ch 4), shared components like ContentPage (Ch 3), and Table (Ch 7) from this book — if you're starting here, review those chapters first or clone the source code.
+The checklist tells you what premium looks like. These recipes show you how to build it. Every pattern uses the design tokens (Ch 4) and shared components like ContentPage (Ch 3); the invoice also reuses Table (Ch 7). If you're starting here, review those chapters first or clone the source code.
 
 ### Recipe: Invoice Component
 
@@ -488,4 +488,4 @@ Four layouts you'll reach for repeatedly. All examples use design tokens from th
 </View>
 ```
 
-Every recipe follows the same principle: typed data in, styled PDF out. The interface defines the contract, the component handles layout, and the design tokens enforce visual consistency. Start with the recipe closest to your use case, adapt the interface to your data, and build from there.
+The invoice and report recipes follow typed data in, styled PDF out: an interface defines the contract, the component handles layout, and design tokens enforce visual consistency. The layout recipes demonstrate reusable composition without requiring a data interface. Start with the pattern closest to your use case and adapt it to your content.

@@ -9,8 +9,8 @@ const Page: React.FC = () => (
       Total context: roughly 2,650 tokens. The AI has everything it needs to produce code that matches your design system, uses the correct component wrapper, and fits the existing page structure. No guesswork required.
     </Text>
 
-    <InfoBox label="The Reference Folder">
-      Keep a reference/ folder with concise markdown docs about your project: design tokens, component API, coding conventions. When prompting AI, point it to these docs instead of loading all source files. Markdown tokenizes more efficiently than TypeScript code.
+    <InfoBox label="Project Docs vs. Research">
+      Keep concise project guidance – design tokens, component API, conventions – in docs/. Reserve reference/ for long-form research. Point AI to the smallest relevant docs instead of loading all source files.
     </InfoBox>
 
     <TipBox label="Token Budget Template">
@@ -26,7 +26,7 @@ find src -name '*.tsx' -exec wc -c {} \\; \\
   | awk '{ printf "%6d tokens  %s\\n", $1/4, $2 }' \\
   | sort -rn | head -20`}</CodeBlock>
     <Text style={styles.body}>
-      Anything over 1,500 tokens is a split candidate. Then sum the files an AI actually needs for one edit (theme + components + target page + instructions). A total under 4,000 is compact even for a 32K model and uses just over 3% of a 128K context window.
+      Page or feature files over 1,500 tokens are worth reviewing for a split. Cohesive source-of-truth files such as theme.ts can stay larger when dividing them would make the system harder to follow. Then sum the files an AI actually needs for one edit (theme + components + target page + instructions). A total under 4,000 is compact even for a 32K model and uses just over 3% of a 128K context window.
     </Text>
   </ContentPage>
 );

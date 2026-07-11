@@ -135,7 +135,7 @@ ls -lh "$PNG_DIR"/page-*.png
 ### Critical Rules
 1. Always pair `fontWeight` with `fontFamily` — custom fonts are a single family, weight selects the variant
 2. Always use `wrap={false}` on elements that must not split across pages
-3. Always reference design tokens from theme.ts — never hardcode values
+3. Tokenize reusable design values in theme.ts; keep unique geometry in named local constants
 4. Use LETTER (612 x 792pt) or A4 page size with generous margins (50-60pt)
 5. Disable hyphenation globally via `Font.registerHyphenationCallback`
-6. Only TTF font files are reliably supported — not OTF, not variable fonts
+6. Use static TTF or WOFF fonts — not OTF, WOFF2, or variable fonts

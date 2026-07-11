@@ -20,6 +20,9 @@ export interface Group {
   chapters: Chapter[];
 }
 
+/** Stable PDF destination shared by TOC links and chapter divider pages. */
+export const chapterDestinationId = (num: string) => `chapter-${num}`;
+
 export const MANIFEST: Group[] = [
   {
     id: 'FOUNDATIONS',
@@ -112,7 +115,7 @@ export const MANIFEST: Group[] = [
       {
         num: '12',
         title: 'Markdown Automation',
-        subtitle: 'Writing your book in Markdown and rendering it to premium PDF automatically.',
+        subtitle: 'Markdown authoring with shared components and explicit page breaks.',
         entryPage: '14-markdown-automation/00-title',
       },
     ],

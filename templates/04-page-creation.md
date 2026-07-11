@@ -27,7 +27,7 @@ import Table from '../components/Table';
  * Components: [List components used]
  */
 
-// Local styles for page-specific layouts (reference tokens, don't hardcode)
+// Local styles reference tokens; named constants may hold unique geometry
 const local = StyleSheet.create({
   // Add page-specific styles here
 });
@@ -94,7 +94,7 @@ pnpm pipeline
 |---------|-----------|
 | SectionHeadings | 3-5 per ContentPage |
 | Body text | 2-4 sentences per paragraph |
-| Code blocks | Under 15 lines. Split longer code into explained chunks |
+| Code blocks | Fit within the page height left by surrounding content; split or move blocks that do not fit |
 | Tables | Max 3 columns. 4-8 rows ideal |
 | Callout boxes | 1-2 per page. End with a TipBox when practical |
 | BulletLists | 3-8 items. Trim to essentials |
@@ -113,4 +113,4 @@ pnpm pipeline
 - Hardcoding colors/spacing instead of importing tokens
 - Forgetting `fontWeight` alongside `fontFamily`
 - Using emoji instead of SVG icons
-- Code blocks longer than 15 lines (they won't fit on one page with wrap={false})
+- Code blocks that exceed the vertical space available on their page (`wrap={false}` prevents splitting)

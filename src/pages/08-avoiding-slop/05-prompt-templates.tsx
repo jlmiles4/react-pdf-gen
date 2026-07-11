@@ -14,13 +14,14 @@ const Page: React.FC = () => (
     <CodeBlock language="">{`Build a new ContentPage for [TOPIC].
 
 Reference: src/pages/[EXISTING_PAGE].tsx for structure.
-Design tokens: src/styles/theme.ts (use ONLY these values).
+Design system: src/styles/theme.ts (tokenize reusable choices).
 Components: SectionHeading, BulletList, CodeBlock, TipBox, Table.
 
 Requirements:
 - Use ContentPage wrapper with sectionTitle="[SECTION]"
 - Import styles from '../../styles/shared'
-- All Text components need fontFamily + fontWeight
+- Every text run must resolve to a registered family and weight
+- Use shared typography styles; pair fontFamily + fontWeight when defining either
 - wrap={false} on elements that must not split across pages
 - No Helvetica, no emoji, no hardcoded colors`}</CodeBlock>
 

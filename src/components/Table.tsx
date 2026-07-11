@@ -37,7 +37,7 @@ const Table: React.FC<TableProps> = ({ headers, rows, columnWidths, wrap = false
             key={i}
             style={[
               styles.tableHeaderText,
-              { width: widths[i], paddingRight: i < headers.length - 1 ? spacing.sm : 0 },
+              { width: widths[i], paddingRight: i < headers.length - 1 ? spacing.sm : spacing.none },
             ]}
           >
             {header}
@@ -51,7 +51,7 @@ const Table: React.FC<TableProps> = ({ headers, rows, columnWidths, wrap = false
               key={cellIdx}
               style={[
                 styles.tableCell,
-                { width: widths[cellIdx], paddingRight: cellIdx < row.length - 1 ? spacing.sm : 0 },
+                { width: widths[cellIdx], paddingRight: cellIdx < row.length - 1 ? spacing.sm : spacing.none },
               ]}
             >
               {cell}

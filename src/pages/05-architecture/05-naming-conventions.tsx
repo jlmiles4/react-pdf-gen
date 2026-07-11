@@ -7,7 +7,7 @@ const Page: React.FC = () => (
   <ContentPage sectionTitle="Architecture" wrap={false}>
     <SectionHeading>Naming Conventions</SectionHeading>
     <Text style={styles.body}>
-      File names follow a strict pattern: one folder per chapter (NN-chapter/), with 00-title.tsx for the chapter divider and NN-topic.tsx for each content page. Components are PascalCase.tsx. The numeric prefixes keep files sorted in the right order in your editor and make it obvious which page you're editing. When you tell an AI "edit 05-architecture/05-naming-conventions", there's zero ambiguity about which file to open. The book's chapter structure itself lives in src/manifest.ts.
+      Chapter files follow a strict pattern: NN-chapter/, with 00-title.tsx for the divider and NN-topic.tsx for content. Cover, TOC, and conclusion are chrome exceptions: each has one 01- file and no divider. Components are PascalCase.tsx. Numeric prefixes keep files sorted and make the target unambiguous. The chapter structure itself lives in src/manifest.ts.
     </Text>
 
     <WarningBox label="Anti-Patterns">
@@ -16,7 +16,7 @@ const Page: React.FC = () => (
 
     <SectionHeading>The Pattern at a Glance</SectionHeading>
     <Text style={styles.body}>
-      Every path in the project resolves to one of a handful of shapes. Once your AI internalizes the rule, it can name new files correctly without being told – and you can predict where anything lives.
+      Chapter paths resolve to a handful of shapes; chrome uses the exception above. Once your AI internalizes the rule, it can name new files correctly – and you can predict where anything lives.
     </Text>
 
     <Table

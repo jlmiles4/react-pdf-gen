@@ -47,12 +47,12 @@ const Page: React.FC = () => (
         Without a design system, every AI-generated page is a coin flip. The AI picks fontSize 14 on one page and 16 on the next. It uses #333 for body text here and #444 there. The result looks like five different people designed it.
       </Text>
       <Text style={styles.body}>
-        A design token file solves this. It's a single source of truth for every visual decision: colors, font sizes, spacing, border radii. You include it in every AI prompt, and the output is automatically consistent.
+        A design token file solves this. It centralizes reusable visual decisions: colors, font sizes, spacing, and border radii. Include it in every AI prompt so generated pages inherit the same constraints.
       </Text>
 
       <SectionHeading>Color Palette</SectionHeading>
       <Text style={styles.body}>
-        Pick one primary color, one accent, and a neutral scale. That's it. Three to five colors handle 95% of document design.
+        Pick one primary role, one accent role, and a neutral scale. Three to five core roles handle most document design; tonal steps provide useful variation without adding new roles.
       </Text>
 
       <View style={local.swatchRow}>
@@ -69,7 +69,7 @@ const Page: React.FC = () => (
       </Text>
 
       <TipBox>
-        Use your primary dark shade (800-900) for headings and backgrounds. Use the accent for highlights, callout borders, and chapter numbers. Neutrals handle body text, dividers, and secondary information.
+        Use darker primary shades (700-900): 800-900 for major headings and surfaces, 700 for minor headings. Use the accent for highlights and chapter numbers, and semantic colors for status callouts. Neutrals handle body text, dividers, and secondary information.
       </TipBox>
   </ContentPage>
 );

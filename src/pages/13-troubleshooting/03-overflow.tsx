@@ -10,14 +10,13 @@ const Page: React.FC = () => (
       Content runs off the bottom of the page, disappearing below the margin. Footer may overlap with body text.
     </WarningBox>
     <Text style={styles.body}>
-      Two common causes: a parent View has wrap=false (preventing page breaks), or fixed heights constrain the layout. react-pdf needs wrapping enabled to split content across pages.
+      This project renders one non-wrapping ContentPage per source file. If one overflows, shorten or split that file. In a wrapping document, a wrap=false parent or fixed content height can block page breaks.
     </Text>
-    <CodeBlock language="tsx">{`// Problem: wrap={false} prevents page breaks
+    <CodeBlock language="tsx">{`// On a wrapping Page, this child cannot break
 <View wrap={false} style={{ minHeight: 800 }}>
   {/* Content can't split – overflows the page */}
 </View>
-
-// Fix: wrap the parent, lock individual items
+// Fix there: allow the parent to wrap, lock each item
 <View> {/* wrap={true} is default */}
   {items.map((item, i) => (
     <View key={i} wrap={false}> {/* Each item stays together */}
@@ -30,7 +29,7 @@ const Page: React.FC = () => (
     <Table
       headers={['Property', 'Why it overflows', 'Fix']}
       rows={[
-        ['height / minHeight', 'Forces a size taller than the page can hold.', 'Remove it – let content size itself.'],
+        ['height / minHeight', 'Forces a content box taller than the page can hold.', 'Remove it from content containers.'],
         ['position: absolute', 'Escapes flow, so react-pdf cannot break it.', 'Use flex layout for body content.'],
       ]}
       columnWidths={['28%', '42%', '30%']}

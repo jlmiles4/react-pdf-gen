@@ -6,7 +6,7 @@ Common build errors and rendering surprises when editing the source, with the sm
 
 ### Console warning: `Invalid '...' string child outside <Text> component`
 
-A raw string ended up inside a `<View>` (or any non-`<Text>` element). The renderer logs the warning above and omits the string from the output, so the symptom is text silently disappearing from the rendered page. Wrap it:
+A raw string ended up directly under a `<Page>` or `<View>`. The renderer logs the warning above and omits the string from the output, so the symptom is text disappearing from the rendered page. Put ordinary copy in `<Text>`; text-capable primitives such as `<Link>` are exceptions. Wrap it:
 
 ```tsx
 // Wrong
@@ -50,7 +50,7 @@ Fixed example: `src/pages/12-premium-recipes/06-recipe-invoice.tsx`.
 
 ### Section heading appears at the bottom of a page with no body
 
-Add `minPresenceAhead={40}` to the heading wrapper. `<SectionHeading>` already does this — if you wrote a custom heading, it doesn't.
+On a wrapping `<Page>`, add `minPresenceAhead={40}` to the heading wrapper; `<SectionHeading>` already carries it. On this project's default fixed `ContentPage wrap={false}`, rebalance the page or split later content into another source file instead.
 
 ### Callout box splits across a page
 
@@ -78,9 +78,9 @@ Install poppler-utils:
 
 ### Exported PNGs look stale
 
-`scripts/export-pages.sh` runs `rm -f output/pages/page-*.png` before re-rendering, so stale files shouldn't persist. If they do, you may have files from a previous build with a different page count — check that the page numbers go up to the value `pdfinfo output/ebook.pdf` reports.
+`scripts/export-pages.sh` runs `rm -f output/pages/page-*.png` before re-rendering, so stale files shouldn't persist. If they do, you may have files from a previous build with a different page count — check that the page numbers go up to the value `pdfinfo output/react-pdf-ai-builders-guide.pdf` reports.
 
-### Export fails with "ebook.pdf not found"
+### Export fails with "react-pdf-ai-builders-guide.pdf not found"
 
 Run `pnpm build` first, or use `pnpm pipeline` to chain both.
 
@@ -92,8 +92,8 @@ Run `pnpm build` first, or use `pnpm pipeline` to chain both.
 
 ### Hot reload doesn't update the PDF viewer
 
-`pnpm dev` (`tsx watch`) re-renders the PDF on save, but most PDF viewers don't reload from disk automatically. Use Skim (macOS) or Zathura (Linux), or just re-open `output/ebook.pdf` after each save.
+`pnpm dev` (`tsx watch`) re-renders the PDF on save, but most PDF viewers don't reload from disk automatically. Use Skim (macOS) or Zathura (Linux), or just re-open `output/react-pdf-ai-builders-guide.pdf` after each save.
 
 ### Page count changed unexpectedly after a one-line edit
 
-Adding a line of body text to a page near the bottom can exceed the intended LETTER box. With `<ContentPage wrap={false}>` (the project default), react-pdf can enlarge that physical page rather than add another one; the build's `pdfinfo` guard then fails and identifies the offending page. Split legitimate overflow into a continuation file instead of fighting the layout. After non-trivial edits, confirm the page count with `pdfinfo output/ebook.pdf` and update any docs that cite it (`README.md`, `docs/README.md`, `TASK.md`).
+Adding a line of body text to a page near the bottom can exceed the intended LETTER box. With `<ContentPage wrap={false}>` (the project default), react-pdf can enlarge that physical page rather than add another one; the build's `pdfinfo` guard then fails and identifies the offending page. Split legitimate overflow into a continuation file instead of fighting the layout. After non-trivial edits, confirm the page count with `pdfinfo output/react-pdf-ai-builders-guide.pdf` and update any docs that cite it (`README.md`, `docs/README.md`, `TASK.md`).
