@@ -2,8 +2,10 @@
 node_modules/
 
 # Build output (root-anchored so nested dirs like docs/build/ aren't ignored).
-# Everything in output/ is regenerable via `pnpm pipeline`.
-/output/
+# Everything in output/ is regenerable via `pnpm pipeline`, but the book PDF
+# itself is tracked: it is the shipped deliverable.
+/output/*
+!/output/react-pdf-ai-builders-guide.pdf
 /dist/
 /build/
 
