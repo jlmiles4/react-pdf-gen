@@ -24,10 +24,10 @@ const Page: React.FC = () => (
 
       <SectionHeading>Fonts Not Loading</SectionHeading>
       <WarningBox label="Symptom">
-        Text renders in Helvetica instead of your registered font, or the PDF shows blank text where custom fonts should appear.
+        The build reports an unregistered family or unreadable font file, or text uses a different weight than expected.
       </WarningBox>
       <Text style={styles.body}>
-        Font issues are silent, with no warning. A wrong file path or a mismatched fontFamily name drops you all the way to Helvetica; an unregistered weight falls back to the nearest weight within the same family instead.
+        An unknown family or bad file path fails the build. An unavailable weight is quieter: react-pdf selects the nearest registered weight in that family. Helvetica appears when fontFamily is omitted.
       </Text>
   </ContentPage>
 );

@@ -12,10 +12,8 @@ const Page: React.FC = () => (
     <Text style={styles.body}>
       Large documents with many images consume significant memory. Node's default heap (typically 2–4 GB, sized from system memory) may not be enough for image-heavy PDFs past ~50 pages.
     </Text>
-    <CodeBlock language="bash">{`# Increase Node.js memory limit
-NODE_OPTIONS=--max-old-space-size=4096 pnpm build
-# Or add to package.json scripts:
-"build": "NODE_OPTIONS=--max-old-space-size=4096 tsx src/build.tsx"`}</CodeBlock>
+    <CodeBlock language="bash">{`# pnpm build still runs pnpm sync first
+NODE_OPTIONS=--max-old-space-size=4096 pnpm build`}</CodeBlock>
     <BulletList items={[
       'Resize images to actual display size before embedding (2x for retina)',
       'Use JPEG for photos (quality 80), PNG only for graphics with transparency',

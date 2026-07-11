@@ -87,10 +87,11 @@ Body text, borders, subtle backgrounds, secondary information.
 
 ## Spacing Scale
 
-Based on a 4pt grid, plus two sub-grid utility tokens:
+Based on a 4pt grid, plus a zero override and two sub-grid utility tokens:
 
 | Token  | Value | Use                                     |
 |--------|-------|-----------------------------------------|
+| `none` | 0pt   | Explicitly remove inherited spacing    |
 | `micro`| 1pt   | Hairlines, inline-code vertical padding |
 | `xxs`  | 2pt   | Sub-grid nudges (inline code, TOC rows) |
 | `xs`   | 4pt   | Tight gaps, icon-to-label spacing       |

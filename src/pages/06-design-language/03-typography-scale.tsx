@@ -18,7 +18,7 @@ const local = StyleSheet.create({
     color: colors.neutral[500],
   },
   scaleSize: {
-    marginBottom: 0,
+    marginBottom: spacing.none,
     width: spacing.xxxl + spacing.xs,
   },
   scaleUse: {

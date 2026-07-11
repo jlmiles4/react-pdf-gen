@@ -12,10 +12,10 @@ const Page: React.FC = () => (
 
     <RecipeCard title="Two-Column Layout">
       <CodeBlock language="tsx">{`<View style={{ flexDirection: 'row', gap: spacing.lg }}>
-  <View style={{ width: '50%' }}>
+  <View style={{ flex: 1 }}>
     <Text style={styles.body}>Left column</Text>
   </View>
-  <View style={{ width: '50%' }}>
+  <View style={{ flex: 1 }}>
     <Text style={styles.body}>Right column</Text>
   </View>
 </View>`}</CodeBlock>
@@ -23,13 +23,13 @@ const Page: React.FC = () => (
 
     <RecipeCard title="Sidebar + Content">
       <CodeBlock language="tsx">{`<View style={{ flexDirection: 'row', gap: spacing.lg }}>
-  <View style={{ width: '30%',
+  <View style={{ width: '28%',
     backgroundColor: colors.neutral[50],
     padding: spacing.md,
     borderRadius: borders.radius.md }}>
     <Text style={styles.h4}>Sidebar</Text>
   </View>
-  <View style={{ width: '70%' }}>
+  <View style={{ flex: 1 }}>
     <Text style={styles.body}>Main content area</Text>
   </View>
 </View>`}</CodeBlock>

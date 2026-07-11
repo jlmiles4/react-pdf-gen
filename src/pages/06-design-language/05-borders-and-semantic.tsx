@@ -32,7 +32,7 @@ error:   '#C43333',  errorLight:   '#FEF3F3',
 info:    '#2E6BB5',  infoLight:    '#EDF1F8',`}</CodeBlock>
 
     <TipBox label="The Complete Token Set">
-      Start with four core categories: colors (5-8 base values), typography (7-9 sizes), spacing (7-9 values), and borders (3 widths + 3 radii), plus semantic colors for callouts. Then promote recurring magic numbers into new tokens – this book's theme.ts grew to 15 categories.
+      Start with four core categories: colors (5-8 base values), typography (7-9 sizes), spacing (7-9 values), and borders (3 widths + 4 radii), plus semantic colors for callouts. Then promote recurring magic numbers into new tokens – this book's theme.ts grew to 15 categories.
     </TipBox>
   </ContentPage>
 );

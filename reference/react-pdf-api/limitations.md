@@ -310,19 +310,17 @@ const styles = StyleSheet.create({
 });
 ```
 
-### No Media Queries
+### Media Queries Are Supported
 
-**Workaround:** Use JavaScript logic based on the page size you're targeting. Since you control the page size at render time, you know exactly what dimensions you're working with.
+Media queries are not a limitation in react-pdf v4. Style objects can query minimum/maximum page width or height and page orientation. JavaScript conditionals remain useful for content changes, but responsive style changes can stay in the stylesheet.
 
 ```tsx
-const isLandscape = orientation === 'landscape';
 const styles = StyleSheet.create({
-  page: {
-    padding: isLandscape ? 30 : 40,
-  },
   columns: {
     flexDirection: 'row',
-    gap: isLandscape ? 24 : 16,
+    gap: 16,
+    '@media max-width: 400': { flexDirection: 'column' },
+    '@media orientation: landscape': { gap: 24 },
   },
 });
 ```
@@ -561,7 +559,6 @@ Font.registerHyphenationCallback((word) => {
 | No CSS animations | N/A – PDFs are static |
 | No CSS variables | JS constants / design token objects |
 | No calc() | Pre-compute in JavaScript |
-| No media queries | JS conditionals based on page size |
 | No pseudo-selectors | JS conditionals (index, array position) |
 | Only PNG/JPG images | Convert other formats; use SVG components for vectors |
 | No background-image | Absolute-positioned `<Image>` behind content |

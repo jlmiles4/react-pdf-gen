@@ -6,7 +6,7 @@ Every component lives in `src/components/` and is re-exported from `src/componen
 
 ### `ContentPage`
 
-[`src/components/ContentPage.tsx`](../../src/components/ContentPage.tsx) — standard LETTER page with shared page styles, fixed `<Header>` and fixed `<Footer>`. The `wrap` prop is plumbed through to the underlying `<Page>` and defaults to `true`. The project convention is **one source file = one PDF page**, so pages typically pass `wrap={false}` to enforce that (overflow then clips rather than flowing onto a second physical page).
+[`src/components/ContentPage.tsx`](../../src/components/ContentPage.tsx) — standard LETTER page with shared page styles, fixed `<Header>` and fixed `<Footer>`. The `wrap` prop is plumbed through to the underlying `<Page>` and defaults to `false`, enforcing the **one source file = one PDF page** convention. Non-wrapping overflow can enlarge the physical page box; the build's `pdfinfo` guard rejects any page that is not uniform LETTER size.
 
 ```tsx
 <ContentPage sectionTitle="Introduction" wrap={false}>
@@ -18,7 +18,7 @@ Every component lives in `src/components/` and is re-exported from `src/componen
 |---|---|---|---|---|
 | `children` | `ReactNode` | yes | — | |
 | `sectionTitle` | `string` | no | — | Right-aligned text in the page header |
-| `wrap` | `boolean` | no | `true` | Pass `false` to enforce one-PDF-page-per-source-file |
+| `wrap` | `boolean` | no | `false` | Pass `true` only for a deliberate multi-page source component |
 
 ### `ChapterTitle`
 
@@ -193,12 +193,14 @@ Both live in [`src/components/ChecklistItem.tsx`](../../src/components/Checklist
 
 ### `MarkdownRenderer`
 
-[`src/components/MarkdownRenderer.tsx`](../../src/components/MarkdownRenderer.tsx) — parses a markdown string via `src/utils/markdownParser.ts` and renders each node as the matching project component (`SectionHeading` for `##`, `BulletList` for lists, `CodeBlock` for fenced blocks, `TipBox`/`WarningBox`/`InfoBox` for callouts). Inline `**bold**` and `` `code` `` runs are supported inside headings, paragraphs, list items, and callout bodies. Used by [`src/pages/14-markdown-automation/01-markdown-automation.tsx`](../../src/pages/14-markdown-automation/01-markdown-automation.tsx) to load `content/chapters/12-markdown-demo.md` directly into a page. See [markdown-content guide](../guides/markdown-content.md) for full syntax.
+[`src/components/MarkdownRenderer.tsx`](../../src/components/MarkdownRenderer.tsx) — parses a markdown string via `src/utils/markdownParser.ts` and renders each node as the matching project component (`SectionHeading` for `##`, `BulletList` for lists, `CodeBlock` for fenced blocks, `TipBox`/`WarningBox`/`InfoBox` for callouts). Inline `**bold**` and `` `code` `` runs are supported inside headings, paragraphs, list items, and callout bodies. The two pages in `src/pages/14-markdown-automation/` split `content/chapters/12-markdown-demo.md` at its authored page-break marker and render one half each. See [markdown-content guide](../guides/markdown-content.md) for full syntax.
 
 ```tsx
 import { readFileSync } from 'fs';
-const body = readFileSync('content/chapters/12-markdown-demo.md', 'utf8');
-<MarkdownRenderer content={body} />
+const source = readFileSync('content/chapters/12-markdown-demo.md', 'utf8');
+const body = source.replace(/^---[\s\S]*?---/, '').trim();
+const [partOne, partTwo] = body.split('\n<!-- page-break -->\n');
+<MarkdownRenderer content={partOne.trim()} /> // second page uses partTwo
 ```
 
 | Prop | Type | Required |

@@ -14,7 +14,7 @@ const Page: React.FC = () => (
     </InfoBox>
 
     <TipBox label="Token Budget Template">
-      For each AI edit session, aim for this budget: theme (1,650) + components (350) + target page (450) + instructions (200) = 2,650 tokens. That leaves the AI 98% of its context window for reasoning and generating output.
+      For each AI edit session, aim for this budget: theme (1,650) + components (350) + target page (450) + instructions (200) = 2,650 tokens. In a 128K context window, that leaves about 98% available for reasoning and output.
     </TipBox>
 
     <SectionHeading>Measure Your Own Files</SectionHeading>
@@ -26,7 +26,7 @@ find src -name '*.tsx' -exec wc -c {} \\; \\
   | awk '{ printf "%6d tokens  %s\\n", $1/4, $2 }' \\
   | sort -rn | head -20`}</CodeBlock>
     <Text style={styles.body}>
-      Anything over 1,500 tokens is a split candidate. Then sum the files an AI actually needs for one edit (theme + components + target page + instructions). If that total stays under 4,000, you're inside the high-attention zone of every modern model – leaving 95%+ of the context window for reasoning and generation.
+      Anything over 1,500 tokens is a split candidate. Then sum the files an AI actually needs for one edit (theme + components + target page + instructions). A total under 4,000 is compact even for a 32K model and uses just over 3% of a 128K context window.
     </Text>
   </ContentPage>
 );

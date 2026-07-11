@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
 
 ## Font Weight Fallback Behavior
 
-If you request a weight that is not registered, react-pdf picks the closest available weight. For example, if you register only `normal` (400) and `bold` (700), and your style requests `fontWeight: 'semibold'` (600), it will fall back to one of the registered weights.
+If you request a weight that is not registered, react-pdf follows the browser/CSS fallback algorithm. For example, with only `normal` (400) and `bold` (700), a request for 500 resolves to 400 and a request for 600 resolves to 700.
 
 This can produce unexpected results. Register every weight you plan to use to avoid ambiguity.
 
@@ -167,8 +167,8 @@ This can produce unexpected results. Register every weight you plan to use to av
 // If only these two are registered:
 //   400 (normal) and 700 (bold)
 //
-// fontWeight: 500 → falls back (may pick 400 or 700)
-// fontWeight: 600 → falls back (may pick 400 or 700)
+// fontWeight: 500 → falls back to 400
+// fontWeight: 600 → falls back to 700
 //
 // To avoid surprises, register 500 and 600 explicitly.
 ```
@@ -303,4 +303,4 @@ Font.registerHyphenationCallback((word) => [word]);
 
 6. **Use two font families maximum.** One for body text, one for headings. A monospace font for code blocks is optional but common. More than that creates visual noise.
 
-7. **Never assume a font weight exists.** If you reference `fontWeight: 'semibold'` but only registered `normal` and `bold`, the fallback behavior is unpredictable. Be explicit about what you register and what you use.
+7. **Register the weights you intend to render.** Fallback is deterministic, but it can still change hierarchy — with only `normal` and `bold`, `semibold` resolves to bold. Be explicit about what you register and use.

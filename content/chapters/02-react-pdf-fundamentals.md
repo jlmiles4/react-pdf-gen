@@ -199,20 +199,23 @@ For ebooks and reports, US Letter (612x792) and A4 (595x842) cover 95% of use ca
 
 ## Font Registration
 
-react-pdf ships with no fonts. If you don't register a font, it uses a built-in fallback that looks fine for prototyping but wrong for production.
+react-pdf ships with the standard Courier, Helvetica, and Times families. Register any custom family, such as Inter, before using it in a style.
 
 ### Basic registration
 
 ```tsx
 import { Font } from "@react-pdf/renderer";
+import path from "path";
+
+const FONTS_DIR = path.resolve(__dirname, "../fonts");
 
 Font.register({
   family: "Inter",
   fonts: [
-    { src: "/fonts/Inter-Regular.ttf", fontWeight: 400 },
-    { src: "/fonts/Inter-Medium.ttf", fontWeight: 500 },
-    { src: "/fonts/Inter-SemiBold.ttf", fontWeight: 600 },
-    { src: "/fonts/Inter-Bold.ttf", fontWeight: 700 },
+    { src: path.join(FONTS_DIR, "Inter-Regular.ttf"), fontWeight: 400 },
+    { src: path.join(FONTS_DIR, "Inter-Medium.ttf"), fontWeight: 500 },
+    { src: path.join(FONTS_DIR, "Inter-SemiBold.ttf"), fontWeight: 600 },
+    { src: path.join(FONTS_DIR, "Inter-Bold.ttf"), fontWeight: 700 },
   ],
 });
 ```
@@ -237,7 +240,7 @@ Font.register({
 
 - **Remote URLs work.** You can point `src` at a URL instead of a local file path. The font will be fetched at render time. For production, use local files – network requests add latency and can fail.
 
-- **Register fonts once.** Put all `Font.register()` calls in a single file (e.g., `src/fonts.ts`) and import it early. Registering the same family twice causes undefined behavior.
+- **Register fonts once at module scope.** Put `Font.register()` calls in a single file (for example, `src/fonts.ts`) and import it before rendering. Multiple sources may share a family, but registration should not run repeatedly inside component renders.
 
 ### Disabling hyphenation
 
@@ -462,11 +465,11 @@ When content overflows a single page, react-pdf handles page breaks automaticall
 
 ### wrap
 
-By default, `Page` components wrap their content to additional pages. Set `wrap={false}` to prevent wrapping (content will be clipped):
+By default, `Page` components wrap their content to additional pages. Set `wrap={false}` to prevent that flow. Non-wrapping overflow can enlarge the physical page box, so keep the content within the target dimensions or validate the result with `pdfinfo`:
 
 ```tsx
 <Page size="LETTER" wrap={false}>
-  {/* Content will NOT overflow to a new page */}
+  {/* Content will not flow to a new page */}
 </Page>
 ```
 

@@ -62,7 +62,6 @@ The concrete values for every token in [`src/styles/theme.ts`](../../src/styles/
 | `info` | `#2E6BB5` |
 | `infoLight` | `#EDF1F8` |
 | `white` | `#FFFFFF` |
-| `black` | `#0B1426` |
 
 ## Typography
 
@@ -108,10 +107,11 @@ Multipliers for text outside the typography presets (e.g. local `StyleSheet` ent
 
 ## Spacing
 
-4pt grid, with sub-grid micros for fine adjustment.
+4pt grid, with an explicit zero override and sub-grid micros for fine adjustment.
 
 | Token | Value |
 |---|---|
+| `none` | 0 |
 | `micro` | 1 |
 | `xxs` | 2 |
 | `xs` | 4 |

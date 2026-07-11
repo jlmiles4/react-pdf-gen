@@ -21,13 +21,13 @@ The `MarkdownRenderer` component parses your Markdown and maps it to the project
 ```tsx
 import { MarkdownRenderer } from '../components';
 import fs from 'fs';
-
 const content = fs.readFileSync('content/chapters/12-markdown-demo.md', 'utf-8');
 const body = content.replace(/^---[\s\S]*?---/, '').trim();
-
-const Page = () => (
-  <ContentPage sectionTitle="Automation">
-    <MarkdownRenderer content={body} />
+const pages = body.split('\n<!-- page-break -->\n');
+if (pages.length !== 2) throw new Error('Expected one page-break marker');
+const page = (index: 0 | 1) => (
+  <ContentPage sectionTitle="Automation" wrap={false}>
+    <MarkdownRenderer content={pages[index].trim()} />
   </ContentPage>
 );
 ```

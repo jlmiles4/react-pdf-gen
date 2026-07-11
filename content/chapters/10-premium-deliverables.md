@@ -442,19 +442,19 @@ Four layouts you'll reach for repeatedly. All examples use design tokens from th
 **Two-Column Layout:**
 ```tsx
 <View style={{ flexDirection: 'row', gap: spacing.lg }}>
-  <View style={{ width: '50%' }}><Text style={styles.body}>Left</Text></View>
-  <View style={{ width: '50%' }}><Text style={styles.body}>Right</Text></View>
+  <View style={{ flex: 1 }}><Text style={styles.body}>Left</Text></View>
+  <View style={{ flex: 1 }}><Text style={styles.body}>Right</Text></View>
 </View>
 ```
 
 **Sidebar + Content:**
 ```tsx
 <View style={{ flexDirection: 'row', gap: spacing.lg }}>
-  <View style={{ width: '30%', backgroundColor: colors.neutral[50],
+  <View style={{ width: '28%', backgroundColor: colors.neutral[50],
     padding: spacing.md, borderRadius: borders.radius.md }}>
     <Text style={styles.h4}>Sidebar</Text>
   </View>
-  <View style={{ width: '70%' }}><Text style={styles.body}>Main</Text></View>
+  <View style={{ flex: 1 }}><Text style={styles.body}>Main</Text></View>
 </View>
 ```
 

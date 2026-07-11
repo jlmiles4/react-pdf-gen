@@ -13,7 +13,7 @@ const Page: React.FC = () => (
         ['Neutrals + semantic', '5-10 + 4 pairs', 'Gray scale + success/warning/error/info'],
         ['Typography', '7-9 sizes', '8.5pt caption to 36pt display'],
         ['Spacing', '7-9 values', '1pt (micro) to 48pt (xxxl)'],
-        ['Borders', '3 widths + 3 radii', '0.5pt thin to 10pt lg radius'],
+        ['Borders', '3 widths + 4 radii', '0.5pt thin to 10pt lg radius'],
       ]}
       columnWidths={['35%', '20%', '45%']}
     />

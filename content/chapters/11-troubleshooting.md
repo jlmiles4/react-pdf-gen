@@ -4,12 +4,12 @@ The errors you'll hit, why they happen, and how to fix them fast. This chapter c
 
 ## 1. "Text string must be rendered inside a `<Text>` component"
 
-The most common react-pdf crash. Raw strings placed directly inside a `View` (or any non-Text component) cause the renderer to fail.
+The most common react-pdf content warning. Raw strings placed directly inside a `View` (or any non-Text component) are omitted from the PDF.
 
 ```tsx
 // Broken — raw string inside View
 <View>
-  This will crash
+  This triggers a warning and disappears
 </View>
 
 // Fixed — wrap in Text
@@ -22,13 +22,14 @@ Every piece of visible text must be wrapped in a `<Text>` component. This includ
 
 ## 2. Fonts Not Loading
 
-**Symptom:** Text renders in Helvetica instead of your registered font, or shows blank where custom fonts should appear.
+**Symptom:** The build reports an unregistered family or unreadable font file, or text uses a different weight than expected.
 
-Font issues are silent — react-pdf falls back to Helvetica without warning. Common causes:
+Font failures and fallbacks have different symptoms. Common causes:
 
-- **Wrong file path**: Use a resolved base directory, not relative paths from components
-- **Unregistered weight**: Using `fontWeight: 600` but only registering 400 and 700
-- **Mismatched fontFamily name**: The `fontFamily` in your style must exactly match the `family` in `Font.register()`
+- **Wrong file path**: The font cannot be read, so the build fails
+- **Unregistered weight**: React-pdf selects the nearest registered weight in the same family
+- **Mismatched fontFamily name**: The build fails because the name must match `Font.register()`
+- **Omitted fontFamily**: Text uses the built-in Helvetica default
 
 ```tsx
 // Check 1: Is the path correct? Use a resolved base dir.
@@ -38,9 +39,9 @@ Font.register({ family: 'Inter', fonts: [
   { src: path.join(FONTS_DIR, 'Inter-Bold.ttf'), fontWeight: 700 },
 ]});
 
-// Check 2: Does fontWeight match a registered weight?
-// This falls back to Helvetica — weight 600 isn't registered:
-<Text style={{ fontFamily: 'Inter', fontWeight: 600 }}>Oops</Text>
+// Check 2: Did you register the weight you intend to render?
+// With only 400 and 700 registered, this selects the nearest source:
+<Text style={{ fontFamily: 'Inter', fontWeight: 600 }}>Nearest weight</Text>
 ```
 
 ## 3. Content Overflows the Page
@@ -114,7 +115,7 @@ react-pdf supports a subset of CSS. Property names must be camelCase. Common mis
 | `background: linear-gradient(...)` | Not supported — use `Svg` + `Defs` |
 | `display: grid` | Not supported — use flexbox |
 | `overflow: hidden` | Not supported on Text |
-| `font-weight: bold` | `fontWeight: 700` (numeric only) |
+| `font-weight: bold` | `fontWeight: 700` or `fontWeight: 'bold'` |
 
 ## 7. Flexbox Layout Surprises
 
@@ -150,7 +151,7 @@ Other gotchas:
 NODE_OPTIONS=--max-old-space-size=4096 pnpm build
 
 # Or add to package.json scripts:
-"build": "NODE_OPTIONS=--max-old-space-size=4096 tsx src/build.tsx"
+"build": "pnpm sync && NODE_OPTIONS=--max-old-space-size=4096 tsx src/build.tsx"
 ```
 
 Prevention:

@@ -6,7 +6,7 @@ Common build errors and rendering surprises when editing the source, with the sm
 
 ### Console warning: `Invalid '...' string child outside <Text> component`
 
-A raw string ended up inside a `<View>` (or any non-`<Text>` element). The pinned `@react-pdf/renderer` 4.3.2 doesn't throw for this — it logs the warning above and omits the string from the output, so the symptom is text silently disappearing from the rendered page. Wrap it:
+A raw string ended up inside a `<View>` (or any non-`<Text>` element). The renderer logs the warning above and omits the string from the output, so the symptom is text silently disappearing from the rendered page. Wrap it:
 
 ```tsx
 // Wrong
@@ -21,13 +21,14 @@ This also fires for stray whitespace inside conditional fragments like `{cond &&
 
 `ReactPDF.render` walks the tree synchronously and lays out every page in memory. If the PDF grows past ~50 image-heavy pages, set `NODE_OPTIONS=--max-old-space-size=4096 pnpm build`.
 
-### Font silently falls back to Helvetica
+### Font registration, loading, and weight fallback
 
-Three causes, in order of likelihood:
+The symptom identifies the cause:
 
-1. `src/fonts.ts` was not imported before render. `src/build.tsx` imports it as a side-effect on its first line — keep that import first.
-2. The `fontWeight` you used is not registered. Inter is registered for 400 / 500 / 600 / 700 only. Setting `fontWeight: 800` falls back without warning.
-3. The path in `Font.register` doesn't resolve. Check that the `.ttf` file exists in `fonts/`.
+1. An omitted `fontFamily` uses react-pdf's built-in Helvetica default.
+2. An unknown or mismatched `fontFamily` throws a "Font family not registered" build error. Keep the `src/fonts.ts` side-effect import before rendering.
+3. A path in `Font.register` that does not resolve fails while loading the font. Check that the `.ttf` file exists in `fonts/`.
+4. An unavailable `fontWeight` silently resolves to the nearest registered weight in the same family. Inter registers 400 / 500 / 600 / 700; use the project's weight tokens so the requested result is intentional.
 
 To verify: open a content page in `output/pages/page-NN.png` and look for Helvetica's narrow letterforms versus Inter's wider ones.
 
@@ -95,4 +96,4 @@ Run `pnpm build` first, or use `pnpm pipeline` to chain both.
 
 ### Page count changed unexpectedly after a one-line edit
 
-Adding a line of body text to a page near the bottom can push content over a page break and ripple downstream. With `<ContentPage wrap={false}>` (the project default), overflow clips silently — the symptom is missing content at the bottom of the page rather than an extra page appearing. If the content legitimately needs more room, split it into a new continuation file in the same chapter folder rather than fighting the layout. After non-trivial edits, confirm the page count with `pdfinfo output/ebook.pdf` and update any docs that cite it (`README.md`, `docs/README.md`, `TASK.md`).
+Adding a line of body text to a page near the bottom can exceed the intended LETTER box. With `<ContentPage wrap={false}>` (the project default), react-pdf can enlarge that physical page rather than add another one; the build's `pdfinfo` guard then fails and identifies the offending page. Split legitimate overflow into a continuation file instead of fighting the layout. After non-trivial edits, confirm the page count with `pdfinfo output/ebook.pdf` and update any docs that cite it (`README.md`, `docs/README.md`, `TASK.md`).

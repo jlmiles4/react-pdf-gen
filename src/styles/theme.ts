@@ -104,6 +104,7 @@ export const typography = {
 } as const;
 
 export const spacing = {
+  none: 0,
   micro: 1,
   xxs: 2,
   xs: 4,

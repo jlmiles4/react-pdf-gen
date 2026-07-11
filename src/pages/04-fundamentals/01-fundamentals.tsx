@@ -34,7 +34,7 @@ const MyDoc = () => (
       ]} />
 
       <WarningBox label="Common Mistake">
-        Putting a raw string outside of a Text component crashes the renderer. Every piece of text, even a space, needs a Text wrapper.
+        A raw string outside of a Text component triggers a console warning and is omitted from the PDF. Wrap every visible string in Text so content is not silently lost.
       </WarningBox>
   </ContentPage>
 );

@@ -432,6 +432,24 @@ Supported transform functions: `rotate()`, `scale()`, `scaleX()`, `scaleY()`, `t
 
 ---
 
+## Media Queries
+
+React-pdf v4 supports media queries inside style objects. Queries can target minimum or maximum page width and height, plus orientation:
+
+```tsx
+const styles = StyleSheet.create({
+  section: {
+    width: 200,
+    '@media max-width: 400': { width: '100%' },
+    '@media orientation: landscape': { width: 400 },
+  },
+});
+```
+
+Use JavaScript conditionals when the document's content must change; use media queries when only styles change with page geometry.
+
+---
+
 ## Debug Mode
 
 Set `debug={true}` on any component (or add `debug: true` to a style) to render colored borders showing the element's layout box. This is invaluable for diagnosing flexbox issues.
@@ -459,7 +477,6 @@ Every element with debug enabled renders with a semi-transparent colored backgro
 | CSS animations | Not supported | N/A – PDFs are static |
 | CSS variables (`var()`) | Not supported | Use JS constants |
 | `calc()` | Not supported | Compute values in JS |
-| Media queries | Not supported | Use JS logic based on page size |
 | Pseudo-selectors (`:hover`, `::before`) | Not supported | N/A |
 | `background-image` | Not supported | Use `<Image>` or SVG behind content |
 | Multi-value shorthand (`margin: '10 20'`) | Not supported | Use `marginVertical` / `marginHorizontal` |

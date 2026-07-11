@@ -162,7 +162,7 @@ Float is not supported. Use side-by-side row:
 - `display: inline` / `block` / `table` — everything is flex
 - `box-shadow` / `text-shadow` — use borders (see above)
 - CSS animations / transitions — PDF is static
-- `calc()`, CSS variables, media queries — use JS calculations
+- `calc()` and CSS variables — use JS calculations (`@media` width/height/orientation queries are supported)
 - Pseudo-selectors (`:hover`, `::before`) — not applicable to PDF
 
 ## Page Break Control

@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
           ['margin, padding (all sides)', 'display: inline / block / table'],
           ['position: relative / absolute', 'box-shadow, text-shadow'],
           ['border (width, color, style, radius)', 'CSS animations / transitions'],
-          ['backgroundColor, opacity, overflow', 'calc(), CSS variables, media queries'],
+          ['backgroundColor, opacity, @media queries', 'calc(), CSS variables, background-image'],
         ]}
         columnWidths={['50%', '50%']}
       />

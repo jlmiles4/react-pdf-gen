@@ -2,11 +2,11 @@
 
 You've built the page. It compiles. It renders. You have a `.pdf` file. But how do you know it actually looks right?
 
-If you upload that PDF directly to the AI, you'll get a mediocre review at best and a hallucinated one at worst. AI vision models don't understand PDF files -- they understand pixels. This chapter shows you how to close that gap: convert your pages to PNG, let the AI see what the reader sees, and build a feedback loop that catches problems before your client does.
+AI tools preprocess uploaded PDFs in different ways, often combining extracted text with rasterized page images. That is useful for understanding content, but it gives you little control over visual-review resolution. This chapter shows how to export consistent PNGs, let the AI review the rendered page, and build a feedback loop that catches problems before your client does.
 
-## Why AI Can't Effectively Analyze PDF Files
+## Why Controlled Rasterization Helps Visual QA
 
-### PDF Is Not a Visual Format
+### PDF Is a Page Description Format
 
 A PDF file is a complex binary format. It contains:
 
@@ -18,16 +18,16 @@ A PDF file is a complex binary format. It contains:
 
 When you open a PDF, your viewer application interprets all of these instructions and rasterizes them into pixels on your screen. The PDF file itself is not pixels – it's instructions for creating pixels.
 
-### AI Vision Models Are Trained on Raster Images
+### Visual Layout Reaches Models as Raster Images
 
-GPT-4o, Claude, Gemini – every multimodal AI model processes visual input as raster images (grids of pixels). Their training data consists of photographs, screenshots, diagrams, charts, and other pixel-based images.
+Multimodal models analyze page appearance through raster images, even when the surrounding product also extracts the PDF's text layer.
 
-When you upload a PDF to a chat interface, one of two things happens:
+When you upload a PDF to a chat interface, preprocessing may combine several steps:
 
-1. **The interface renders it first.** The chat application converts the PDF to an image and sends that image to the model. The quality of this conversion varies – it might be low-resolution, it might only send the first page, it might crop or resize.
-2. **The model receives raw data.** Some implementations send the PDF bytes or extracted text to the model. The model can read the text content but cannot "see" the visual layout.
+1. **Page rendering.** The application converts pages to images for visual analysis. Resolution, cropping, and resizing vary by product.
+2. **Text extraction.** The application may also send extracted text, which improves content understanding but does not replace layout review.
 
-Neither is reliable for design review. You need to control the conversion yourself.
+For consistent design review, control the conversion settings yourself.
 
 ### AI Can't "See" PDFs from Source Code
 

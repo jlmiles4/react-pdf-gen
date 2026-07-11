@@ -24,7 +24,7 @@ The full source of the ebook you purchased is in the `src/` directory of this re
 - `src/styles/theme.ts` — Complete design token system
 - `src/styles/shared.ts` — Shared StyleSheet with 30 styles
 - `src/components/` — 18 reusable components
-- `src/pages/` — 70 page files in 15 folders (cover, TOC, 12 chapters, conclusion)
+- `src/pages/` — 71 page files in 15 folders (cover, TOC, 12 chapters, conclusion)
 - `src/fonts.ts` — Font registration pattern
 - `src/build.tsx` — Build script
 - `STYLE.md` — Design system documentation

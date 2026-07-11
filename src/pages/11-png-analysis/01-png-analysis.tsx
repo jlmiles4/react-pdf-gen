@@ -39,10 +39,7 @@ const Page: React.FC = () => (
   <ContentPage sectionTitle="AI Visual Analysis" wrap={false}>
       <SectionHeading>Why PNGs Beat Raw PDFs for AI Review</SectionHeading>
       <Text style={styles.body}>
-        You've built the page. It compiles. It renders. But how do you know it actually looks right? Modern AI tools accept PDFs by rasterizing each page to an image first – and that conversion's quality varies. Vision models understand pixels, not PDF drawing commands.
-      </Text>
-      <Text style={styles.body}>
-        So control the conversion yourself: export each page to PNG at the DPI you choose, then show those images to the AI. Now it sees exactly what your reader sees.
+        AI tools preprocess PDFs differently, often combining extracted text with page images. For visual QA, control that conversion: export PNGs at a chosen DPI so the model reviews the same rendered pixels your reader sees.
       </Text>
 
       <SectionHeading>Visual QA Workflow</SectionHeading>
