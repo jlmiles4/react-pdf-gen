@@ -90,7 +90,7 @@ All use `wrap={false}`. Body text is rendered as a single `<Text>` with `styles.
 
 ### `CodeBlock`
 
-[`src/components/CodeBlock.tsx`](../../src/components/CodeBlock.tsx) — dark-navy block, Courier font, optional gold language label, syntax highlighting via `src/utils/syntaxHighlight.ts`. `wrap={false}`. Keep each block within the vertical space left by the surrounding page content; a dedicated code-heavy page can fit substantially more than a block placed below several sections.
+[`src/components/CodeBlock.tsx`](../../src/components/CodeBlock.tsx) — dark-navy block, Courier font, optional gold language label, syntax highlighting via `src/utils/syntaxHighlight.ts` (one language-agnostic JS/TS tokenizer; the `language` label is cosmetic — see [syntax-highlighting](syntax-highlighting.md)). `wrap={false}`. Keep each block within the vertical space left by the surrounding page content; a dedicated code-heavy page can fit substantially more than a block placed below several sections.
 
 ```tsx
 <CodeBlock language="tsx">{`const x = 1;`}</CodeBlock>

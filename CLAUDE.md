@@ -2,7 +2,7 @@
 
 ## Commands
 - **Build PDF:** `pnpm build` (syncs registry, then `tsx src/build.tsx` does a two-pass render: render → `pdftotext` extracts chapter page positions to `output/toc-positions.json` → render again so the TOC reflects them → `pdfinfo` validates uniform LETTER pages. Outputs `output/react-pdf-ai-builders-guide.pdf`; elapsed time varies by machine.)
-- **Sync Registry:** `pnpm sync` (regenerates `src/registry.ts` from `src/pages/`)
+- **Sync Registry:** `pnpm sync` (regenerates `src/registry.ts` from `src/manifest.ts` + `src/pages/`)
 - **Export PNGs:** `pnpm export` (runs `scripts/export-pages.sh`, outputs to `output/pages/`)
 - **Full pipeline:** `pnpm pipeline` (build + export)
 - **Typecheck:** `pnpm typecheck` (sync, then `tsc --noEmit`)
@@ -54,7 +54,7 @@
 See `docs/guides/add-a-page.md` for full skeletons.
 
 ## Image Viewing Limit
-Model APIs hard-cap images per conversation (the Claude API fails at **100** with an `invalid_request_error`; other providers have similar caps). This project exports ~70 page PNGs — close to that limit — so batch-reading them will break the session.
+Model APIs hard-cap images per conversation (the Claude API fails at **100** with an `invalid_request_error`; other providers have similar caps). This project exports 71 page PNGs — close to that limit — so batch-reading them will break the session.
 
 - **Only open one PNG at a time.** Never batch-read all pages from `output/pages/`.
 - When verifying visual output, open only the specific page(s) you changed.
@@ -76,3 +76,5 @@ Model APIs hard-cap images per conversation (the Claude API fails at **100** wit
 - `STYLE.md` — Visual style guide with color palette, typography, spacing
 - `TASK.md` — Project roadmap and chapter status
 - `content/chapters/` — author Markdown drafts; **not** loaded by the build except `12-markdown-demo.md` (split on its `<!-- page-break -->` marker and rendered by `14-markdown-automation/01-…` and `03-supported-elements`). Editing the others does not change the PDF.
+- `templates/` — reader-facing starter pack (generalized prompts + `CLAUDE.md.template`); edit here when revising the shipped starter pack.
+- `prompts/` — internal authoring prompts; they describe an **older, pre-manifest architecture** (flat `pages/`, manual `Document.tsx` registration) — do **not** follow them when editing *this* repo. See `docs/architecture/overview.md#authoring-inputs-vs-build-inputs`.

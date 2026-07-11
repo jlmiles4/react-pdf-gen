@@ -28,10 +28,11 @@ pnpm dev         # watch inputs; sync + rebuild after each relevant change
   - [Add a page](guides/add-a-page.md) — step-by-step for adding a new chapter or content page
   - [Markdown content](guides/markdown-content.md) — `MarkdownRenderer`, supported syntax, when to reach for it
   - [Troubleshooting](guides/troubleshooting.md) — build errors, render surprises, the CodeBlock template-literal trap
-- Reference
+- [Reference](reference/README.md)
   - [Commands](reference/commands.md) — every `pnpm` script and what it does
   - [Components](reference/components.md) — props for every component in `src/components/`
   - [Theme tokens](reference/theme-tokens.md) — concrete color, typography, spacing, geometry values
+  - [Syntax highlighting](reference/syntax-highlighting.md) — how `<CodeBlock>` colors code (language-agnostic tokenizer)
 
 ## Repository layout
 
