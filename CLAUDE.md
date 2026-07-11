@@ -1,7 +1,7 @@
 # React-PDF Project — Claude Code Instructions
 
 ## Commands
-- **Build PDF:** `pnpm build` (syncs registry, then `tsx src/build.tsx` does a two-pass render: render → `pdftotext` extracts chapter page positions to `output/toc-positions.json` → render again so the TOC reflects them. Outputs `output/ebook.pdf`, ~10s.)
+- **Build PDF:** `pnpm build` (syncs registry, then `tsx src/build.tsx` does a two-pass render: render → `pdftotext` extracts chapter page positions to `output/toc-positions.json` → render again so the TOC reflects them → `pdfinfo` validates uniform LETTER pages. Outputs `output/ebook.pdf`, ~10s.)
 - **Sync Registry:** `pnpm sync` (regenerates `src/registry.ts` from `src/pages/`)
 - **Export PNGs:** `pnpm export` (runs `scripts/export-pages.sh`, outputs to `output/pages/`)
 - **Full pipeline:** `pnpm pipeline` (build + export)

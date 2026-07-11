@@ -14,7 +14,10 @@ import { AccentBar, CoverDecor } from '../../components';
 
 const s = StyleSheet.create({
   page: {
+    minHeight: page.height,
     backgroundColor: colors.primary[800],
+    fontFamily: fonts.body,
+    fontWeight: fontWeight.regular,
     justifyContent: 'center',
     paddingHorizontal: page.coverMargin.horizontal,
   },
@@ -75,7 +78,7 @@ const s = StyleSheet.create({
 });
 
 const Page01Cover: React.FC = () => (
-  <Page size="LETTER" style={s.page}>
+  <Page size="LETTER" style={s.page} wrap={false}>
     <View style={s.topBar} />
     <AccentBar size="xl" mb={spacing.xl} />
     <Text style={s.title}>

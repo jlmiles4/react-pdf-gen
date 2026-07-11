@@ -15,7 +15,10 @@ import { AccentBar, CoverDecor } from '../../components';
 
 const s = StyleSheet.create({
   page: {
+    minHeight: page.height,
     backgroundColor: colors.primary[800],
+    fontFamily: fonts.body,
+    fontWeight: fontWeight.regular,
     justifyContent: 'center',
     paddingHorizontal: page.coverMargin.horizontal,
   },
@@ -112,14 +115,14 @@ const takeaways = [
   'Structure your project for AI – one file per page, design tokens in one place, components that compose (Ch 3).',
   'Define your design language once – colors, typography, spacing, borders. The theme file enforces consistency so you don\'t have to (Ch 4).',
   'Optimize for token budgets – small, focused files mean small, focused prompts that keep AI in its high-attention zone (Ch 5).',
-  'Export to PNG, not PDF – AI vision models see pixels, not PostScript. The QA loop is generate, export, review, fix (Ch 9).',
+  'Export to PNG for visual QA – controlled rasterization shows AI the same rendered pixels readers see. The loop is generate, export, review, fix (Ch 9).',
   'Iterate past the first draft – premium output takes 2-3 passes. Use the recipes and checklists from Chapter 10 to close the gap.',
   'Use the troubleshooting playbook – most issues trace to three things: missing wrap, missing Text wrappers, or flexDirection defaulting to column (Ch 11).',
   'Automate your workflow – use Markdown for content and let the rendering pipeline handle the layout, so you focus on writing (Ch 12).',
 ];
 
 const Conclusion: React.FC = () => (
-  <Page size="LETTER" style={s.page}>
+  <Page size="LETTER" style={s.page} wrap={false}>
     <View style={s.topBar} />
     <AccentBar size="xl" mb={spacing.xl} />
     <Text style={s.heading}>

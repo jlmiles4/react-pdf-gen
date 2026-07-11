@@ -25,6 +25,7 @@ const GROUP_CONFIG: Record<string, { color: string }> = {
 
 const s = StyleSheet.create({
   page: {
+    minHeight: page.height,
     paddingTop: page.margin.top,
     paddingBottom: page.margin.bottom,
     paddingHorizontal: page.margin.left,
@@ -106,7 +107,7 @@ const s = StyleSheet.create({
 const Page02TOC: React.FC = () => {
   const positions = getTocPositions();
   return (
-    <Page size="LETTER" style={s.page}>
+    <Page size="LETTER" style={s.page} wrap={false}>
       <Text style={s.heading}>Contents</Text>
       <AccentBar size="md" />
       {MANIFEST.map((group) => {

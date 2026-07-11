@@ -26,9 +26,10 @@ pnpm build
        ReactPDF.render(<EbookDocument/>, 'output/ebook.pdf')   pass 1
        pdftotext -layout output/ebook.pdf  →  output/toc-positions.json
        ReactPDF.render(<EbookDocument/>, 'output/ebook.pdf')   pass 2 (TOC numbers filled)
+       pdfinfo output/ebook.pdf              validates page count + LETTER sizes
 
 scripts/export-pages.sh
-  └─ pdftoppm -png -r 200 output/ebook.pdf output/pages/page
+  └─ pdfinfo + pdftoppm -png -r 200 output/ebook.pdf output/pages/page
 ```
 
 See [build pipeline](../build/pipeline.md) for the two-pass mechanics and [registry-sync](../build/registry-sync.md) for how the manifest and the filesystem combine into `registry.ts`.
@@ -61,7 +62,7 @@ Four folders look similar (mostly markdown, mostly unread by `build.tsx`) but ex
 
 | Folder | Audience | Contents | Read by the build? |
 |---|---|---|---|
-| `content/chapters/` | The author drafting prose | One markdown file per chapter, in narrative form | Mostly no — only `12-markdown-demo.md` is loaded (by `src/pages/14-markdown-automation/01-markdown-automation.tsx` via `MarkdownRenderer`). The other drafts are reference material the author worked from before re-typing into TSX. |
+| `content/chapters/` | The author drafting prose | One markdown file per chapter, in narrative form | Mostly no — only `12-markdown-demo.md` is loaded. Its marker-delimited halves are rendered by `14-markdown-automation/01-markdown-automation.tsx` and `03-supported-elements.tsx` via `MarkdownRenderer`. The other drafts are reference material the author worked from before re-typing into TSX. |
 | `reference/` | An AI agent helping the author | Long-form research notes (react-pdf API, AI patterns, design) | No |
 | `prompts/` | An AI scaffolding a *new*, unrelated react-pdf project | Generic starter prompts (flat `pages/Page01-Cover.tsx` files, manual registration in `Document.tsx`) predating this repo's manifest + generated-`registry.ts` architecture — not updated to match it | No |
 | `templates/` | A reader of the published ebook | Generalized prompts (`YourFont`, `[YOUR-PROJECT]`) plus a project-instructions template and a starter `README.md` | No |

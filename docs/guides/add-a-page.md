@@ -85,7 +85,8 @@ This does, in order:
 2. `tsx src/build.tsx` pass 1 renders the PDF.
 3. `pdftotext -layout` finds where each `CHAPTER NN` title page landed; positions are written to `output/toc-positions.json`.
 4. Pass 2 re-renders so the TOC reflects the new page positions.
-5. `pnpm export` rasterizes to `output/pages/page-NN.png` at 200 DPI.
+5. `pdfinfo` verifies that every physical page is uniform LETTER size.
+6. `pnpm export` rasterizes to `output/pages/page-NN.png` at 200 DPI.
 
 You don't edit `Document.tsx` or `registry.ts` — both follow from the manifest plus the page files.
 
@@ -99,7 +100,7 @@ Open the relevant PNG(s) in `output/pages/`. Check for:
 - Footer page number is consistent with the TOC entry
 - Header section title matches the `sectionTitle` prop on `ContentPage`
 - Chapter title page shows the correct page number bottom-left
-- Content fits within one physical page when `wrap={false}` is set — if it doesn't, react-pdf clips silently; shorten the content or split it into a continuation file
+- Content fits within one physical page when `wrap={false}` is set — overflow can enlarge the page box, and the build's `pdfinfo` guard rejects non-LETTER output; shorten the content or split it into a continuation file
 
 If a section is breaking awkwardly, see [pagination](../build/pagination.md) — the usual fixes are `wrap={false}` on the offending block, `minPresenceAhead={40}`, or restructuring content density.
 
@@ -108,5 +109,5 @@ If a section is breaking awkwardly, see [pagination](../build/pagination.md) —
 - One source file = one PDF page. Set `wrap={false}` on `<ContentPage>` and split into a continuation file rather than letting one source file flow.
 - Import styles only from `../../styles/shared` and tokens only from `../../styles/theme`. Don't reach into `theme.ts` for raw values inside JSX — use the named token (`colors.accent[500]`, not `'#F0A000'`).
 - Reuse components from `src/components/`. If a visual pattern repeats, promote it to a component instead of duplicating local styles.
-- Pair every `fontFamily` with a `fontWeight` token (`fontWeight.regular`, `fontWeight.semibold`, `fontWeight.bold`) — never inline literals like `fontWeight: 700 as const`. The token set is the contract with `Font.register` in `src/fonts.ts`; an unregistered weight silently falls back to Helvetica.
+- Pair every `fontFamily` with a `fontWeight` token (`fontWeight.regular`, `fontWeight.semibold`, `fontWeight.bold`) — never inline literals like `fontWeight: 700 as const`. An unavailable weight resolves to the nearest registered weight in the same family, so tokens keep the rendered hierarchy intentional.
 - Use SVG icons from `src/components/Icons.tsx` sized via `iconSize.*` tokens, never emoji — Inter doesn't ship emoji glyphs and `pdftoppm` won't pull them from the system.

@@ -16,13 +16,14 @@ fs.writeFileSync(POSITIONS_FILE, ...);     // output/toc-positions.json
 await renderPdf();                         // pass 2 — TOC reads positions
 ```
 
-Order matters: `fonts.ts` must be imported before any `<Page>` renders, otherwise text falls back to Helvetica. The script:
+Order matters: `fonts.ts` must be imported before any `<Page>` renders; otherwise the explicitly styled Inter family is unregistered and the build fails. The script:
 
 1. Creates `output/` if it doesn't exist.
 2. Pass 1: renders via `ReactPDF.render(...)`. The TOC reserves its page-number column but renders empty strings on first build (or stale positions from a prior run).
 3. Spawns `pdftotext -layout output/ebook.pdf -`, splits on form-feed (`\f`) for one block per page, and matches `^CHAPTER\s+(\d{1,2})$` line-by-line. The first page each chapter number appears on is recorded into `output/toc-positions.json`.
 4. Pass 2: re-renders. `src/pages/02-toc/01-toc.tsx` reads `toc-positions.json` via `src/tocPositions.ts` and fills the page-number column.
-5. Logs file size and total elapsed ms (~10s for both passes on a current laptop). Exits 1 on failure.
+5. Runs `pdfinfo` across every rendered page and rejects any page whose dimensions differ from 612 × 792pt LETTER. This catches non-wrapping content that silently grows a page box.
+6. Logs file size and total elapsed ms (~10s for both passes on a current laptop). Exits 1 on failure.
 
 The TOC layout is identical between passes (column reserved either way), so positions extracted from pass 1 are still correct for pass 2 — no convergence iteration needed.
 
@@ -41,7 +42,7 @@ pdftoppm -png -r 200 output/ebook.pdf output/pages/page
 Defaults:
 - DPI: `200` (override via `./scripts/export-pages.sh 150` for faster/smaller output, or `300` for print-quality verification).
 - Output: `output/pages/page-NN.png`, one file per PDF page, zero-padded numbering.
-- The script clears existing `page-*.png` files before re-exporting and verifies `pdftoppm` is on PATH; if it's missing it prints platform-specific `poppler-utils` install instructions and exits.
+- The script clears existing `page-*.png` files before re-exporting, requires both `pdftoppm` and `pdfinfo`, and verifies that the PNG count matches the PDF page count. Missing tools, zero output, or a count mismatch make the export fail.
 
 ## Stage 3: combined (`pnpm pipeline`)
 
@@ -53,7 +54,7 @@ Use this whenever you want to verify visual output. PDF first; if the build fail
 
 ## Dev watch (`pnpm dev`)
 
-`tsx watch src/build.tsx` re-runs the build on every file change under `src/`. There is no PDF live-reload — open the regenerated `output/ebook.pdf` in a viewer that reloads on file change (most macOS Preview-style viewers do not; Zathura, Skim, and `xdg-open` chained to a PDF viewer with reload work).
+`tsx watch` runs `scripts/dev.ts` for relevant source, manifest, page-tree, sync-script, and authored-Markdown changes. Every restart re-syncs the registry and runs the two-pass build in the watched process, so added or renamed pages are picked up without a manual sync. There is no PDF live-reload — open the regenerated `output/ebook.pdf` in a viewer that reloads on file change (most macOS Preview-style viewers do not; Zathura and Skim do).
 
 ## Performance notes
 

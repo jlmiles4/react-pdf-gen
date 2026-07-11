@@ -18,13 +18,13 @@ PDF generated: /abs/path/output/ebook.pdf
 Size: 0.27 MB | Time: 10340ms
 ```
 
-Exits 1 on render failure. Creates `output/` if it doesn't exist. Does not clean previous PNGs. Requires `pdftotext` (poppler-utils) on PATH for pass 1's extraction.
+Exits 1 on render failure, an incomplete TOC map, or any page whose `pdfinfo` dimensions differ from uniform LETTER size. Creates `output/` if it doesn't exist and does not clean previous PNGs. Requires both `pdftotext` and `pdfinfo` (from poppler-utils) on PATH.
 
 ## `pnpm sync`
 
 Runs `tsx scripts/sync-project.ts`. Reads `src/manifest.ts` (chapter structure) plus the `src/pages/` tree, then writes `src/registry.ts` (auto-generated, gitignored). The registry exports `allPages` (the ordered page array `Document.tsx` renders, with chrome at the ends and manifest chapters in between) — its only export. The TOC page reads `MANIFEST` directly.
 
-You don't normally run sync directly — `pnpm build` runs it first, and `pnpm dev` runs it once at startup.
+You don't normally run sync directly — `pnpm build` runs it first, and `pnpm dev` runs it before every watched rebuild.
 
 ## `pnpm export`
 
@@ -33,7 +33,8 @@ Runs `bash scripts/export-pages.sh`. Calls `pdftoppm -png -r 200 output/ebook.pd
 - Default DPI: `200` (matches Chapter 9's recommendation for AI vision analysis). Override with a positional arg: `./scripts/export-pages.sh 150` (faster) or `./scripts/export-pages.sh 300` (print-quality).
 - Clears existing `page-*.png` before exporting.
 - Errors out if `output/ebook.pdf` doesn't exist (run `pnpm build` first).
-- If `pdftoppm` is not on PATH, prints platform-specific `poppler-utils` install instructions (apt / brew / dnf) and exits 1 — the script never runs an install itself.
+- Requires `pdftoppm` and `pdfinfo` on PATH. If either is missing, prints platform-specific `poppler-utils` install instructions (apt / brew / dnf) and exits 1 — the script never runs an install itself.
+- Fails if rasterization produces zero PNGs or if the PNG count differs from the PDF page count reported by `pdfinfo`.
 
 ## `pnpm pipeline`
 
@@ -41,9 +42,7 @@ Runs `bash scripts/export-pages.sh`. Calls `pdftoppm -png -r 200 output/ebook.pd
 
 ## `pnpm dev`
 
-Runs `pnpm sync && tsx watch src/build.tsx`. Re-syncs the registry once, then watches `src/` and re-runs the two-pass build on every change. There is no live reload for the PDF viewer — open `output/ebook.pdf` in a viewer that auto-reloads on file change (Skim, Zathura), or re-open after each rebuild.
-
-Note: dev watch re-runs `tsx src/build.tsx` only — if you add a new page file or edit `src/manifest.ts`, the registry won't pick it up until the next explicit `pnpm sync` (or restart of dev watch).
+Runs `tsx watch` on `scripts/dev.ts` with the source tree and authored Markdown file included. Each relevant change starts a fresh watched process, re-syncs `src/registry.ts`, then runs the two-pass build directly. New, renamed, or deleted page files and manifest changes are therefore picked up without restarting watch mode. There is no live reload for the PDF viewer — open `output/ebook.pdf` in a viewer that auto-reloads on file change (Skim, Zathura), or re-open after each rebuild.
 
 ## `pnpm typecheck`
 

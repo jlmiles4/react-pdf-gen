@@ -15,10 +15,11 @@ import React from 'react';
 import ReactPDF from '@react-pdf/renderer';
 import path from 'path';
 import fs from 'fs';
-import { execSync, execFileSync } from 'child_process';
+import { execFileSync } from 'child_process';
 import './fonts';
 import EbookDocument from './Document';
 import { MANIFEST } from './manifest';
+import { allPages } from './registry';
 
 const OUTPUT_DIR = path.resolve(__dirname, '../output');
 const OUTPUT_FILE = path.join(OUTPUT_DIR, 'ebook.pdf');
@@ -32,13 +33,20 @@ async function renderPdf(): Promise<void> {
   await ReactPDF.render(<EbookDocument />, OUTPUT_FILE);
 }
 
-// pdftotext ships with poppler-utils. Don't auto-install (sudo/network/OS vary) —
-// detect it before pass 1 and print platform-specific guidance instead.
-function checkPdftotext(): void {
-  try {
-    execSync('pdftotext -v', { stdio: 'ignore' });
-  } catch {
-    console.error('Error: pdftotext not found (needed to extract TOC page positions).');
+// Both tools ship with poppler-utils. Don't auto-install (sudo/network/OS vary) —
+// detect them before pass 1 and print platform-specific guidance instead.
+function checkPopplerTools(): void {
+  const missing = ['pdftotext', 'pdfinfo'].filter((tool) => {
+    try {
+      execFileSync(tool, ['-v'], { stdio: 'ignore' });
+      return false;
+    } catch {
+      return true;
+    }
+  });
+
+  if (missing.length > 0) {
+    console.error(`Error: required Poppler tool(s) not found: ${missing.join(', ')}`);
     console.error('Install poppler-utils:');
     console.error('  Debian/Ubuntu: sudo apt-get install -y poppler-utils');
     console.error('  macOS:         brew install poppler');
@@ -77,18 +85,37 @@ function checkPageSizes(): void {
     process.exit(1);
   }
   const pageCount = Number(pagesMatch[1]);
+  if (pageCount !== allPages.length) {
+    console.error(
+      `Error: rendered ${pageCount} PDF page(s), but the registry contains ${allPages.length} page component(s). Each page file must render exactly one PDF page.`,
+    );
+    process.exit(1);
+  }
 
   const perPage = execFileSync('pdfinfo', ['-f', '1', '-l', String(pageCount), OUTPUT_FILE], {
     encoding: 'utf8',
   });
+  const sizes = new Map<number, { width: number; height: number }>();
   const offenders: string[] = [];
   for (const raw of perPage.split('\n')) {
     const match = raw.match(/^Page\s+(\d+)\s+size:\s+([\d.]+)\s+x\s+([\d.]+)\s+pts/);
     if (!match) continue;
     const [, page, width, height] = match;
-    if (Number(width) !== LETTER_WIDTH || Number(height) !== LETTER_HEIGHT) {
+    const pageNumber = Number(page);
+    const numericWidth = Number(width);
+    const numericHeight = Number(height);
+    sizes.set(pageNumber, { width: numericWidth, height: numericHeight });
+    if (numericWidth !== LETTER_WIDTH || numericHeight !== LETTER_HEIGHT) {
       offenders.push(`page ${page} (${width}x${height})`);
     }
+  }
+  const missingSizeRecords = Array.from({ length: pageCount }, (_, index) => index + 1)
+    .filter((pageNumber) => !sizes.has(pageNumber));
+  if (missingSizeRecords.length > 0) {
+    console.error(
+      `Error: pdfinfo returned no size record for ${missingSizeRecords.length} page(s): ${missingSizeRecords.join(', ')}`,
+    );
+    process.exit(1);
   }
   if (offenders.length > 0) {
     console.error(`Error: ${offenders.length} page(s) are not uniform LETTER size (${LETTER_WIDTH}x${LETTER_HEIGHT}): ${offenders.join(', ')}`);
@@ -96,8 +123,8 @@ function checkPageSizes(): void {
   }
 }
 
-async function main(): Promise<void> {
-  checkPdftotext();
+export async function buildPdf(): Promise<void> {
+  checkPopplerTools();
 
   console.log('Building PDF...');
   const start = Date.now();
@@ -129,7 +156,10 @@ async function main(): Promise<void> {
   console.log(`Size: ${(stats.size / 1024 / 1024).toFixed(2)} MB | Time: ${elapsed}ms`);
 }
 
-main().catch((err: Error) => {
-  console.error('Build failed:', err.message);
-  process.exit(1);
-});
+if (path.resolve(process.argv[1] ?? '') === __filename) {
+  buildPdf().catch((err: unknown) => {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error('Build failed:', message);
+    process.exit(1);
+  });
+}

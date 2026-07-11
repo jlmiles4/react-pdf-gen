@@ -1,13 +1,14 @@
 {
   "name": "react-pdf-gen",
   "version": "1.0.0",
+  "private": true,
   "description": "React-PDF + AI: The Builder's Guide to Premium PDF Generation",
   "main": "src/build.tsx",
   "scripts": {
     "build": "pnpm sync && tsx src/build.tsx",
     "sync": "tsx scripts/sync-project.ts",
     "export": "bash scripts/export-pages.sh",
-    "dev": "pnpm sync && tsx watch src/build.tsx",
+    "dev": "tsx watch --include \"src/**/*.ts\" --include \"src/**/*.tsx\" --include \"scripts/sync-project.ts\" --include \"content/chapters/12-markdown-demo.md\" --exclude \"src/registry.ts\" scripts/dev.ts",
     "pipeline": "pnpm build && pnpm export",
     "typecheck": "pnpm sync && tsc --noEmit"
   },
@@ -21,18 +22,17 @@
   "license": "MIT",
   "packageManager": "pnpm@10.29.1",
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
   },
   "dependencies": {
-    "@react-pdf/renderer": "^4.3.2",
+    "@react-pdf/renderer": "^4.5.1",
     "react": "^19.2.4",
-    "react-dom": "^19.2.4",
     "react-icons": "^5.6.0"
   },
   "devDependencies": {
-    "@types/node": "^25.2.2",
+    "@types/node": "^22.20.1",
     "@types/react": "^19.2.13",
-    "tsx": "^4.21.0",
+    "tsx": "^4.23.0",
     "typescript": "^5.9.3"
   }
 }

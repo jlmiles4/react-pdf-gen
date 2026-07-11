@@ -9,7 +9,9 @@ const Page: React.FC = () => {
   const body = content.replace(/^---[\s\S]*?---/, '').trim();
   // Split on the authored page-break marker so each half is its own LETTER page;
   // the parser never sees the marker.
-  const [partOne] = body.split('<!-- page-break -->');
+  const parts = body.split('\n<!-- page-break -->\n');
+  if (parts.length !== 2) throw new Error('Expected exactly one page-break marker line');
+  const [partOne] = parts;
 
   return (
     <ContentPage sectionTitle="Automation" wrap={false}>

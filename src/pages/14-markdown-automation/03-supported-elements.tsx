@@ -8,7 +8,9 @@ const Page: React.FC = () => {
   const content = fs.readFileSync(mdPath, 'utf-8');
   const body = content.replace(/^---[\s\S]*?---/, '').trim();
   // Render the half after the authored page-break marker; the parser never sees it.
-  const [, partTwo] = body.split('<!-- page-break -->');
+  const parts = body.split('\n<!-- page-break -->\n');
+  if (parts.length !== 2) throw new Error('Expected exactly one page-break marker line');
+  const [, partTwo] = parts;
 
   return (
     <ContentPage sectionTitle="Automation" wrap={false}>

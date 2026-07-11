@@ -2,7 +2,7 @@
 
 A chapter lives in `src/pages/NN-chapter/`. The first file in that folder is the **chapter-divider page** (`00-title.tsx`) — it renders `<ChapterTitle>` and nothing else. The second (`01-<chapter>.tsx`) is the chapter's first `<ContentPage>`. Sibling files (`03-…`, `04-…`, …) are **continuation pages** — each renders one more `<ContentPage>` for the same chapter. Continuations start at `03-` by convention; the `02-` slot is skipped.
 
-The per-source-file convention is: **one `.tsx` file = one PDF page**. `<ContentPage>` is usually called with `wrap={false}` so a single source file can't accidentally spill onto a second physical page; `wrap` defaults to `true` and is left on only for the rare deliberate multi-page section.
+The per-source-file convention is: **one `.tsx` file = one PDF page**. `<ContentPage>` defaults to `wrap={false}` so a single source file cannot silently flow onto a second physical page. Use `wrap={true}` only for a rare deliberate multi-page component; non-wrapping overflow is rejected by the build's uniform-LETTER page-size check.
 
 ## Chapter-divider page
 
@@ -77,7 +77,7 @@ src/build.tsx
                  └─ each page imports from src/components/ and src/styles/
 
 ReactPDF.render(<EbookDocument/>, 'output/ebook.pdf')
-  └─ writes PDF, runs pdftotext for chapter positions, re-renders
+  └─ writes PDF, runs pdftotext for chapter positions, re-renders, validates with pdfinfo
 ```
 
 See [pipeline](../build/pipeline.md) for the two-pass detail and [registry-sync](../build/registry-sync.md) for how `manifest.ts` plus the directory layout produce the import order in `registry.ts`.

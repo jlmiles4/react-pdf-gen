@@ -38,7 +38,8 @@ function findAllPageFiles(): string[] {
       if (entry.isDirectory()) {
         walk(res);
       } else if (entry.isFile() && entry.name.endsWith('.tsx')) {
-        files.push(path.relative(PAGES_DIR, res).replace(/\.tsx$/, ''));
+        const relative = path.relative(PAGES_DIR, res).split(path.sep).join('/');
+        files.push(relative.replace(/\.tsx$/, ''));
       }
     }
   }
@@ -47,8 +48,58 @@ function findAllPageFiles(): string[] {
   return files.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
 }
 
-function sync() {
+function findDuplicates(values: string[]): string[] {
+  const seen = new Set<string>();
+  const duplicates = new Set<string>();
+  for (const value of values) {
+    if (seen.has(value)) duplicates.add(value);
+    seen.add(value);
+  }
+  return [...duplicates].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+}
+
+function validateInputs(allFiles: string[]): void {
+  const chapters = MANIFEST.flatMap((group) => group.chapters);
+  const errors: string[] = [];
+
+  const duplicateNumbers = findDuplicates(chapters.map((chapter) => chapter.num));
+  if (duplicateNumbers.length > 0) {
+    errors.push(`duplicate manifest chapter number(s): ${duplicateNumbers.join(', ')}`);
+  }
+
+  const duplicateEntries = findDuplicates(chapters.map((chapter) => chapter.entryPage));
+  if (duplicateEntries.length > 0) {
+    errors.push(`duplicate manifest entryPage(s): ${duplicateEntries.join(', ')}`);
+  }
+
+  const missingEntries = chapters
+    .filter((chapter) => !allFiles.includes(chapter.entryPage))
+    .map((chapter) => `${chapter.num} ("${chapter.title}"): ${chapter.entryPage}`);
+  if (missingEntries.length > 0) {
+    errors.push(`manifest entryPage(s) without a matching file: ${missingEntries.join(', ')}`);
+  }
+
+  const pathsByIdentifier = new Map<string, string[]>();
+  for (const relPath of allFiles) {
+    const identifier = toIdentifier(relPath);
+    pathsByIdentifier.set(identifier, [...(pathsByIdentifier.get(identifier) ?? []), relPath]);
+  }
+  const identifierCollisions = [...pathsByIdentifier.entries()]
+    .filter(([, relPaths]) => relPaths.length > 1)
+    .map(([identifier, relPaths]) => `${identifier}: ${relPaths.join(', ')}`);
+  if (identifierCollisions.length > 0) {
+    errors.push(`generated component identifier collision(s): ${identifierCollisions.join('; ')}`);
+  }
+
+  if (errors.length > 0) {
+    for (const error of errors) console.error(`sync: ${error}`);
+    process.exit(1);
+  }
+}
+
+export function sync(): void {
   const allFiles = findAllPageFiles();
+  validateInputs(allFiles);
   const claimed = new Set<string>();
 
   const filesInDirs = (dirs: string[]): string[] => {
@@ -72,12 +123,6 @@ function sync() {
   MANIFEST.forEach((group) => {
     group.chapters.forEach((ch) => {
       const entryPath = ch.entryPage;
-      if (!allFiles.includes(entryPath)) {
-        console.error(
-          `sync: manifest chapter ${ch.num} ("${ch.title}") entryPage '${entryPath}' has no matching file under src/pages/`,
-        );
-        process.exit(1);
-      }
       if (claimed.has(entryPath)) return;
       middlePaths.push(entryPath);
       claimed.add(entryPath);
@@ -130,8 +175,17 @@ export const allPages = [
 ];
 `;
 
-  fs.writeFileSync(REGISTRY_FILE, registryContent);
-  console.log(`Registry generated at src/registry.ts (${pages.length} pages)`);
+  const previousContent = fs.existsSync(REGISTRY_FILE)
+    ? fs.readFileSync(REGISTRY_FILE, 'utf8')
+    : undefined;
+  if (previousContent !== registryContent) {
+    fs.writeFileSync(REGISTRY_FILE, registryContent);
+    console.log(`Registry generated at src/registry.ts (${pages.length} pages)`);
+  } else {
+    console.log(`Registry already current at src/registry.ts (${pages.length} pages)`);
+  }
 }
 
-sync();
+if (path.resolve(process.argv[1] ?? '') === __filename) {
+  sync();
+}

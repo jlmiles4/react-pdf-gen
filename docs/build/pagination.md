@@ -4,11 +4,13 @@
 
 ## `<Page>` and `wrap`
 
-`ContentPage` wraps children in `<Page size="LETTER" style={styles.page} wrap={wrap}>`, with `wrap` controllable via prop (default `true`). The `wrap` prop allows content to flow across multiple physical pages within one `<Page>` element.
+`ContentPage` wraps children in `<Page size="LETTER" style={styles.page} wrap={wrap}>`, with `wrap` controllable via prop and defaulting to `false`. Setting `wrap={true}` allows content to flow across multiple physical pages within one `<Page>` element.
 
-The project's per-source-file convention is **one `.tsx` file = one PDF page**, so most pages call `<ContentPage ... wrap={false}>` to enforce that — a single source file that overflows is treated as a layout bug to fix, not as content to flow. Leave `wrap` at its `true` default only when a single source file deliberately spans multiple physical pages.
+The project's per-source-file convention is **one `.tsx` file = one PDF page**, so pages use the non-wrapping default — a single source file that overflows is treated as a layout bug to fix, not as content to flow. Opt into `wrap={true}` only when one source component deliberately spans multiple physical pages.
 
-`ChapterTitle` does *not* set `wrap` — chapter title pages always render as a single page.
+Non-wrapping overflow can grow the PDF page box beyond LETTER rather than creating a second page. After the second render, `src/build.tsx` runs `pdfinfo` over every page and fails if any width or height differs from 612 × 792 points. Shorten or split an offending source page; do not rely on clipping.
+
+`ChapterTitle` and the cover, TOC, and conclusion explicitly set `wrap={false}` and a tokenized minimum LETTER height so each standalone source stays exactly one physical page.
 
 ## `wrap={false}` on a `<View>`
 

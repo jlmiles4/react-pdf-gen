@@ -29,6 +29,7 @@ const RINGS_SIZE = layout.decorRingsSize;
 
 const ctStyles = StyleSheet.create({
   page: {
+    minHeight: page.height,
     backgroundColor: colors.primary[800],
     justifyContent: 'center',
     alignItems: 'flex-start',
@@ -81,7 +82,7 @@ const ctStyles = StyleSheet.create({
 });
 
 const ChapterTitle: React.FC<ChapterTitleProps> = ({ number, title, subtitle }) => (
-  <Page size="LETTER" style={ctStyles.page}>
+  <Page size="LETTER" style={ctStyles.page} wrap={false}>
     <AccentBar size="lg" mb={spacing.lg} />
     <Text style={ctStyles.chapterLabel}>Chapter {number}</Text>
     <Text style={ctStyles.title} hyphenationCallback={noHyphenation}>{title}</Text>

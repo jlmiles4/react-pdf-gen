@@ -4,17 +4,17 @@ A `@react-pdf/renderer` project that builds a 71-page ebook ("React-PDF + AI: Th
 
 ## Quick start
 
-Prerequisites: Node 18+ (20+ recommended), pnpm (`corepack enable`), and poppler-utils (`pdftotext` for the TOC pass, `pdftoppm` for PNG export).
+Prerequisites: Node 22+, pnpm (`corepack enable`), and poppler-utils (`pdftotext` for the TOC pass, `pdfinfo` for page validation, and `pdftoppm` for PNG export).
 
 ```bash
 pnpm install
 pnpm build       # sync registry + render PDF -> output/ebook.pdf (two passes)
 pnpm export      # rasterize PDF -> output/pages/page-NN.png (needs poppler-utils)
 pnpm pipeline    # build + export
-pnpm dev         # tsx watch on src/build.tsx (sync runs once at startup)
+pnpm dev         # watch inputs; sync + rebuild after each relevant change
 ```
 
-`pnpm export` shells out to `pdftoppm`; if it's missing the script prints platform-specific install instructions for `poppler-utils` and exits (see `scripts/export-pages.sh`). The build itself also needs `pdftotext` from the same package for the TOC two-pass.
+`pnpm export` uses `pdftoppm` to rasterize and `pdfinfo` to verify that PNG and PDF page counts match. If either is missing, the script prints platform-specific install instructions for `poppler-utils` and exits (see `scripts/export-pages.sh`). The build also needs `pdftotext` for the TOC pass and `pdfinfo` for the uniform-LETTER page-size check.
 
 ## Documentation
 
@@ -59,9 +59,10 @@ scripts/
   sync-project.ts        regenerates registry.ts from manifest.ts + src/pages/
   export-pages.sh        pdftoppm wrapper, default 200 DPI
 fonts/                   Inter .ttf files (Regular, Medium, SemiBold, Bold + italics)
-content/chapters/        author drafts. One file (12-markdown-demo.md) is loaded at build
-                         time by src/pages/14-markdown-automation/01-markdown-automation.tsx
-                         via MarkdownRenderer; the rest are reference material.
+content/chapters/        author drafts. One file (12-markdown-demo.md) is split at its
+                         page-break marker and loaded by both pages in
+                         src/pages/14-markdown-automation/ via MarkdownRenderer;
+                         the rest are reference material.
 reference/               long-form research notes referenced while authoring (not loaded by the build)
 templates/               readers' starter pack — generalized prompt files + project-instructions template
 prompts/                 internal authoring prompts — same structure as templates/, project-specific
