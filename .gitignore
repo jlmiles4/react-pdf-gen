@@ -16,8 +16,8 @@ pnpm-debug.log*
 
 # Environment
 .env
-.env.local
-.env.*.local
+.env.*
+!.env.example
 
 # Claude Code session state
 .claude/
@@ -27,6 +27,12 @@ pnpm-debug.log*
 .idea/
 *.swp
 *.swo
+*.bak
+*.orig
+*.rej
+*.tmp
+*.temp
+*~
 .DS_Store
 Thumbs.db
 
