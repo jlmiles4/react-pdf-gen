@@ -91,6 +91,29 @@ function validateInputs(allFiles: string[]): void {
     errors.push(`generated component identifier collision(s): ${identifierCollisions.join('; ')}`);
   }
 
+  // Chrome folders are load-bearing (cover/TOC open the book, conclusion closes
+  // it); a rename must not silently degrade them to manifest leftovers.
+  const missingChrome = [...CHROME_START, ...CHROME_END].filter(
+    (dir) => !allFiles.some((file) => file.startsWith(dir + '/')),
+  );
+  if (missingChrome.length > 0) {
+    errors.push(`chrome folder(s) with no page files: ${missingChrome.join(', ')} — if a folder was renamed, update CHROME_START/CHROME_END in scripts/sync-project.ts`);
+  }
+
+  // Two chapters sharing a directory would silently merge: the first chapter
+  // claims every sibling file, swallowing the second chapter's pages.
+  const chapterNumsByDir = new Map<string, string[]>();
+  for (const chapter of chapters) {
+    const dir = path.dirname(chapter.entryPage);
+    chapterNumsByDir.set(dir, [...(chapterNumsByDir.get(dir) ?? []), chapter.num]);
+  }
+  const sharedDirs = [...chapterNumsByDir.entries()]
+    .filter(([, nums]) => nums.length > 1)
+    .map(([dir, nums]) => `${dir} (chapters ${nums.join(', ')})`);
+  if (sharedDirs.length > 0) {
+    errors.push(`multiple manifest chapters share one page directory: ${sharedDirs.join('; ')} — each chapter needs its own folder`);
+  }
+
   if (errors.length > 0) {
     for (const error of errors) console.error(`sync: ${error}`);
     process.exit(1);
@@ -186,6 +209,15 @@ export const allPages = [
   }
 }
 
-if (path.resolve(process.argv[1] ?? '') === __filename) {
+function isMainModule(): boolean {
+  try {
+    // realpath both sides so a symlinked invocation path still counts as "run as main".
+    return fs.realpathSync(path.resolve(process.argv[1] ?? '')) === fs.realpathSync(__filename);
+  } catch {
+    return false;
+  }
+}
+
+if (isMainModule()) {
   sync();
 }

@@ -11,6 +11,9 @@
  */
 import React from 'react';
 import { Document } from '@react-pdf/renderer';
+// Side effect: registers Inter + the hyphenation callback. Living here (not in
+// build.tsx) means every entry point that renders EbookDocument gets fonts.
+import './fonts';
 import { allPages } from './registry';
 
 const EbookDocument: React.FC = () => (

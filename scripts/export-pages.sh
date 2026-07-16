@@ -5,6 +5,9 @@
 
 set -euo pipefail
 
+# Anchor to the repo root so the script works from any invocation directory.
+cd "$(dirname "$0")/.."
+
 PDF_FILE="output/react-pdf-ai-builders-guide.pdf"
 PNG_DIR="output/pages"
 DPI="${1:-200}"

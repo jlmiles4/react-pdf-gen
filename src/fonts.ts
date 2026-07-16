@@ -5,7 +5,8 @@
  * 500, 600, 600-italic, 700, 700-italic) from local .ttf files. Disables
  * hyphenation globally for cleaner text rendering.
  *
- * Must be imported before any rendering (imported by build.tsx).
+ * Must be imported before any rendering (imported by Document.tsx, so every
+ * entry point that renders the book gets registration automatically).
  */
 import { Font } from '@react-pdf/renderer';
 import path from 'path';
