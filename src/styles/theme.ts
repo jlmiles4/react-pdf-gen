@@ -4,55 +4,62 @@
  * This is the single source of truth for visual consistency.
  */
 
+// Primary: deep navy – authority, trust, professionalism
+const primary = {
+  900: '#0B1426',
+  800: '#121F3D',
+  700: '#1A2D54',
+  600: '#243B6B',
+  500: '#2E4A82',
+  400: '#4A6BA5',
+  300: '#6E8DC4',
+  200: '#9BB3DB',
+  100: '#C8D6ED',
+  50: '#EDF1F8',
+} as const;
+
+// Accent: warm amber/gold – energy, premium feel
+const accent = {
+  900: '#7A4F00',
+  800: '#9C6500',
+  700: '#BE7B00',
+  600: '#D98E00',
+  500: '#F0A000',
+  400: '#F5B733',
+  300: '#F8CB66',
+  200: '#FBDF99',
+  100: '#FDF0CC',
+  50: '#FEF8E6',
+} as const;
+
+// Neutral: slate grays
+const neutral = {
+  900: '#1A1A2E',
+  800: '#2D2D44',
+  700: '#45455E',
+  600: '#5E5E77',
+  500: '#7A7A91',
+  400: '#9696AA',
+  300: '#B2B2C2',
+  200: '#D0D0DB',
+  100: '#E8E8EF',
+  50: '#F5F5F8',
+} as const;
+
 export const colors = {
-  // Primary: deep navy – authority, trust, professionalism
-  primary: {
-    900: '#0B1426',
-    800: '#121F3D',
-    700: '#1A2D54',
-    600: '#243B6B',
-    500: '#2E4A82',
-    400: '#4A6BA5',
-    300: '#6E8DC4',
-    200: '#9BB3DB',
-    100: '#C8D6ED',
-    50: '#EDF1F8',
-  },
-  // Accent: warm amber/gold – energy, premium feel
-  accent: {
-    900: '#7A4F00',
-    800: '#9C6500',
-    700: '#BE7B00',
-    600: '#D98E00',
-    500: '#F0A000',
-    400: '#F5B733',
-    300: '#F8CB66',
-    200: '#FBDF99',
-    100: '#FDF0CC',
-    50: '#FEF8E6',
-  },
-  // Neutral: slate grays
-  neutral: {
-    900: '#1A1A2E',
-    800: '#2D2D44',
-    700: '#45455E',
-    600: '#5E5E77',
-    500: '#7A7A91',
-    400: '#9696AA',
-    300: '#B2B2C2',
-    200: '#D0D0DB',
-    100: '#E8E8EF',
-    50: '#F5F5F8',
-  },
-  // Semantic
+  primary,
+  accent,
+  neutral,
+  // Semantic — warning/info aliases reference palette steps (never re-type a hex
+  // here: an alias that drifts from its palette step defeats the token system).
   success: '#2D8B4E',
   successLight: '#F0F9F4',
-  warning: '#D98E00',
-  warningLight: '#FEF8E6',
+  warning: accent[600],
+  warningLight: accent[50],
   error: '#C43333',
   errorLight: '#FEF3F3',
   info: '#2E6BB5',
-  infoLight: '#EDF1F8',
+  infoLight: primary[50],
   // Base
   white: '#FFFFFF',
 } as const;
@@ -60,6 +67,8 @@ export const colors = {
 export const fonts = {
   heading: 'Inter',
   body: 'Inter',
+  // Alias of `body`, not a separate face: Inter boldness comes from the paired
+  // fontWeight token. Kept so call sites can signal "this text is emphasized".
   bodyBold: 'Inter',
   mono: 'Courier',
   monoBold: 'Courier-Bold',
@@ -170,6 +179,7 @@ export const fontScale = {
   label: 12,
   bodyMedium: 10.5,
   labelSmall: 10,
+  chromeLabel: 8,   // page chrome: header section title, footer/divider page numbers, cover bottom strip
   navSmall: 7.5,
   micro: 7,
 } as const;

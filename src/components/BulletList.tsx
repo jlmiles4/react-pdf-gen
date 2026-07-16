@@ -7,8 +7,8 @@
  *
  * Props: items (string[] or ReactNode[] — strings render as plain body text;
  *        ReactNodes render as-is, useful for inline markdown like bold/code spans)
- *        keepTogether (optional bool, default false — when true, the whole list
- *        stays on one page; use only for short lists known to fit)
+ *        wrap (optional bool, default true — the list may split across pages,
+ *        items staying whole; pass wrap={false} only for short lists known to fit)
  */
 import React from 'react';
 import { View, Text, Svg, Circle, StyleSheet } from '@react-pdf/renderer';
@@ -17,7 +17,7 @@ import { colors, spacing, layout } from '../styles/theme';
 
 interface BulletListProps {
   items: (string | React.ReactNode)[];
-  keepTogether?: boolean;
+  wrap?: boolean;
 }
 
 const local = StyleSheet.create({
@@ -34,6 +34,9 @@ const local = StyleSheet.create({
     width: layout.bulletWrapperWidth,
     paddingTop: spacing.xs,
   },
+  nodeContent: {
+    flex: 1,
+  },
 });
 
 const BulletDot = () => (
@@ -44,14 +47,14 @@ const BulletDot = () => (
   </View>
 );
 
-const BulletList: React.FC<BulletListProps> = ({ items, keepTogether = false }) => (
-  <View style={local.container} wrap={!keepTogether}>
+const BulletList: React.FC<BulletListProps> = ({ items, wrap = true }) => (
+  <View style={local.container} wrap={wrap}>
     {items.map((item, i) => (
       <View key={i} wrap={false} style={local.item}>
         <BulletDot />
         {typeof item === 'string'
           ? <Text style={styles.listContent}>{item}</Text>
-          : <View style={{ flex: 1 }}>{item}</View>}
+          : <View style={local.nodeContent}>{item}</View>}
       </View>
     ))}
   </View>

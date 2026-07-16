@@ -9,8 +9,11 @@
  */
 import React from 'react';
 import { Page, View, Text, StyleSheet } from '@react-pdf/renderer';
-import { colors, fonts, spacing, page, fontScale, typography, letterSpacing, layout, fontWeight } from '../../styles/theme';
+import { colors, fonts, spacing, page, fontScale, typography, letterSpacing, layout, fontWeight, lineHeight } from '../../styles/theme';
 import { AccentBar, CoverDecor } from '../../components';
+
+// Subtitle measure, tuned so the two-line rag clears the CoverDecor mark.
+const SUBTITLE_MAX_WIDTH = layout.maxHeroWidth - spacing.xl - spacing.xxl; // ≈404pt
 
 const s = StyleSheet.create({
   page: {
@@ -21,6 +24,9 @@ const s = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: page.coverMargin.horizontal,
   },
+  // Cover/back-cover chrome (topBar + bottomInfo/bottomText) is deliberately
+  // duplicated in 15-conclusion/01-conclusion.tsx — only these two pages use
+  // it. Keep the two files in sync when changing it.
   topBar: {
     position: 'absolute',
     top: 0,
@@ -48,9 +54,9 @@ const s = StyleSheet.create({
     fontFamily: fonts.body,
     fontWeight: fontWeight.regular,
     color: colors.neutral[300],
-    lineHeight: typography.bodySmall.lineHeight,
+    lineHeight: lineHeight.normal,
     marginBottom: spacing.xxxl,
-    maxWidth: layout.maxHeroWidth - spacing.xl - spacing.xxl, // 404pt approx
+    maxWidth: SUBTITLE_MAX_WIDTH,
   },
   author: {
     fontSize: typography.h4.fontSize,
@@ -70,7 +76,7 @@ const s = StyleSheet.create({
     alignItems: 'center',
   },
   bottomText: {
-    fontSize: typography.codeSmall.fontSize,
+    fontSize: fontScale.chromeLabel,
     fontFamily: fonts.body,
     fontWeight: fontWeight.regular,
     color: colors.neutral[500],

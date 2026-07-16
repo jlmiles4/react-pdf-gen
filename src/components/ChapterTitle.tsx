@@ -10,12 +10,11 @@
 import React from 'react';
 import { Page, Text, StyleSheet, Svg, Circle, G } from '@react-pdf/renderer';
 import { chapterDestinationId } from '../manifest';
-import { colors, fonts, spacing, page, fontScale, typography, letterSpacing, layout, fontWeight, opacity } from '../styles/theme';
+import { colors, fonts, spacing, page, fontScale, typography, letterSpacing, layout, fontWeight, lineHeight, opacity } from '../styles/theme';
 import AccentBar from './AccentBar';
 
 interface PageNumberRenderArgs {
   pageNumber: number;
-  totalPages: number;
 }
 
 const noHyphenation = (word: string) => [word];
@@ -27,6 +26,16 @@ interface ChapterTitleProps {
 }
 
 const RINGS_SIZE = layout.decorRingsSize;
+// Ring cluster sits past the bottom-right page corner so only arcs show.
+const RINGS_OFFSET = -(spacing.xxxl + spacing.xs); // -52pt off-page overshoot
+const RING_CENTER = 190; // off-center in the 240×240 viewBox so the larger rings clip at its edges
+const RINGS = [
+  { radius: 50, strokeWidth: 1.5 },
+  { radius: 90, strokeWidth: 1 },
+  { radius: 135, strokeWidth: 0.75 },
+] as const;
+// Subtitle measure: slightly wider than body maxTextWidth so two lines rag nicely.
+const SUBTITLE_MAX_WIDTH = layout.maxTextWidth + spacing.sm; // ≈428pt
 
 const ctStyles = StyleSheet.create({
   page: {
@@ -36,6 +45,10 @@ const ctStyles = StyleSheet.create({
     alignItems: 'flex-start',
     paddingHorizontal: page.margin.left + page.chapterPaddingExtra,
   },
+  // Renders "CHAPTER NN" via textTransform — the exact standalone line
+  // src/build.tsx's TOC extraction regex matches (case-sensitively). The
+  // uppercase transform and the "Chapter {number}" text are load-bearing:
+  // change either only together with the regex in build.tsx.
   chapterLabel: {
     fontSize: fontScale.label,
     fontFamily: fonts.body,
@@ -50,7 +63,7 @@ const ctStyles = StyleSheet.create({
     fontFamily: fonts.heading,
     fontWeight: fontWeight.bold,
     color: colors.white,
-    lineHeight: typography.h1.lineHeight,
+    lineHeight: lineHeight.tight,
     marginBottom: spacing.md,
     maxWidth: layout.maxHeroWidth,
   },
@@ -59,13 +72,13 @@ const ctStyles = StyleSheet.create({
     fontFamily: fonts.body,
     fontWeight: fontWeight.regular,
     color: colors.neutral[300],
-    lineHeight: typography.bodySmall.lineHeight,
-    maxWidth: layout.maxTextWidth + spacing.sm, // 428pt approx
+    lineHeight: lineHeight.normal,
+    maxWidth: SUBTITLE_MAX_WIDTH,
   },
   decorRings: {
     position: 'absolute',
-    right: -spacing.xxxl - spacing.xs,
-    bottom: -spacing.xxxl - spacing.xs,
+    right: RINGS_OFFSET,
+    bottom: RINGS_OFFSET,
     width: RINGS_SIZE,
     height: RINGS_SIZE,
   },
@@ -73,7 +86,7 @@ const ctStyles = StyleSheet.create({
     position: 'absolute',
     bottom: page.coverMargin.bottom,
     left: page.margin.left + page.chapterPaddingExtra,
-    fontSize: typography.codeSmall.fontSize,
+    fontSize: fontScale.chromeLabel,
     fontFamily: fonts.body,
     fontWeight: fontWeight.regular,
     color: colors.accent[400],
@@ -90,9 +103,17 @@ const ChapterTitle: React.FC<ChapterTitleProps> = ({ number, title, subtitle }) 
     {subtitle && <Text style={ctStyles.subtitle}>{subtitle}</Text>}
     <Svg style={ctStyles.decorRings} viewBox={`0 0 ${RINGS_SIZE} ${RINGS_SIZE}`}>
       <G opacity={opacity.decor}>
-        <Circle cx="190" cy="190" r="50" stroke={colors.accent[500]} strokeWidth="1.5" fill="none" />
-        <Circle cx="190" cy="190" r="90" stroke={colors.accent[500]} strokeWidth="1" fill="none" />
-        <Circle cx="190" cy="190" r="135" stroke={colors.accent[500]} strokeWidth="0.75" fill="none" />
+        {RINGS.map(({ radius, strokeWidth }) => (
+          <Circle
+            key={radius}
+            cx={RING_CENTER}
+            cy={RING_CENTER}
+            r={radius}
+            stroke={colors.accent[500]}
+            strokeWidth={strokeWidth}
+            fill="none"
+          />
+        ))}
       </G>
     </Svg>
     <Text

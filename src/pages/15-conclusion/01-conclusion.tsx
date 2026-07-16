@@ -10,8 +10,11 @@
  */
 import React from 'react';
 import { Page, View, Text, StyleSheet } from '@react-pdf/renderer';
-import { colors, fonts, spacing, page, borders, fontScale, typography, layout, accentBar, fontWeight, opacity } from '../../styles/theme';
+import { colors, fonts, spacing, page, borders, fontScale, typography, layout, accentBar, fontWeight, lineHeight, opacity } from '../../styles/theme';
 import { AccentBar, BulletList, CoverDecor } from '../../components';
+
+// Subtitle measure, slightly narrower than body maxTextWidth for the hero rag.
+const SUBTITLE_MAX_WIDTH = layout.maxTextWidth - spacing.xl; // ≈396pt
 
 const s = StyleSheet.create({
   page: {
@@ -22,6 +25,9 @@ const s = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: page.coverMargin.horizontal,
   },
+  // Cover/back-cover chrome (topBar + bottomInfo/bottomText) is deliberately
+  // duplicated in 01-cover/01-cover.tsx — only these two pages use it. Keep
+  // the two files in sync when changing it.
   topBar: {
     position: 'absolute',
     top: 0,
@@ -35,7 +41,7 @@ const s = StyleSheet.create({
     fontFamily: fonts.heading,
     fontWeight: fontWeight.bold,
     color: colors.white,
-    lineHeight: typography.h1.lineHeight,
+    lineHeight: lineHeight.tight,
     marginBottom: spacing.md,
   },
   headingAccent: {
@@ -47,9 +53,9 @@ const s = StyleSheet.create({
     fontFamily: fonts.body,
     fontWeight: fontWeight.regular,
     color: colors.neutral[300],
-    lineHeight: typography.body.lineHeight,
+    lineHeight: lineHeight.relaxed,
     marginBottom: spacing.xl,
-    maxWidth: layout.maxTextWidth - spacing.xl, // 396pt approx
+    maxWidth: SUBTITLE_MAX_WIDTH,
   },
   takeawayRow: {
     flexDirection: 'row',
@@ -70,7 +76,7 @@ const s = StyleSheet.create({
     fontFamily: fonts.body,
     fontWeight: fontWeight.regular,
     color: colors.neutral[200],
-    lineHeight: typography.bodySmall.lineHeight,
+    lineHeight: lineHeight.normal,
   },
   divider: {
     width: accentBar.md.width,
@@ -93,7 +99,7 @@ const s = StyleSheet.create({
     fontFamily: fonts.body,
     fontWeight: fontWeight.regular,
     color: colors.neutral[300],
-    lineHeight: typography.bodySmall.lineHeight,
+    lineHeight: lineHeight.normal,
     maxWidth: layout.maxTextWidth,
   },
   ctaClose: {
@@ -117,7 +123,7 @@ const s = StyleSheet.create({
     alignItems: 'center',
   },
   bottomText: {
-    fontSize: typography.codeSmall.fontSize,
+    fontSize: fontScale.chromeLabel,
     fontFamily: fonts.body,
     fontWeight: fontWeight.regular,
     color: colors.neutral[500],
@@ -157,7 +163,7 @@ const Conclusion: React.FC = () => (
 
     <Text style={s.ctaIntro}>The source code for this entire book is included:</Text>
     <BulletList
-      keepTogether
+      wrap={false}
       items={[
         <Text style={s.ctaItem}>A design token system (theme.ts) ready to customize.</Text>,
         <Text style={s.ctaItem}>A reusable component library – ContentPage, CodeBlock, Table, TipBox, Icons.</Text>,

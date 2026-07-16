@@ -11,11 +11,11 @@
  */
 import React from 'react';
 import { View, Text, StyleSheet } from '@react-pdf/renderer';
-import { colors, fonts, page, borders, fontScale, typography, fontWeight } from '../styles/theme';
+import { colors, fonts, page, borders, fontScale, fontWeight } from '../styles/theme';
 
 const borderTop = page.height - page.footerHeight;
 const brandTop = page.height - page.footerHeight + (page.footerHeight - fontScale.navSmall) / 2;
-const pageNumberTop = page.height - page.footerHeight + (page.footerHeight - typography.codeSmall.fontSize) / 2;
+const pageNumberTop = page.height - page.footerHeight + (page.footerHeight - fontScale.chromeLabel) / 2;
 
 const footerStyles = StyleSheet.create({
   border: {
@@ -41,7 +41,7 @@ const footerStyles = StyleSheet.create({
     left: page.margin.left,
     right: page.margin.right,
     textAlign: 'right',
-    fontSize: typography.codeSmall.fontSize,
+    fontSize: fontScale.chromeLabel,
     fontFamily: fonts.body,
     fontWeight: fontWeight.regular,
     color: colors.neutral[500],

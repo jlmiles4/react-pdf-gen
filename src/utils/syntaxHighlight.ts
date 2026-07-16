@@ -19,11 +19,15 @@ const KEYWORDS = new Set([
   'void', 'typeof', 'as', 'in', 'of', 'for', 'while', 'switch', 'case',
   'break', 'continue', 'throw', 'try', 'catch', 'finally', 'yield',
   'static', 'readonly', 'public', 'private', 'protected', 'set', 'get',
+  // Deliberate hack: react-pdf prop names, so the book's JSX samples highlight
+  // them. Cost: the same identifiers highlight anywhere (e.g. `const size = 5`).
   'style', 'wrap', 'fixed', 'render', 'size', 'key',
 ]);
 
 // Single combined regex — order matters (first match wins)
 // Groups: 1=comment, 2=string, 3=word, 4=JSX tag, 5=number, 6=punctuation
+// Tokenization is per-line (see tokenize), so the /* */ alternative only fires
+// when a block comment opens and closes on the same line.
 const TOKEN_RE =
   /(\/\/.*$|\/\*[\s\S]*?\*\/)|('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|`(?:[^`\\]|\\.)*`)|(\b[a-zA-Z_$][a-zA-Z0-9_$]*\b)|(<\/?[A-Z][A-Za-z.]*)|(\b\d+\.?\d*\b)|([{}()\[\],.;=+\-*/&|!<>?:]+)/gm;
 

@@ -114,7 +114,12 @@ const Page02TOC: React.FC = () => {
       <Text style={s.heading}>Contents</Text>
       <AccentBar size="md" />
       {MANIFEST.map((group) => {
-        const config = GROUP_CONFIG[group.id] || { color: colors.neutral[500] };
+        const config = GROUP_CONFIG[group.id];
+        if (!config) {
+          // Fail the build instead of silently rendering a neutral badge for a
+          // renamed/added manifest group.
+          throw new Error(`TOC: no GROUP_CONFIG entry for manifest group "${group.id}" — add its badge color in src/pages/02-toc/01-toc.tsx`);
+        }
         return (
           <View key={group.id} style={s.groupContainer}>
             <View style={s.groupLabelRow}>

@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, Text } from '@react-pdf/renderer';
+import { Text } from '@react-pdf/renderer';
 import { styles } from '../../styles/shared';
-import { colors, spacing, iconSize } from '../../styles/theme';
-import { ContentPage, CodeBlock, TipBox, SectionHeading } from '../../components';
+import { colors } from '../../styles/theme';
+import { ContentPage, CodeBlock, TipBox, SectionHeading, IconList } from '../../components';
 import { CheckIcon } from '../../components/Icons';
 
 const Page: React.FC = () => (
@@ -27,18 +27,16 @@ const Icon = ({ icon, size = iconSize.lg, color }) => {
 };`}</CodeBlock>
 
     <SectionHeading>Using Icons in Context</SectionHeading>
-    <View style={[styles.iconRow, { marginBottom: spacing.sm, paddingLeft: spacing.sm }]}>
-      <CheckIcon size={iconSize.md} color={colors.success} />
-      <Text style={styles.body}>Vector-sharp at any zoom level</Text>
-    </View>
-    <View style={[styles.iconRow, { marginBottom: spacing.sm, paddingLeft: spacing.sm }]}>
-      <CheckIcon size={iconSize.md} color={colors.success} />
-      <Text style={styles.body}>Matches your brand color palette</Text>
-    </View>
-    <View style={[styles.iconRow, { marginBottom: spacing.sm, paddingLeft: spacing.sm }]}>
-      <CheckIcon size={iconSize.md} color={colors.success} />
-      <Text style={styles.body}>Zero network dependencies at render time – no CDN, no internet</Text>
-    </View>
+    <IconList
+      variant="feature"
+      icon={CheckIcon}
+      color={colors.success}
+      items={[
+        'Vector-sharp at any zoom level',
+        'Matches your brand color palette',
+        'Zero network dependencies at render time – no CDN, no internet',
+      ]}
+    />
 
     <TipBox label="When Emojis Are Acceptable">
       Internal team documents, quick prototypes, or documents where your brand literally uses emoji as part of its identity. For anything client-facing or paid – use SVG icons.

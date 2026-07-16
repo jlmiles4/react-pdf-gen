@@ -101,7 +101,7 @@ export function parseMarkdown(md: string): MarkdownNode[] {
     if (line.startsWith('> [!')) {
       const variantMatch = line.match(/> \[!(TIP|WARNING|INFO)\]/i);
       if (variantMatch) {
-        const variant = variantMatch[1].toLowerCase() as any;
+        const variant = variantMatch[1].toLowerCase() as 'tip' | 'warning' | 'info';
         const labelMatch = line.match(/label="([^"]+)"/);
         const label = labelMatch ? labelMatch[1] : variant.toUpperCase();
         i++;
@@ -126,6 +126,11 @@ export function parseMarkdown(md: string): MarkdownNode[] {
     }
 
     // Default: Body Text (group consecutive lines)
+    // Ordered lists have no branch — without this warning they'd silently
+    // collapse into one paragraph ("1. First 2. Second").
+    if (/^\d+\.\s/.test(line)) {
+      console.warn(`markdownParser: ordered lists are not supported — "${line.slice(0, 60)}" will render as plain body text (use "- " bullets instead)`);
+    }
     const textLines: string[] = [];
     while (i < lines.length && lines[i].trim() && !lines[i].trim().match(/^(#{1,3}\s|[*+-]\s|```|>)/)) {
       textLines.push(lines[i].trim());

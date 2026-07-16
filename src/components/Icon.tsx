@@ -66,7 +66,9 @@ function coerceProps(rawProps: Record<string, unknown>, color: string): Record<s
     if (key === 'children' || key === 'key' || key === 'className' || key === 'style' || key === 'xmlns') continue;
     let value = rawProps[key];
     if (value === 'currentColor' || value === 'currentcolor') value = color;
-    if (typeof value === 'string' && NUMERIC_KEYS.has(key)) {
+    // Percentage values (e.g. gradient stop offset="50%") must stay strings —
+    // parseFloat would silently turn "50%" into 50.
+    if (typeof value === 'string' && NUMERIC_KEYS.has(key) && !value.trim().endsWith('%')) {
       const num = parseFloat(value);
       if (!Number.isNaN(num)) value = num;
     }
@@ -74,6 +76,8 @@ function coerceProps(rawProps: Record<string, unknown>, color: string): Record<s
   }
   return out;
 }
+
+const warnedTags = new Set<string>();
 
 function convertChildren(
   children: React.ReactNode,
@@ -86,7 +90,13 @@ function convertChildren(
     const tag = element.type;
     if (typeof tag !== 'string') return null;
     const PdfComponent = TAG_MAP[tag];
-    if (!PdfComponent) return null;
+    if (!PdfComponent) {
+      if (!warnedTags.has(tag)) {
+        warnedTags.add(tag);
+        console.warn(`Icon: unsupported SVG element <${tag}> dropped — if the glyph renders incomplete, add it to TAG_MAP in src/components/Icon.tsx`);
+      }
+      return null;
+    }
     const own = coerceProps(element.props, color);
     const merged: Record<string, unknown> = { ...own };
     for (const key of INHERITABLE) {
@@ -100,6 +110,10 @@ function convertChildren(
 }
 
 const Icon: React.FC<IconProps> = ({ icon, size = iconSize.lg, color = colors.neutral[900] }) => {
+  // Relies on react-icons' GenIcon contract: calling the icon as a plain
+  // function returns an IconBase element whose `attr` prop carries the SVG
+  // attributes. If react-icons ever wraps icons in memo/forwardRef or renames
+  // `attr`, this returns null/bare Svg — revisit this adapter on major bumps.
   const rendered = (icon as (props: object) => React.ReactNode)({});
   if (!React.isValidElement(rendered)) return null;
   const wrapper = rendered as React.ReactElement<{ attr?: Record<string, unknown>; children?: React.ReactNode }>;

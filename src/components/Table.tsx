@@ -27,6 +27,13 @@ interface TableProps {
 
 const Table: React.FC<TableProps> = ({ headers, rows, columnWidths, wrap = false }) => {
   if (!headers.length) return null;
+  if (columnWidths && columnWidths.length !== headers.length) {
+    console.warn(`Table: columnWidths has ${columnWidths.length} value(s) but there are ${headers.length} header(s) — cells beyond the widths render unsized`);
+  }
+  const overwideRows = rows.filter((row) => row.length > headers.length).length;
+  if (overwideRows > 0) {
+    console.warn(`Table: ${overwideRows} row(s) have more cells than headers — the extra cells render unsized`);
+  }
   const widths = columnWidths || headers.map(() => `${100 / headers.length}%`);
 
   return (

@@ -1,6 +1,24 @@
 import { StyleSheet } from '@react-pdf/renderer';
 import { colors, typography, spacing, page, borders, fonts, fontWeight, lineHeight, accentBar } from './theme';
 
+// One callout skeleton, three color schemes. Geometry changes here apply to
+// tipBox/warningBox/infoBox at once (TipBox.tsx renders all three via one base).
+const calloutBox = (background: string, borderColor: string) => ({
+  backgroundColor: background,
+  borderLeftWidth: borders.thick,
+  borderLeftColor: borderColor,
+  borderRadius: borders.radius.sm,
+  padding: spacing.md,
+  marginBottom: spacing.md,
+  marginTop: spacing.sm,
+});
+
+const calloutLabel = (color: string) => ({
+  ...typography.h4,
+  color,
+  marginBottom: spacing.xs,
+});
+
 /**
  * Shared styles used across all pages.
  * Import individual styles – never import the whole sheet into a page.
@@ -67,6 +85,9 @@ export const styles = StyleSheet.create({
     ...typography.bodySmall,
     color: colors.neutral[600],
   },
+  // Deliberately semibold (600), not 700: full bold reads too heavy against
+  // 11pt Inter body text. `**bold**` markdown and every styles.bold consumer
+  // get this weight.
   bold: {
     fontFamily: fonts.bodyBold,
     fontWeight: fontWeight.semibold,
@@ -110,48 +131,12 @@ export const styles = StyleSheet.create({
   },
 
   // --- Callout boxes ---
-  tipBox: {
-    backgroundColor: colors.accent[50],
-    borderLeftWidth: borders.thick,
-    borderLeftColor: colors.accent[500],
-    borderRadius: borders.radius.sm,
-    padding: spacing.md,
-    marginBottom: spacing.md,
-    marginTop: spacing.sm,
-  },
-  tipLabel: {
-    ...typography.h4,
-    color: colors.accent[700],
-    marginBottom: spacing.xs,
-  },
-  warningBox: {
-    backgroundColor: colors.errorLight,
-    borderLeftWidth: borders.thick,
-    borderLeftColor: colors.error,
-    borderRadius: borders.radius.sm,
-    padding: spacing.md,
-    marginBottom: spacing.md,
-    marginTop: spacing.sm,
-  },
-  warningLabel: {
-    ...typography.h4,
-    color: colors.error,
-    marginBottom: spacing.xs,
-  },
-  infoBox: {
-    backgroundColor: colors.primary[50],
-    borderLeftWidth: borders.thick,
-    borderLeftColor: colors.info,
-    borderRadius: borders.radius.sm,
-    padding: spacing.md,
-    marginBottom: spacing.md,
-    marginTop: spacing.sm,
-  },
-  infoLabel: {
-    ...typography.h4,
-    color: colors.info,
-    marginBottom: spacing.xs,
-  },
+  tipBox: calloutBox(colors.accent[50], colors.accent[500]),
+  tipLabel: calloutLabel(colors.accent[700]),
+  warningBox: calloutBox(colors.errorLight, colors.error),
+  warningLabel: calloutLabel(colors.error),
+  infoBox: calloutBox(colors.infoLight, colors.info),
+  infoLabel: calloutLabel(colors.info),
 
   // --- Lists ---
   listContent: {

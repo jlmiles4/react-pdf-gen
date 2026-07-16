@@ -1,9 +1,10 @@
 /**
  * CoverDecor — Concentric-circle / crosshair geometric mark.
  *
- * Used as a low-opacity background flourish on hero pages (Cover, Conclusion,
- * ChapterTitle). Pull the size and opacity from props so callers can place it
- * without redeclaring the same SVG path data.
+ * Used as a low-opacity background flourish on the Cover and Conclusion hero
+ * pages. (ChapterTitle draws its own corner-anchored ring cluster — a different
+ * mark, not this one.) Pull the size and opacity from props so callers can
+ * place it without redeclaring the same SVG path data.
  */
 import React from 'react';
 import { Svg, Circle, Line, G } from '@react-pdf/renderer';

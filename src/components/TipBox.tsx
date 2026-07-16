@@ -1,14 +1,18 @@
 /**
  * TipBox / WarningBox / InfoBox — Callout boxes
  *
- * Left-bordered callout boxes with icon + label header. All use wrap={false}
- * to prevent splitting across pages.
+ * Left-bordered callout boxes with icon + label header, all rendered by one
+ * base component (three color schemes, one skeleton — the matching style
+ * pairs are built by one factory in shared.ts). All use wrap={false} to
+ * prevent splitting across pages.
  *
  * - TipBox:     Gold border (accent[500]), cream bg (accent[50]), ZapIcon
  * - WarningBox: Red border (error), pink bg (errorLight), AlertTriangleIcon
- * - InfoBox:    Blue border (info), light blue bg (primary[50]), InfoIcon
+ * - InfoBox:    Blue border (info), light blue bg (infoLight), InfoIcon
  *
- * Props: children (ReactNode), label (optional string, defaults vary by variant)
+ * Props: children (text content — strings or nested <Text> spans; block
+ * elements like <View> are not valid inside the body <Text>),
+ * label (optional string, defaults vary by variant)
  */
 import React from 'react';
 import { View, Text, StyleSheet } from '@react-pdf/renderer';
@@ -21,6 +25,14 @@ interface TipBoxProps {
   label?: string;
 }
 
+interface CalloutSpec {
+  boxStyle: typeof styles.tipBox;
+  labelStyle: typeof styles.tipLabel;
+  Icon: React.ComponentType<{ size?: number; color?: string }>;
+  iconColor: string;
+  defaultLabel: string;
+}
+
 const local = StyleSheet.create({
   labelRow: {
     flexDirection: 'row',
@@ -30,32 +42,39 @@ const local = StyleSheet.create({
   },
 });
 
-export const TipBox: React.FC<TipBoxProps> = ({ children, label = 'Tip' }) => (
-  <View wrap={false} style={styles.tipBox}>
-    <View style={local.labelRow}>
-      <ZapIcon size={iconSize.callout} color={colors.accent[700]} />
-      <Text style={styles.tipLabel}>{label}</Text>
+const makeCallout = ({ boxStyle, labelStyle, Icon, iconColor, defaultLabel }: CalloutSpec): React.FC<TipBoxProps> => {
+  const Callout: React.FC<TipBoxProps> = ({ children, label = defaultLabel }) => (
+    <View wrap={false} style={boxStyle}>
+      <View style={local.labelRow}>
+        <Icon size={iconSize.callout} color={iconColor} />
+        <Text style={labelStyle}>{label}</Text>
+      </View>
+      <Text style={styles.body}>{children}</Text>
     </View>
-    <Text style={styles.body}>{children}</Text>
-  </View>
-);
+  );
+  return Callout;
+};
 
-export const WarningBox: React.FC<TipBoxProps> = ({ children, label = 'Warning' }) => (
-  <View wrap={false} style={styles.warningBox}>
-    <View style={local.labelRow}>
-      <AlertTriangleIcon size={iconSize.callout} color={colors.error} />
-      <Text style={styles.warningLabel}>{label}</Text>
-    </View>
-    <Text style={styles.body}>{children}</Text>
-  </View>
-);
+export const TipBox = makeCallout({
+  boxStyle: styles.tipBox,
+  labelStyle: styles.tipLabel,
+  Icon: ZapIcon,
+  iconColor: colors.accent[700],
+  defaultLabel: 'Tip',
+});
 
-export const InfoBox: React.FC<TipBoxProps> = ({ children, label = 'Note' }) => (
-  <View wrap={false} style={styles.infoBox}>
-    <View style={local.labelRow}>
-      <InfoIcon size={iconSize.callout} color={colors.info} />
-      <Text style={styles.infoLabel}>{label}</Text>
-    </View>
-    <Text style={styles.body}>{children}</Text>
-  </View>
-);
+export const WarningBox = makeCallout({
+  boxStyle: styles.warningBox,
+  labelStyle: styles.warningLabel,
+  Icon: AlertTriangleIcon,
+  iconColor: colors.error,
+  defaultLabel: 'Warning',
+});
+
+export const InfoBox = makeCallout({
+  boxStyle: styles.infoBox,
+  labelStyle: styles.infoLabel,
+  Icon: InfoIcon,
+  iconColor: colors.info,
+  defaultLabel: 'Note',
+});

@@ -8,7 +8,7 @@
  */
 import React from 'react';
 import { View, Text, StyleSheet } from '@react-pdf/renderer';
-import { colors, fonts, page, borders, fontScale, typography, letterSpacing, fontWeight, spacing } from '../styles/theme';
+import { colors, fonts, page, borders, fontScale, letterSpacing, fontWeight, spacing } from '../styles/theme';
 
 interface HeaderProps {
   sectionTitle?: string;
@@ -32,7 +32,7 @@ const headerStyles = StyleSheet.create({
     borderBottomColor: colors.neutral[200],
   },
   title: {
-    fontSize: typography.codeSmall.fontSize,
+    fontSize: fontScale.chromeLabel,
     fontFamily: fonts.body,
     fontWeight: fontWeight.regular,
     color: colors.neutral[500],
