@@ -71,7 +71,7 @@ All three live in [`src/components/TipBox.tsx`](../../src/components/TipBox.tsx)
 |---|---|---|---|---|
 | `TipBox` | `accent[500]` | `accent[50]` | `ZapIcon` (gold) | `Tip` |
 | `WarningBox` | `error` | `errorLight` | `AlertTriangleIcon` (red) | `Warning` |
-| `InfoBox` | `info` | `primary[50]` | `InfoIcon` (blue) | `Note` |
+| `InfoBox` | `info` | `infoLight` | `InfoIcon` (blue) | `Note` |
 
 All use `wrap={false}`. Body text is rendered as a single `<Text>` with `styles.body` — pass strings, not nested `<View>` blocks.
 
@@ -90,7 +90,7 @@ All use `wrap={false}`. Body text is rendered as a single `<Text>` with `styles.
 
 ### `CodeBlock`
 
-[`src/components/CodeBlock.tsx`](../../src/components/CodeBlock.tsx) — dark-navy block, Courier font, optional gold language label, syntax highlighting via `src/utils/syntaxHighlight.ts` (one language-agnostic JS/TS tokenizer; the `language` label is cosmetic — see [syntax-highlighting](syntax-highlighting.md)). `wrap={false}`. Keep each block within the vertical space left by the surrounding page content; a dedicated code-heavy page can fit substantially more than a block placed below several sections.
+[`src/components/CodeBlock.tsx`](../../src/components/CodeBlock.tsx) — dark-navy block, Courier font, optional gold language label, syntax highlighting via `src/utils/syntaxHighlight.ts` (one language-agnostic JS/TS tokenizer; the `language` label is cosmetic — see [syntax-highlighting](syntax-highlighting.md)). Defaults to `wrap={false}`; keep each block within the vertical space left by the surrounding page content (a dedicated code-heavy page can fit substantially more than a block placed below several sections), or pass `wrap={true}` for a block that may legitimately span pages.
 
 ```tsx
 <CodeBlock language="tsx">{`const x = 1;`}</CodeBlock>
@@ -105,7 +105,7 @@ All use `wrap={false}`. Body text is rendered as a single `<Text>` with `styles.
 
 ### `BulletList`
 
-[`src/components/BulletList.tsx`](../../src/components/BulletList.tsx) — vertical list with gold SVG circle bullets. Each item is `wrap={false}` individually so a dot can't get stranded from its text. `items` accepts strings (rendered as plain body text) or React nodes (rendered as-is, useful for inline `<Text style={styles.bold}>` / `<Text style={styles.inlineCode}>` spans). `keepTogether` puts `wrap={false}` on the whole list — use it for short lists known to fit on a single page.
+[`src/components/BulletList.tsx`](../../src/components/BulletList.tsx) — vertical list with gold SVG circle bullets. Each item is `wrap={false}` individually so a dot can't get stranded from its text. `items` accepts strings (rendered as plain body text) or React nodes (rendered as-is, useful for inline `<Text style={styles.bold}>` / `<Text style={styles.inlineCode}>` spans). `wrap` defaults to `true` (the list may split between items); pass `wrap={false}` to keep a short list known to fit on one page together.
 
 ```tsx
 <BulletList items={['First', 'Second', 'Third']} />
@@ -115,14 +115,14 @@ All use `wrap={false}`. Body text is rendered as a single `<Text>` with `styles.
     <Text>Plain item</Text>,
     <Text><Text style={styles.bold}>Bold</Text> + body</Text>,
   ]}
-  keepTogether
+  wrap={false}
 />
 ```
 
 | Prop | Type | Required | Default |
 |---|---|---|---|
 | `items` | `(string \| ReactNode)[]` | yes | — |
-| `keepTogether` | `boolean` | no | `false` |
+| `wrap` | `boolean` | no | `true` |
 
 ### `Table`
 
@@ -158,10 +158,11 @@ Both live in [`src/components/ChecklistItem.tsx`](../../src/components/Checklist
 
 ### `IconList`
 
-[`src/components/IconList.tsx`](../../src/components/IconList.tsx) — vertical list of icon + `bodySmall` text rows. Pass an icon *component* (not an element); each row is `wrap={false}` so an icon can't get stranded from its label. Used for the Ch09 "what AI can/can't spot" lists.
+[`src/components/IconList.tsx`](../../src/components/IconList.tsx) — vertical list of icon + text rows. Pass an icon *component* (not an element); each row is `wrap={false}` so an icon can't get stranded from its label. Two variants: `'checklist'` (default — tight `bodySmall` rows, `xs` icons; the Ch09 "what AI can/can't spot" lists) and `'feature'` (`body`-size text, `md` icons, relaxed indented rows; the Ch10 adapter-benefits list). `size` overrides the variant's icon default.
 
 ```tsx
 <IconList items={['Spacing drift', 'Orphaned headings']} icon={CheckIcon} color={colors.success} />
+<IconList variant="feature" items={['Vector-sharp at any zoom']} icon={CheckIcon} color={colors.success} />
 ```
 
 | Prop | Type | Required | Default |
@@ -169,7 +170,8 @@ Both live in [`src/components/ChecklistItem.tsx`](../../src/components/Checklist
 | `items` | `string[]` | yes | — |
 | `icon` | `ComponentType<{size?: number; color?: string}>` | yes | — |
 | `color` | `string` | yes | — |
-| `size` | `number` | no | `iconSize.xs` |
+| `size` | `number` | no | `iconSize.xs` (checklist) / `iconSize.md` (feature) |
+| `variant` | `'checklist' \| 'feature'` | no | `'checklist'` |
 
 ## Recipe cards
 
@@ -257,7 +259,7 @@ Pass sizes through the `iconSize` token (`xs`/`sm`/`callout`/`md`/`lg`/`xl`) —
 
 ### `Icon`
 
-[`src/components/Icon.tsx`](../../src/components/Icon.tsx) — the underlying react-icons adapter. Use directly for icons not pre-bound in `Icons.tsx`.
+[`src/components/Icon.tsx`](../../src/components/Icon.tsx) — the underlying react-icons adapter. Use directly for icons not pre-bound in `Icons.tsx`. It rebuilds the icon's SVG tree with react-pdf primitives via a tag map (`path`, `circle`, `g`, gradients, …); an SVG element outside the map is dropped with a build-time `console.warn` naming the tag — if a new glyph renders incomplete, add its tag to `TAG_MAP`. Percentage attribute values (gradient stop offsets) are passed through as strings, not coerced to numbers.
 
 ```tsx
 import { LuFile } from 'react-icons/lu';

@@ -15,7 +15,7 @@ This is a `@react-pdf/renderer` project that generates [DESCRIBE YOUR DOCUMENT: 
 4. **No default fonts.** All text uses [your-font] font. Always pair `fontFamily` with explicit `fontWeight` (400, 500, 600, or 700).
 5. **No emoji.** Use SVG icons from `src/components/Icons.tsx`.
 6. **wrap={false}** on any element that must not split across pages: callout boxes, code blocks, table rows, cards, bullet items.
-7. **minPresenceAhead={40}** on section headings when the ancestor `<Page>` wraps. On fixed pages, rebalance or split the source instead.
+7. **minPresenceAhead={40}** on section headings when the ancestor `<Page>` wraps. On pages that don't wrap, rebalance or split the source instead.
 
 ## Key Files
 | File | Purpose |

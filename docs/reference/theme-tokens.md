@@ -80,7 +80,7 @@ The concrete values for every token in [`src/styles/theme.ts`](../../src/styles/
 | `code` | 9 | `regular` (400) | `normal` (1.5) | Code blocks (Courier) |
 | `codeSmall` | 8 | `regular` (400) | `snug` (1.4) | Inline code labels |
 
-`fontScale.*` holds the chrome sizes that don't fit the body scale: `coverTitle: 42`, `pageTitle: 32`, `sectionTitle: 18`, `subtitle: 15`, `contentTitle: 14`, `label: 12`, `bodyMedium: 10.5`, `labelSmall: 10`, `navSmall: 7.5`, `micro: 7`.
+`fontScale.*` holds the chrome sizes that don't fit the body scale: `coverTitle: 42`, `pageTitle: 32`, `sectionTitle: 18`, `subtitle: 15`, `contentTitle: 14`, `label: 12`, `bodyMedium: 10.5`, `labelSmall: 10`, `chromeLabel: 8` (header section title, footer/divider page numbers, cover bottom strip), `navSmall: 7.5`, `micro: 7`.
 
 `fonts.*` values: `heading`, `body`, `bodyBold` are all the string `'Inter'`; `mono` is `'Courier'`, `monoBold` is `'Courier-Bold'`. The bold/heading distinction comes from `fontWeight`, not the family name.
 

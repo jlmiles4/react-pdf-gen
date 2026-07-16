@@ -1,6 +1,6 @@
 # react-pdf-gen
 
-A `@react-pdf/renderer` project that builds a 71-page ebook ("React-PDF + AI: The Builder's Guide to Premium PDF Generation") from React/TSX components. The build script auto-syncs a registry of pages, renders the PDF in two passes (the second pass populates the clickable TOC with real page numbers), and a shell script rasterizes the PDF to PNG pages for visual review.
+A `@react-pdf/renderer` project that builds a 71-page ebook ("React-PDF + AI: The Builder's Guide to Premium PDF Generation") from React/TSX components. The build command syncs a registry of pages, then renders the PDF in two passes (the second pass populates the clickable TOC with real page numbers), and a shell script rasterizes the PDF to PNG pages for visual review.
 
 **Read the book:** [`react-pdf-ai-builders-guide.pdf`](output/react-pdf-ai-builders-guide.pdf) — the built 71-page PDF, tracked in the repo.
 
@@ -32,10 +32,11 @@ pnpm dev         # watch inputs; sync + rebuild after each relevant change
   - [Add a page](docs/guides/add-a-page.md) — step-by-step for adding a new chapter or content page
   - [Markdown content](docs/guides/markdown-content.md) — `MarkdownRenderer`, supported syntax, when to reach for it
   - [Troubleshooting](docs/guides/troubleshooting.md) — build errors, render surprises, the CodeBlock template-literal trap
-- Reference
+- [Reference](docs/reference/README.md)
   - [Commands](docs/reference/commands.md) — every `pnpm` script and what it does
   - [Components](docs/reference/components.md) — props for every component in `src/components/`
   - [Theme tokens](docs/reference/theme-tokens.md) — concrete color, typography, spacing, geometry values
+  - [Syntax highlighting](docs/reference/syntax-highlighting.md) — how `<CodeBlock>` colors code (language-agnostic tokenizer)
 
 ## Repository layout
 
@@ -51,7 +52,7 @@ src/
     theme.ts             design tokens (colors, typography, spacing, page, borders, syntax)
     shared.ts            StyleSheet shared by every page
   components/            ContentPage, ChapterTitle, SectionHeading, TipBox, CodeBlock,
-                         MarkdownRenderer, AccentBar, CoverDecor, icons, ...
+                         Table, RecipeCard, MarkdownRenderer, AccentBar, CoverDecor, icons, ...
   pages/                 one folder per chapter, one file per PDF page (NN-chapter/NN-page.tsx).
                          Each chapter folder starts with 00-title.tsx (the chapter divider),
                          then 01-<chapter>.tsx, then continuation pages. Chrome lives in
@@ -67,7 +68,8 @@ content/chapters/        author drafts. One file (12-markdown-demo.md) is split 
                          the rest are reference material.
 reference/               long-form research notes referenced while authoring (not loaded by the build)
 templates/               readers' starter pack — generalized prompt files + project-instructions template
-output/                  generated PDF, toc-positions.json, and PNGs (gitignored)
+output/                  generated PDF, toc-positions.json, and PNGs (gitignored, except the
+                         book PDF itself — the tracked, shipped deliverable)
 ```
 
 ## License

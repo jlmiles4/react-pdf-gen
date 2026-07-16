@@ -58,7 +58,7 @@ const Footer: React.FC = () => (
 ```
 
 ### SectionHeading — Accent Bar + Heading
-Use `wrap={false}` to keep the heading together. Add `minPresenceAhead={40}` when the ancestor Page wraps; fixed pages must be authored to fit.
+Use `wrap={false}` to keep the heading together. Add `minPresenceAhead={40}` when the ancestor Page wraps; pages that don't wrap must be authored to fit.
 
 ```tsx
 const SectionHeading: React.FC<{ children: string }> = ({ children }) => (

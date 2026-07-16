@@ -93,9 +93,9 @@ CSS Grid is not supported. Use flexbox with explicit widths:
     <React.Fragment key={i}>
       {i > 0 && <Text style={{ fontSize: 16, color: colors.neutral[400] }}>→</Text>}
       <View style={{ alignItems: 'center', width: 80 }}>
-        <Text style={{ fontSize: 18, fontFamily: fonts.heading, fontWeight: 700,
+        <Text style={{ fontSize: 18, fontFamily: fonts.heading, fontWeight: 700 as const,
           color: colors.accent[500] }}>{i + 1}</Text>
-        <Text style={{ fontSize: 9, fontFamily: fonts.bodyBold, fontWeight: 600,
+        <Text style={{ fontSize: 9, fontFamily: fonts.bodyBold, fontWeight: 600 as const,
           textAlign: 'center' }}>{step}</Text>
       </View>
     </React.Fragment>

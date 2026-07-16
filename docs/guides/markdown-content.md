@@ -6,16 +6,13 @@ Source: [`src/components/MarkdownRenderer.tsx`](../../src/components/MarkdownRen
 
 ## Where it's used today
 
-Two pages — [`01-markdown-automation.tsx`](../../src/pages/14-markdown-automation/01-markdown-automation.tsx) and [`03-supported-elements.tsx`](../../src/pages/14-markdown-automation/03-supported-elements.tsx) — read `content/chapters/12-markdown-demo.md` at build time. Each strips the YAML-style frontmatter, splits on the authored page-break marker, and passes one half to `<MarkdownRenderer>`:
+Two pages — [`01-markdown-automation.tsx`](../../src/pages/14-markdown-automation/01-markdown-automation.tsx) and [`03-supported-elements.tsx`](../../src/pages/14-markdown-automation/03-supported-elements.tsx) — read `content/chapters/12-markdown-demo.md` at build time via the shared loader [`src/utils/markdownDemo.ts`](../../src/utils/markdownDemo.ts), which strips the YAML-style frontmatter, splits on the authored page-break marker (asserting it appears exactly once), and returns the two halves:
 
 ```tsx
-const mdPath = path.join(process.cwd(), 'content/chapters/12-markdown-demo.md');
-const content = fs.readFileSync(mdPath, 'utf-8');
-const body = content.replace(/^---[\s\S]*?---/, '').trim();
-const [partOne, partTwo] = body.split('\n<!-- page-break -->\n');
+const [partOne, partTwo] = loadMarkdownDemoParts();
 
-<MarkdownRenderer content={partOne.trim()} /> // first page
-<MarkdownRenderer content={partTwo.trim()} /> // second page
+<MarkdownRenderer content={partOne} /> // first page
+<MarkdownRenderer content={partTwo} /> // second page
 ```
 
 The other files in `content/chapters/` are author drafts, not loaded by the build.
@@ -71,4 +68,5 @@ For chapters where the layout matters (cross-page splits, custom callouts, side-
 
 - **Build-time read.** Both markdown-automation pages use `fs.readFileSync` synchronously inside their React component bodies. That works because `tsx` runs the files in Node — but it ties the build to the markdown file's presence on disk. Move the read into a build-time prep step if you want to ship the rendered chapter without the source file.
 - **No links, no images.** Link and image syntax pass through as raw characters. Use TSX if you need those.
+- **No ordered lists, no `####`.** `1. item` lines have no branch, so they'd merge into one paragraph — the parser emits a build-time `console.warn` when it sees them (use `-` bullets instead). `#### heading` degrades to a body paragraph containing the literal `####`; only `#`/`##`/`###` are headings.
 - **Code-block language label is cosmetic.** `lang` is a string passed to `<CodeBlock>`, which renders it as the gold label only. It does *not* select a highlighter: `src/utils/syntaxHighlight.ts` is one language-agnostic JS/TS tokenizer applied to every block regardless of the label. See [syntax-highlighting reference](../reference/syntax-highlighting.md) for what it recognizes.

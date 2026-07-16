@@ -66,7 +66,8 @@ content/chapters/        author drafts. One file (12-markdown-demo.md) is split 
                          the rest are reference material.
 reference/               long-form research notes referenced while authoring (not loaded by the build)
 templates/               readers' starter pack — generalized prompt files + project-instructions template
-output/                  generated PDF, toc-positions.json, and PNGs (gitignored)
+output/                  generated PDF, toc-positions.json, and PNGs (gitignored, except the
+                         book PDF itself — the tracked, shipped deliverable)
 ```
 
 ## License

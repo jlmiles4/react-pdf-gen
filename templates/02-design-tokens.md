@@ -115,7 +115,7 @@ export const borders = {
 
 ### Rules
 - `as const` on every export for TypeScript type safety
-- `fontWeight` is always `700 as const`, `600 as const`, or `400 as const` — never a plain number
+- `fontWeight` is always a weight your `Font.register` call includes, written `as const` (`700 as const`, `600 as const`, `500 as const`, or `400 as const`) — never a plain number
 - Core spacing follows a 4pt grid; named micro tokens may handle 1pt/2pt fine adjustments
 - Never add a color without a documented purpose
 - This file should be under 130 lines — if it's growing, you're over-engineering

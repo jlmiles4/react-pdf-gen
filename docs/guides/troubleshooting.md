@@ -32,6 +32,10 @@ The symptom identifies the cause:
 
 To verify: open a content page in `output/pages/page-NN.png` and look for Helvetica's narrow letterforms versus Inter's wider ones.
 
+### Build fails with "expected exactly one page-break marker line"
+
+`content/chapters/12-markdown-demo.md` is the one authored Markdown file the build consumes, and editing it is the one `.md` change that can fail the build: both `src/pages/14-markdown-automation/` pages split it on a single `<!-- page-break -->` marker line (via `src/utils/markdownDemo.ts`). Deleting the marker, duplicating it, or breaking its own-line placement throws this error — restore exactly one marker line between the two halves.
+
 ## Rendering surprises
 
 ### CodeBlock displays `$$` instead of `$`
@@ -46,7 +50,7 @@ When the *displayed* code is itself a template literal (e.g. an invoice formatte
 
 When the *displayed* code is JSX (`<Text>Total: ${price}</Text>`), the `$` is a literal character and `{price}` is a JSX expression — write `\${price}` in the source, not `$\${price}`. Otherwise the rendered PDF shows `$$`.
 
-Fixed example: `src/pages/12-premium-recipes/06-recipe-invoice.tsx`.
+There is also a third option that sidesteps escaping entirely: split the displayed snippet into concatenated pieces so no `${` appears in the outer template literal. That's what `src/pages/12-premium-recipes/06-recipe-invoice.tsx` does (`` 'INVOICE #' + ... `` style) — read it as the working example of the concatenation approach, not of the `\${...}` escape.
 
 ### Section heading appears at the bottom of a page with no body
 
