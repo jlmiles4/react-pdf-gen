@@ -149,7 +149,7 @@ const Table: React.FC<{
 ```
 
 ### Icons — SVG Vector Icons
-Never use emoji. Get path data from [lucide.dev](https://lucide.dev) (MIT license).
+Never use emoji. Get path data from [lucide.dev](https://lucide.dev) (ISC license).
 
 ```tsx
 import { Svg, Path } from '@react-pdf/renderer';

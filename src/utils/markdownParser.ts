@@ -57,17 +57,25 @@ export function parseMarkdown(md: string): MarkdownNode[] {
 
     // Headings (check ### before ## before # to avoid prefix collisions)
     if (line.startsWith('### ')) {
-      nodes.push({ type: 'heading', level: 3, spans: parseInline(line.replace('### ', '')) });
+      nodes.push({ type: 'heading', level: 3, spans: parseInline(line.slice(4)) });
       i++;
       continue;
     }
     if (line.startsWith('## ')) {
-      nodes.push({ type: 'heading', level: 2, spans: parseInline(line.replace('## ', '')) });
+      nodes.push({ type: 'heading', level: 2, spans: parseInline(line.slice(3)) });
       i++;
       continue;
     }
     if (line.startsWith('# ')) {
-      nodes.push({ type: 'heading', level: 1, spans: parseInline(line.replace('# ', '')) });
+      nodes.push({ type: 'heading', level: 1, spans: parseInline(line.slice(2)) });
+      i++;
+      continue;
+    }
+    // h4–h6 have no heading branch: warn and degrade to body text rather than
+    // silently rendering the #### markers as literal text.
+    if (/^#{4,6}\s/.test(line)) {
+      console.warn(`markdownParser: heading levels deeper than ### are not supported — "${line.slice(0, 60)}" will render as plain body text`);
+      nodes.push({ type: 'text', spans: parseInline(line.replace(/^#{4,6}\s+/, '')) });
       i++;
       continue;
     }
@@ -85,12 +93,15 @@ export function parseMarkdown(md: string): MarkdownNode[] {
 
     // Code Blocks
     if (line.startsWith('```')) {
-      const language = line.replace('```', '').trim();
+      const language = line.slice(3).trim();
       i++;
       const codeLines: string[] = [];
       while (i < lines.length && !lines[i].trim().startsWith('```')) {
         codeLines.push(lines[i]);
         i++;
+      }
+      if (i >= lines.length) {
+        console.warn('markdownParser: unclosed code fence — everything after it renders as code');
       }
       nodes.push({ type: 'code', language, code: codeLines.join('\n') });
       i++;
@@ -132,7 +143,7 @@ export function parseMarkdown(md: string): MarkdownNode[] {
       console.warn(`markdownParser: ordered lists are not supported — "${line.slice(0, 60)}" will render as plain body text (use "- " bullets instead)`);
     }
     const textLines: string[] = [];
-    while (i < lines.length && lines[i].trim() && !lines[i].trim().match(/^(#{1,3}\s|[*+-]\s|```|>)/)) {
+    while (i < lines.length && lines[i].trim() && !lines[i].trim().match(/^(#{1,6}\s|[*+-]\s|```|>)/)) {
       textLines.push(lines[i].trim());
       i++;
     }

@@ -17,8 +17,8 @@ The directories are numbered `01`–`15` (book-position order); the manifest's c
 pnpm build
   └─ pnpm sync                              (regenerates src/registry.ts from manifest + src/pages/)
   └─ tsx src/build.tsx
-       └─ imports './fonts'                 (Font.register — must run before render)
        └─ imports './Document'              (EbookDocument)
+            └─ imports './fonts'            (Font.register — side effect, must run before render)
             └─ imports './registry' (allPages)
                  └─ imports each src/pages/NN-chapter/NN-page.tsx
                       └─ each page imports from src/components/ and src/styles/

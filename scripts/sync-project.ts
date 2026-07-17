@@ -67,6 +67,17 @@ function validateInputs(allFiles: string[]): void {
     errors.push(`duplicate manifest chapter number(s): ${duplicateNumbers.join(', ')}`);
   }
 
+  // Nums must stay zero-padded two digits: src/build.tsx's TOC extraction pads
+  // matched "CHAPTER NN" markers to two digits and compares them against these
+  // strings, so a '1' would only surface at build time as a confusing
+  // "chapter had no detected page" error.
+  const malformedNumbers = chapters
+    .map((chapter) => chapter.num)
+    .filter((num) => !/^\d{2}$/.test(num));
+  if (malformedNumbers.length > 0) {
+    errors.push(`manifest chapter num(s) must be zero-padded two-digit strings ('01', '02', …): ${malformedNumbers.join(', ')}`);
+  }
+
   const duplicateEntries = findDuplicates(chapters.map((chapter) => chapter.entryPage));
   if (duplicateEntries.length > 0) {
     errors.push(`duplicate manifest entryPage(s): ${duplicateEntries.join(', ')}`);

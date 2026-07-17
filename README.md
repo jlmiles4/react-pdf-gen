@@ -57,7 +57,7 @@ src/
                          Each chapter folder starts with 00-title.tsx (the chapter divider),
                          then 01-<chapter>.tsx, then continuation pages. Chrome lives in
                          01-cover/, 02-toc/, 15-conclusion/.
-  utils/                 syntaxHighlight.ts, markdownParser.ts
+  utils/                 syntaxHighlight.ts, markdownParser.ts, markdownDemo.ts
 scripts/
   sync-project.ts        regenerates registry.ts from manifest.ts + src/pages/
   export-pages.sh        pdftoppm wrapper, default 200 DPI

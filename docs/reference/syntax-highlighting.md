@@ -7,11 +7,11 @@
 <CodeBlock language="python">{`def f(): return 1`}</CodeBlock>
 ```
 
-`CodeBlock` calls `tokenize(children)` with the code only ([`CodeBlock.tsx:23`](../../src/components/CodeBlock.tsx)); `language` is rendered separately as `styles.codeLabel` ([`CodeBlock.tsx:27`](../../src/components/CodeBlock.tsx)).
+`CodeBlock` calls `tokenize(children)` with the code only ([`CodeBlock.tsx:26`](../../src/components/CodeBlock.tsx)); `language` is rendered separately as `styles.codeLabel` ([`CodeBlock.tsx:30`](../../src/components/CodeBlock.tsx)).
 
 ## How a line is tokenized
 
-`tokenize(code)` splits on `\n` and runs `tokenizeLine` per line. Each line is matched left-to-right by a single combined regex (`TOKEN_RE`), **first match wins**, and any gap between matches becomes `default` text. The seven token types, in match priority:
+`tokenize(code)` splits on `\n` and scans each line left-to-right with a single combined regex (`TOKEN_RE`), **first match wins**; any gap between matches becomes `default` text. A `/*` comment or backtick template literal left open at end-of-line is tracked, and following lines are colored until its closer. The seven token types, in match priority:
 
 | # | Token type | What matches | Example |
 |---|---|---|---|
@@ -22,7 +22,7 @@
 | 5 | `number` | `\d+\.?\d*` | `42`, `1.5` |
 | 6 | `punctuation` | a run of `{}()[],.;=+-*/&|!<>?:` | `=>`, `({`, `);` |
 
-Blank lines render a single space so their line-height doesn't collapse ([`CodeBlock.tsx:32`](../../src/components/CodeBlock.tsx)).
+Blank lines render a single space so their line-height doesn't collapse ([`CodeBlock.tsx:36`](../../src/components/CodeBlock.tsx)).
 
 ## Colors
 
@@ -52,7 +52,7 @@ Any identifier not in this set is `default` text. To make a new word highlight a
 
 - **No per-language modes.** One tokenizer for everything; the `language` prop is decorative. Non-JS languages (Python, Bash, JSON, YAML) are colored with the JS/TS rules, which is usually close enough for short snippets but will miscolor language-specific keywords.
 - **JSX tags need an uppercase initial.** `<ContentPage>` colors as a `tag`; a lowercase HTML tag like `<div>` does not — its `<` falls to `punctuation` and `div` to `default`.
-- **Regex, not a parser.** No awareness of template-literal interpolation (`${...}`), no context sensitivity, no multi-line string tracking beyond the block comment case. First-match-wins can occasionally mis-slice unusual input.
+- **Regex, not a parser.** No awareness of template-literal interpolation (`${...}`) — interpolations stay string-colored — and no context sensitivity. First-match-wins can occasionally mis-slice unusual input.
 - **Keyword allowlist is fixed.** Words outside the set above stay `default`, even common ones like `let`-adjacent identifiers or DOM globals.
 
 ## Related

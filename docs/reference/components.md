@@ -100,6 +100,7 @@ All use `wrap={false}`. Body text is rendered as a single `<Text>` with `styles.
 |---|---|---|---|
 | `children` | `string` | yes | The literal source. Pass as a template string. |
 | `language` | `string` | no | Free-text label rendered in gold above the block |
+| `wrap` | `boolean` | no | Defaults to `false` so the block can't split across pages; pass `true` for a block that may legitimately span pages |
 
 ## Lists and tables
 
@@ -249,7 +250,7 @@ const [partOne, partTwo] = body.split('\n<!-- page-break -->\n');
 
 ## Icons
 
-[`src/components/Icons.tsx`](../../src/components/Icons.tsx) — SVG Lucide-style icons. Each is a thin wrapper around `Icon.tsx` (the react-icons → react-pdf adapter). Available exports: `CheckIcon`, `XIcon`, `AlertTriangleIcon`, `InfoIcon`, `ArrowRightIcon`, `BookIcon`, `CodeIcon`, `LayersIcon`, `PaletteIcon`, `ZapIcon`. Each accepts `size` (number, default `iconSize.lg` = 16) and `color` (string, default varies by icon — e.g. `CheckIcon` defaults to `colors.success`).
+[`src/components/Icons.tsx`](../../src/components/Icons.tsx) — SVG Lucide-style icons. Each is a thin wrapper around `Icon.tsx` (the react-icons → react-pdf adapter). Available exports: `CheckIcon`, `XIcon`, `AlertTriangleIcon`, `InfoIcon`, `ArrowRightIcon`, `ZapIcon`. Each accepts `size` (number, default `iconSize.lg` = 16) and `color` (string, default varies by icon — e.g. `CheckIcon` defaults to `colors.success`).
 
 ```tsx
 <CheckIcon size={iconSize.sm} color={colors.success} />

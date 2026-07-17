@@ -42,11 +42,13 @@ const s = StyleSheet.create({
     fontWeight: fontWeight.bold,
     color: colors.white,
     lineHeight: lineHeight.tight,
-    marginBottom: spacing.md,
   },
   headingAccent: {
     fontWeight: fontWeight.bold,
     color: colors.accent[400],
+  },
+  headingGap: {
+    marginBottom: spacing.md,
   },
   subtitle: {
     fontSize: fontScale.contentTitle,
@@ -144,10 +146,8 @@ const Conclusion: React.FC = () => (
   <Page size="LETTER" style={s.page} wrap={false}>
     <View style={s.topBar} />
     <AccentBar size="xl" mb={spacing.xl} />
-    <Text style={s.heading}>
-      Now{'\n'}
-      <Text style={s.headingAccent}>Ship It.</Text>
-    </Text>
+    <Text style={s.heading}>Now</Text>
+    <Text style={[s.heading, s.headingAccent, s.headingGap]}>Ship It.</Text>
     <Text style={s.subtitle}>
       Twelve chapters, from architecture to automation. You have the patterns, the source code, and the templates. The distance between a basic AI-generated PDF and a high-end, professional deliverable is shorter than you think.
     </Text>

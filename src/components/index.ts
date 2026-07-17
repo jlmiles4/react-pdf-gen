@@ -21,9 +21,5 @@ export {
   XIcon,
   ArrowRightIcon,
   ZapIcon,
-  BookIcon,
-  CodeIcon,
-  LayersIcon,
-  PaletteIcon,
   Icon,
 } from './Icons';

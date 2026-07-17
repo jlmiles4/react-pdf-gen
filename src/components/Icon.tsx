@@ -33,7 +33,7 @@ interface IconProps {
   color?: string;
 }
 
-const TAG_MAP: Record<string, React.ComponentType<any>> = {
+const TAG_MAP: Record<string, React.ElementType> = {
   svg: Svg,
   path: Path,
   circle: Circle,
@@ -120,7 +120,7 @@ const Icon: React.FC<IconProps> = ({ icon, size = iconSize.lg, color = colors.ne
   const attr = wrapper.props.attr ?? {};
   const svgProps = coerceProps(attr, color);
   const children = convertChildren(wrapper.props.children, color, svgProps);
-  return React.createElement(Svg, { width: size, height: size, ...svgProps }, children);
+  return React.createElement(Svg, { ...svgProps, width: size, height: size }, children);
 };
 
 export default Icon;

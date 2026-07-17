@@ -15,7 +15,7 @@ Every export is `as const`. `typography` composes from `fontWeight` and `lineHei
 | `fontWeight` | `{ regular: 400, semibold: 600, bold: 700 }` | Matches `Font.register` weights |
 | `lineHeight` | `{ tight: 1.2, snug: 1.4, normal: 1.5, relaxed: 1.6 }` | For local styles that don't pull a typography preset |
 | `typography` | `{ display, h1, h2, h3, h4, body, bodySmall, caption, code, codeSmall }` | Each is `{ fontSize, fontFamily, fontWeight, lineHeight }` |
-| `fontScale` | `{ coverTitle, pageTitle, sectionTitle, subtitle, contentTitle, label, bodyMedium, labelSmall, navSmall, micro }` | Header/footer/chapter chrome sizes outside the body scale |
+| `fontScale` | `{ coverTitle, pageTitle, sectionTitle, subtitle, contentTitle, label, bodyMedium, labelSmall, chromeLabel, navSmall, micro }` | Header/footer/chapter chrome sizes outside the body scale |
 | `letterSpacing` | `{ tight, normal, wide, wider }` | Uppercase/tracked-out text (chapter label, cover author) |
 | `spacing` | `{ none: 0, micro: 1, xxs: 2, xs: 4, sm: 8, md: 12, lg: 16, xl: 24, xxl: 32, xxxl: 48 }` | 4pt grid (with zero/sub-grid values for overrides) |
 | `page` | `{ width: 612, height: 792, margin, coverMargin, headerHeight, footerHeight, topBarHeight, chapterPaddingExtra, contentWidth: 504, contentHeight: 672 }` | LETTER, in points |
