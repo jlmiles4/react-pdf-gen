@@ -9,4 +9,4 @@ These files are the **starter kit shipped to customers**, not configuration for 
 - **This `CLAUDE.md` itself is maintainer guidance.** It is tracked in the repo but must be excluded from the customer starter kit when packaging `templates/` — the customer deliverable is `CLAUDE.md.template` only.
 
 ## Conventions
-- **This folder's `README.md` carries marketing counts** ("71-page PDF", "18 reusable components", "71 page files in 15 folders", "30 styles"). These drift whenever pages or components change — re-measure against the repo (`pdfinfo output/react-pdf-ai-builders-guide.pdf`, `ls src/components`, `find src/pages -name '*.tsx'`) before quoting or editing them.
+- **This folder's `README.md` carries marketing counts** ("78-page PDF", "18 reusable components", "78 page files in 15 folders", "30 styles"). These drift whenever pages or components change — re-measure against the repo (`pdfinfo output/react-pdf-ai-builders-guide.pdf`, `ls src/components`, `find src/pages -name '*.tsx'`) before quoting or editing them.

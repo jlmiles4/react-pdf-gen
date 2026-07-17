@@ -16,7 +16,7 @@ const Page: React.FC = () => (
         ['A simple page (title, 3 paragraphs)', '150-250'],
         ['A complex page (table, code block, callouts)', '400-800'],
         ['A shared component (Header or Footer)', '400-500'],
-        ['A theme.ts with full design tokens', '1,500-1,700'],
+        ['A theme.ts with full design tokens', '1,700-1,900'],
         ['A 30-page monolith file', '8,000-15,000'],
       ]}
       columnWidths={['60%', '40%']}
@@ -27,11 +27,11 @@ const Page: React.FC = () => (
       When you ask AI to edit a page, it needs context. Here's the optimal context budget:
     </Text>
     <BulletList items={[
-      'theme.ts (design tokens): ~1,650 tokens',
+      'theme.ts (design tokens): ~1,800 tokens',
       'Relevant shared components: ~300-500 tokens',
       'The page file being edited: ~200-600 tokens',
       'Your instructions: ~100-300 tokens',
-      'Total: 2,200-3,000 tokens of context – well within any model\'s sweet spot',
+      'Total: 2,400-3,200 tokens of context – well within any model\'s sweet spot',
     ]} />
   </ContentPage>
 );

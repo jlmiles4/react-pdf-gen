@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-An ebook (71 pages) covering best practices for using `@react-pdf/renderer` with AI coding agents. The book teaches developers how to structure react-pdf projects for maximum AI productivity, avoid common pitfalls, and produce premium-quality PDF deliverables.
+An ebook (78 pages) covering best practices for using `@react-pdf/renderer` with AI coding agents. The book teaches developers how to structure react-pdf projects for maximum AI productivity, avoid common pitfalls, and produce premium-quality PDF deliverables.
 
 ## Target Audience
 
@@ -12,7 +12,7 @@ An ebook (71 pages) covering best practices for using `@react-pdf/renderer` with
 
 ## Status Tracker
 
-71 source `.tsx` files in `src/pages/` render to 71 PDF pages in `output/react-pdf-ai-builders-guide.pdf`. Layout is directory-based: one folder per chapter, `NN-chapter/NN-page.tsx`, with `00-title.tsx` as the chapter divider. Chapter structure is defined in `src/manifest.ts`. Verify the rendered count with `pdfinfo output/react-pdf-ai-builders-guide.pdf` (or count `output/pages/*.png` after `pnpm pipeline`).
+78 source `.tsx` files in `src/pages/` render to 78 PDF pages in `output/react-pdf-ai-builders-guide.pdf`. Layout is directory-based: one folder per chapter, `NN-chapter/NN-page.tsx`, with `00-title.tsx` as the chapter divider. Chapter structure is defined in `src/manifest.ts`. Verify the rendered count with `pdfinfo output/react-pdf-ai-builders-guide.pdf` (or count `output/pages/*.png` after `pnpm pipeline`).
 
 | Group | Chapter | Folder | Status |
 |-------|---------|--------|--------|
@@ -32,7 +32,7 @@ An ebook (71 pages) covering best practices for using `@react-pdf/renderer` with
 | Shipping | 12 — Markdown Automation | `14-markdown-automation/` | DONE |
 | — | Conclusion / Back Cover | `15-conclusion/` | DONE |
 
-**Total: 71 source files → 71 rendered pages.**
+**Total: 78 source files → 78 rendered pages.**
 
 ## File Structure
 

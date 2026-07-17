@@ -1,6 +1,6 @@
 # react-pdf-gen
 
-A `@react-pdf/renderer` project that builds a 71-page ebook ("React-PDF + AI: The Builder's Guide to Premium PDF Generation") from React/TSX components. The build command syncs a registry of pages, then renders the PDF in two passes (the second pass populates the clickable TOC with real page numbers), and a shell script rasterizes the PDF to PNG pages for visual review.
+A `@react-pdf/renderer` project that builds a 78-page ebook ("React-PDF + AI: The Builder's Guide to Premium PDF Generation") from React/TSX components. The build command syncs a registry of pages, then renders the PDF in two passes (the second pass populates the clickable TOC with real page numbers), and a shell script rasterizes the PDF to PNG pages for visual review.
 
 ## Quick start
 

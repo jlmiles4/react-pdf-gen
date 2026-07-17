@@ -6,7 +6,7 @@ import { ContentPage, CodeBlock, TipBox, InfoBox, SectionHeading } from '../../c
 const Page: React.FC = () => (
   <ContentPage sectionTitle="Tokenization" wrap={false}>
     <Text style={styles.body}>
-      Total context: roughly 2,650 tokens. The AI has everything it needs to produce code that matches your design system, uses the correct component wrapper, and fits the existing page structure. No guesswork required.
+      Total context: roughly 2,800 tokens. The AI has everything it needs to produce code that matches your design system, uses the correct component wrapper, and fits the existing page structure. No guesswork required.
     </Text>
 
     <InfoBox label="Project Docs vs. Research">
@@ -14,7 +14,7 @@ const Page: React.FC = () => (
     </InfoBox>
 
     <TipBox label="Token Budget Template">
-      For each AI edit session, aim for this budget: theme (1,650) + components (350) + target page (450) + instructions (200) = 2,650 tokens. In a 128K context window, that leaves about 98% available for reasoning and output.
+      For each AI edit session, aim for this budget: theme (1,800) + components (350) + target page (450) + instructions (200) = 2,800 tokens. In a 128K context window, that leaves about 98% available for reasoning and output.
     </TipBox>
 
     <SectionHeading>Measure Your Own Files</SectionHeading>

@@ -25,7 +25,7 @@ const Page: React.FC = () => (
       rows={[
         ['NN-chapter/', '05-architecture/', 'One folder per chapter'],
         ['00-title.tsx', '00-title.tsx', 'The chapter divider page'],
-        ['NN-topic.tsx', '05-naming-conventions.tsx', 'A single content page'],
+        ['NN-topic.tsx', '07-naming-conventions.tsx', 'A single content page'],
         ['PascalCase.tsx', 'CodeBlock.tsx', 'A reusable component'],
         ['manifest.ts', 'src/manifest.ts', 'The chapter structure'],
       ]}

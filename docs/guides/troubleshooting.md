@@ -50,7 +50,7 @@ When the *displayed* code is itself a template literal (e.g. an invoice formatte
 
 When the *displayed* code is JSX (`<Text>Total: ${price}</Text>`), the `$` is a literal character and `{price}` is a JSX expression — write `\${price}` in the source, not `$\${price}`. Otherwise the rendered PDF shows `$$`.
 
-There is also a third option that sidesteps escaping entirely: split the displayed snippet into concatenated pieces so no `${` appears in the outer template literal. That's what `src/pages/12-premium-recipes/06-recipe-invoice.tsx` does (`` 'INVOICE #' + ... `` style) — read it as the working example of the concatenation approach, not of the `\${...}` escape.
+There is also a third option that sidesteps escaping entirely: split the displayed snippet into concatenated pieces so no `${` appears in the outer template literal. That's what `src/pages/12-premium-recipes/07-recipe-invoice.tsx` does (`` 'INVOICE #' + ... `` style) — read it as the working example of the concatenation approach, not of the `\${...}` escape.
 
 ### Section heading appears at the bottom of a page with no body
 

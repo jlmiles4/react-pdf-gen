@@ -19,7 +19,7 @@ import { colors, iconSize } from './styles/theme';
     </Text>
 
     <WarningBox label="Path Data Quality">
-      Not every icon library renders cleanly. Stick to stroke-based sets (Lucide, Feather, Heroicons-outline). Avoid icons that rely on filters or masks – react-pdf supports neither, and the adapter drops unmapped tags silently.
+      Not every icon library renders cleanly. Stick to stroke-based sets (Lucide, Feather, Heroicons-outline). Avoid icons that rely on filters or masks – react-pdf supports neither, and the adapter skips any tag it can't map, logging a one-time build warning that names it.
     </WarningBox>
 
     <View wrap={false} minPresenceAhead={40}>

@@ -10,7 +10,7 @@ The common case. Drop a new file in the chapter folder; `pnpm build` picks it up
 
 Path: `src/pages/<chapter-folder>/NN-topic.tsx`, where `NN` is the next available numeric prefix (`00-title` is the divider, `01-<chapter>` is the first content page, continuations start at `03-` by convention — the `02-` slot is skipped).
 
-Skeleton — matches [`src/pages/04-fundamentals/03-styling-and-flexbox.tsx`](../../src/pages/04-fundamentals/03-styling-and-flexbox.tsx):
+Skeleton — matches [`src/pages/04-fundamentals/05-styling-and-flexbox.tsx`](../../src/pages/04-fundamentals/05-styling-and-flexbox.tsx):
 
 ```tsx
 import React from 'react';

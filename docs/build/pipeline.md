@@ -114,8 +114,8 @@ Use this whenever you want to verify visual output. PDF first; if the build fail
 
 ## Performance notes
 
-- The full 71-page build renders twice, so layout dominates elapsed time; the script logs the measured duration because hardware and cache state vary.
-- The current PDF is about 290 KB. `pdffonts` shows subset-embedded Inter variants actually used by visible text; Courier is a standard PDF base font. Raster images would add substantially more.
+- The full 78-page build renders twice, so layout dominates elapsed time; the script logs the measured duration because hardware and cache state vary.
+- The current PDF is about 320 KB. `pdffonts` shows subset-embedded Inter variants actually used by visible text; Courier is a standard PDF base font. Raster images would add substantially more.
 - PNG size at 200 DPI varies with page complexity (roughly 48–330 KB in the current export). 150 DPI is enough for layout review; 200 DPI is what the book itself recommends for AI vision analysis.
 
 ## Generated artifacts

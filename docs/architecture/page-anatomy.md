@@ -33,7 +33,7 @@ Example: [`src/pages/03-introduction/01-introduction.tsx`](../../src/pages/03-in
 
 ## Continuation page
 
-Example: [`src/pages/04-fundamentals/03-styling-and-flexbox.tsx`](../../src/pages/04-fundamentals/03-styling-and-flexbox.tsx).
+Example: [`src/pages/04-fundamentals/05-styling-and-flexbox.tsx`](../../src/pages/04-fundamentals/05-styling-and-flexbox.tsx).
 
 ```tsx
 import React from 'react';

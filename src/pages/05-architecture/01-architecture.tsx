@@ -34,7 +34,7 @@ const Page: React.FC = () => (
       <Text style={styles.h3}>Why This Works</Text>
       <BulletList items={[
         'Page files stay small and focused – often a few dozen lines',
-        'AI can edit one page (e.g. 05-architecture/05-naming-conventions.tsx) without touching the others',
+        'AI can edit one page (e.g. 05-architecture/07-naming-conventions.tsx) without touching the others',
         'You give AI context: the page file + theme.ts + relevant components = ~3,000 tokens',
         'Components enforce consistency – every content page uses the same Header and Footer',
       ]} />

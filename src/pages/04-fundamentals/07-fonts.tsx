@@ -13,9 +13,10 @@ const Page: React.FC = () => (
 import path from 'path';
 const dir = path.resolve(__dirname, '../fonts');
 Font.register({ family: 'Inter', fonts: [
-  { src: path.join(dir, 'Inter-Regular.ttf'), fontWeight: 400 },
-  { src: path.join(dir, 'Inter-Bold.ttf'), fontWeight: 700 },
-] });`}</CodeBlock>
+  { src: path.join(dir, 'Inter-Regular.ttf'),  fontWeight: 400 },
+  { src: path.join(dir, 'Inter-SemiBold.ttf'), fontWeight: 600 },
+  { src: path.join(dir, 'Inter-Bold.ttf'),     fontWeight: 700 },
+] });  // + Medium 500 and italics in the real project`}</CodeBlock>
 
     <WarningBox label="Font Limitations">
       Only TTF and WOFF formats work – OTF files and variable fonts are not supported. Missing styles fail; missing weights resolve to the nearest registered weight.
@@ -29,8 +30,8 @@ Font.register({ family: 'Inter', fonts: [
       headers={['Style', 'Resolves to', 'Common use']}
       rows={[
         ['fontWeight: 400', 'Inter-Regular.ttf', 'Body copy, captions'],
-        ['fontWeight: 700', 'Inter-Bold.ttf', 'Headings, emphasis'],
-        ['fontWeight: 600', 'Inter-Bold.ttf', 'Nearest fallback'],
+        ['fontWeight: 600', 'Inter-SemiBold.ttf', 'Headings, bold text'],
+        ['fontWeight: 700', 'Inter-Bold.ttf', 'Heaviest emphasis'],
       ]}
       columnWidths={['34%', '34%', '32%']}
     />
