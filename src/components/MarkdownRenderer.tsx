@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text } from '@react-pdf/renderer';
 import { styles } from '../styles/shared';
-import { parseMarkdown, MarkdownNode, InlineSpan } from '../utils/markdownParser';
+import { parseMarkdown, InlineSpan } from '../utils/markdownParser';
 import SectionHeading from './SectionHeading';
 import BulletList from './BulletList';
 import CodeBlock from './CodeBlock';

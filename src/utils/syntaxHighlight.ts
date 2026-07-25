@@ -31,7 +31,7 @@ const KEYWORDS = new Set([
 // The trailing /* and backtick alternatives match constructs that open on this
 // line without closing; tokenize() carries that state into the following lines.
 const TOKEN_RE =
-  /(\/\/.*$|\/\*[\s\S]*?\*\/|\/\*.*$)|('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|`(?:[^`\\]|\\.)*`|`[^`\\]*$)|(\b[a-zA-Z_$][a-zA-Z0-9_$]*\b)|(<\/?[A-Z][A-Za-z.]*)|(\b\d+\.?\d*\b)|([{}()\[\],.;=+\-*/&|!<>?:]+)/gm;
+  /(\/\/.*$|\/\*[\s\S]*?\*\/|\/\*.*$)|('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|`(?:[^`\\]|\\.)*`|`(?:[^`\\]|\\.)*$)|(\b[a-zA-Z_$][a-zA-Z0-9_$]*\b)|(<\/?[A-Z][A-Za-z.]*)|(\b\d+\.?\d*\b)|([{}()\[\],.;=+\-*/&|!<>?:]+)/gm;
 
 type OpenBlock = 'comment' | 'template' | null;
 
@@ -96,13 +96,6 @@ function findClosingBacktick(line: string): number {
     if (backslashes % 2 === 0) return i;
   }
   return -1;
-}
-
-export function tokenizeLine(line: string): Token[] {
-  const { tokens } = scanLine(line);
-  // Keep the line renderable even when it produced no tokens (blank line).
-  if (tokens.length === 0) tokens.push({ text: '', type: 'default' });
-  return tokens;
 }
 
 export function tokenize(code: string): Token[][] {

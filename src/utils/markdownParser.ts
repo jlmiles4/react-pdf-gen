@@ -18,10 +18,17 @@ export type MarkdownNode =
  * `snake_case` identifiers are left alone — wrap real identifiers in backticks.
  * Bold/italic content is parsed recursively so runs nest (`**a *b* c**`); code
  * spans are terminal and stay literal.
+ *
+ * Emphasis bodies are `(?:[^`]|`[^`]*`)+?` rather than `.+?` so a run may span
+ * a *complete* code span (`**a `b` c**` still bolds) but can never end inside
+ * one. With a plain `.+?`, an unpaired `**` would lazily close on a `**` that
+ * sits inside a later code span, swallowing it and leaking literal backticks
+ * into the PDF — e.g. "a ** b `c ** d`". Now the emphasis simply fails to
+ * match, the `**` stays literal, and the code span parses on its own.
  */
 export function parseInline(line: string): InlineSpan[] {
   const spans: InlineSpan[] = [];
-  const re = /\*\*(.+?)\*\*|`([^`]+)`|\*([^*\n]+)\*|(?<![A-Za-z0-9])_([^_\n]+)_(?![A-Za-z0-9])/g;
+  const re = /\*\*((?:[^`]|`[^`]*`)+?)\*\*|`([^`]+)`|\*((?:[^*\n`]|`[^`]*`)+?)\*|(?<![A-Za-z0-9])_((?:[^_\n`]|`[^`]*`)+?)_(?![A-Za-z0-9])/g;
   let last = 0;
   let m: RegExpExecArray | null;
   while ((m = re.exec(line)) !== null) {
@@ -42,8 +49,16 @@ function isListItem(line: string): boolean {
   return line.startsWith('* ') || line.startsWith('- ') || line.startsWith('+ ');
 }
 
+/** Strip an ATX closing sequence (`## Title ##` -> `Title`), per CommonMark. */
+function stripHeadingSuffix(text: string): string {
+  return text.replace(/\s+#+\s*$/, '');
+}
+
 export function parseMarkdown(md: string): MarkdownNode[] {
-  const lines = md.split('\n');
+  // Normalize CRLF once, up front. Every branch except the code fence trims its
+  // line (which would hide a stray \r); the fence pushes raw lines, so without
+  // this a CRLF-authored file leaks \r into rendered code blocks.
+  const lines = md.replace(/\r\n/g, '\n').split('\n');
   const nodes: MarkdownNode[] = [];
   let i = 0;
 
@@ -57,17 +72,17 @@ export function parseMarkdown(md: string): MarkdownNode[] {
 
     // Headings (check ### before ## before # to avoid prefix collisions)
     if (line.startsWith('### ')) {
-      nodes.push({ type: 'heading', level: 3, spans: parseInline(line.slice(4)) });
+      nodes.push({ type: 'heading', level: 3, spans: parseInline(stripHeadingSuffix(line.slice(4))) });
       i++;
       continue;
     }
     if (line.startsWith('## ')) {
-      nodes.push({ type: 'heading', level: 2, spans: parseInline(line.slice(3)) });
+      nodes.push({ type: 'heading', level: 2, spans: parseInline(stripHeadingSuffix(line.slice(3))) });
       i++;
       continue;
     }
     if (line.startsWith('# ')) {
-      nodes.push({ type: 'heading', level: 1, spans: parseInline(line.slice(2)) });
+      nodes.push({ type: 'heading', level: 1, spans: parseInline(stripHeadingSuffix(line.slice(2))) });
       i++;
       continue;
     }
@@ -75,7 +90,7 @@ export function parseMarkdown(md: string): MarkdownNode[] {
     // silently rendering the #### markers as literal text.
     if (/^#{4,6}\s/.test(line)) {
       console.warn(`markdownParser: heading levels deeper than ### are not supported — "${line.slice(0, 60)}" will render as plain body text`);
-      nodes.push({ type: 'text', spans: parseInline(line.replace(/^#{4,6}\s+/, '')) });
+      nodes.push({ type: 'text', spans: parseInline(stripHeadingSuffix(line.replace(/^#{4,6}\s+/, ''))) });
       i++;
       continue;
     }
@@ -115,8 +130,15 @@ export function parseMarkdown(md: string): MarkdownNode[] {
         const variant = variantMatch[1].toLowerCase() as 'tip' | 'warning' | 'info';
         const labelMatch = line.match(/label="([^"]+)"/);
         const label = labelMatch ? labelMatch[1] : variant.toUpperCase();
+        // Body text may start on the marker line itself (`> [!TIP] Do this.`).
+        // Everything after the marker (and after an optional label="…") belongs
+        // to the callout — dropping it silently rendered an empty box.
+        const inlineBody = line
+          .slice(variantMatch.index! + variantMatch[0].length)
+          .replace(/^\s*label="[^"]*"/, '')
+          .trim();
         i++;
-        const calloutLines: string[] = [];
+        const calloutLines: string[] = inlineBody ? [inlineBody] : [];
         while (i < lines.length && lines[i].trim().startsWith('>')) {
           calloutLines.push(lines[i].trim().replace(/^>\s*/, ''));
           i++;
@@ -149,6 +171,16 @@ export function parseMarkdown(md: string): MarkdownNode[] {
     }
     if (textLines.length > 0) {
       nodes.push({ type: 'text', spans: parseInline(textLines.join(' ')) });
+    } else {
+      // Guaranteed progress. The grouping guard above is deliberately broader
+      // than the branch predicates that precede it — it stops on `#{1,6}\s`
+      // and `[*+-]\s`, where `\s` matches a tab, while the heading and list
+      // branches require a literal space. So a line like "-\titem" or
+      // "#\tTitle" reaches this branch, matches the guard, consumes nothing,
+      // and would leave `i` unchanged: a silent infinite loop that hangs the
+      // build with no error. Emit the line as body text and always advance.
+      nodes.push({ type: 'text', spans: parseInline(line) });
+      i++;
     }
   }
 
