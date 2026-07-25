@@ -96,7 +96,15 @@ const ctStyles = StyleSheet.create({
 });
 
 const ChapterTitle: React.FC<ChapterTitleProps> = ({ number, title, subtitle }) => (
-  <Page id={chapterDestinationId(number)} size="LETTER" style={ctStyles.page} wrap={false}>
+  // `id` is the internal destination the TOC links jump to; `bookmark` is what
+  // gives the PDF a navigable outline in the reader's sidebar. Both are needed.
+  <Page
+    id={chapterDestinationId(number)}
+    bookmark={`${number}. ${title}`}
+    size="LETTER"
+    style={ctStyles.page}
+    wrap={false}
+  >
     <AccentBar size="lg" mb={spacing.lg} />
     <Text style={ctStyles.chapterLabel}>Chapter {number}</Text>
     <Text style={ctStyles.title} hyphenationCallback={noHyphenation}>{title}</Text>

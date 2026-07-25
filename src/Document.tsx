@@ -23,6 +23,7 @@ const EbookDocument: React.FC = () => (
     subject="Best practices for using @react-pdf/renderer with AI coding agents"
     keywords="react-pdf, AI, PDF generation, design systems, best practices"
     creator="react-pdf-gen"
+    language="en-US"
   >
     {allPages.map((Page, index) => (
       <Page key={index} />
