@@ -1,6 +1,25 @@
-MIT License
+MIT License (source code)
 
 Copyright (c) 2026 Landon Miles
+
+SCOPE: this license covers the SOURCE CODE in this repository — the build
+system, the reusable component library, the design-token system, and the
+project's own documentation:
+
+    src/build.tsx, src/Document.tsx, src/manifest.ts, src/registry.ts,
+    src/fonts.ts, src/tocPositions.ts
+    src/components/**, src/styles/**, src/utils/**
+    scripts/**
+    docs/**
+    package.json, pnpm-lock.yaml, pnpm-workspace.yaml, tsconfig.json,
+    .gitignore, CLAUDE.md
+
+It does NOT cover the book's text and design or the commercial starter pack.
+Those are covered by LICENSE-CONTENT, which lists them exactly.
+
+Third-party assets bundled with this repository (the Inter font family,
+react-icons, Lucide icons, and notes derived from upstream react-pdf
+documentation) retain their own licenses — see NOTICE.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,7 +38,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-
-Third-party assets bundled with this repository (the Inter font family,
-react-icons, Lucide icons, and notes derived from upstream react-pdf
-documentation) retain their own licenses — see NOTICE.
