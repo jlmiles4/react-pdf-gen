@@ -54,6 +54,10 @@ CSS Grid is not supported. Use flexbox with explicit widths:
   <Text style={{
     ...typography.h3,
     fontStyle: 'italic',
+    // h3 is weight 600, but 01-project-setup.md registers italic only at 400.
+    // Asking for an unregistered weight+style silently falls back, so state the
+    // weight you actually registered — or register a 600-italic face too.
+    fontWeight: 400 as const,
     color: colors.primary[700],
   }}>
     "The quote text goes here."
@@ -91,7 +95,10 @@ CSS Grid is not supported. Use flexbox with explicit widths:
 }}>
   {steps.map((step, i) => (
     <React.Fragment key={i}>
-      {i > 0 && <Text style={{ fontSize: 16, color: colors.neutral[400] }}>→</Text>}
+      {/* Set the family explicitly: with none set, this falls back to built-in
+          Helvetica, whose encoding has no → and renders the wrong glyph. */}
+      {i > 0 && <Text style={{ fontSize: 16, fontFamily: fonts.body,
+        fontWeight: 400 as const, color: colors.neutral[400] }}>→</Text>}
       <View style={{ alignItems: 'center', width: 80 }}>
         <Text style={{ fontSize: 18, fontFamily: fonts.heading, fontWeight: 700 as const,
           color: colors.accent[500] }}>{i + 1}</Text>
@@ -132,7 +139,12 @@ import { Svg, Defs, LinearGradient, Stop, Rect } from '@react-pdf/renderer';
   <Svg style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
     viewBox={`0 0 ${page.contentWidth} 100`}>
     <Defs>
-      <LinearGradient id="bg" x1="0" y1="0" x2={page.contentWidth} y2="0">
+      {/* gradientUnits="userSpaceOnUse" is required to use viewBox coordinates.
+          Without it the renderer defaults to objectBoundingBox, where x1/x2 are
+          fractions of the shape's box — x2={page.contentWidth} would land far
+          off-canvas and the rect would render as a flat fill. */}
+      <LinearGradient id="bg" gradientUnits="userSpaceOnUse"
+        x1="0" y1="0" x2={page.contentWidth} y2="0">
         <Stop offset="0%" stopColor={colors.primary[700]} />
         <Stop offset="100%" stopColor={colors.primary[500]} />
       </LinearGradient>

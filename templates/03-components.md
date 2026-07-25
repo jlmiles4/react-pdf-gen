@@ -175,7 +175,7 @@ export const CheckIcon: React.FC<IconProps> = ({ size = 16, color = colors.succe
 ## Rules
 1. Every component that should not split across pages gets `wrap={false}`
 2. Headings carry `minPresenceAhead={40}` for wrapping contexts; fixed pages are visually balanced by editing or splitting the source
-3. All styles come from shared.ts or local `StyleSheet.create()` — never inline objects
+3. Named, reused styles come from shared.ts or a local `StyleSheet.create()`; inline objects and style arrays are for one-off structural overrides only (see `06-common-patterns.md`). Either way the *values* are tokens — never raw colors, sizes, or spacing
 4. `fontWeight` must always be present when `fontFamily` is set
 5. Icons use `fill="none"` and `stroke={color}` for line icons
 6. Keep each component file under 50 lines — small and focused

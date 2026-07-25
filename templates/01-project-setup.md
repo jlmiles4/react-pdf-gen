@@ -29,7 +29,8 @@ Set up a new React-PDF project with the following structure and configuration.
 {
   "build": "tsx src/build.tsx",
   "export": "bash scripts/export-pages.sh",
-  "pipeline": "tsx src/build.tsx && bash scripts/export-pages.sh"
+  "pipeline": "tsx src/build.tsx && bash scripts/export-pages.sh",
+  "typecheck": "tsc --noEmit"
 }
 ```
 
@@ -55,7 +56,8 @@ project/
 │   └── pages/                # One file per page
 │       ├── Page01-Cover.tsx
 │       └── ...
-└── package.json
+├── package.json
+└── tsconfig.json             # see 02-design-tokens.md, Step 3
 ```
 
 ### Font Registration Pattern

@@ -113,6 +113,86 @@ export const borders = {
 
 **Page:** LETTER (612x792) for US audiences, A4 (595x842) for international. Margins of 50-60pt give professional whitespace.
 
+## Step 2: Shared StyleSheet — `src/styles/shared.ts`
+
+`theme.ts` holds raw values; `shared.ts` composes them into the named styles every
+page and component imports. The prompts in `03-components.md`, `04-page-creation.md`,
+and `06-common-patterns.md` all import from here, so create it before those steps.
+
+```
+Create src/styles/shared.ts. Import the tokens from ./theme and export a single
+`styles` object built with StyleSheet.create() from @react-pdf/renderer.
+
+Define exactly these keys, using only theme tokens — no literal colors, sizes, or
+spacing anywhere in this file:
+
+  page            page padding + default fontFamily/fontSize/color for a content page
+  body            body paragraph: typography.body + neutral text color + marginBottom
+  h3              minor heading: typography.h3 + heading color + margins
+
+  h2Container     row wrapper for the accent-bar heading (flexDirection: 'row',
+                  alignItems: 'center', gap, marginBottom)
+  h2Accent        the vertical accent bar beside an h2 (small fixed width, taller
+                  height, accent background, small borderRadius)
+  h2Text          typography.h2 + heading color
+
+  codeBlock       dark code container: darkest primary background, padding,
+                  borderRadius, marginBottom
+  codeText        typography.code + light-on-dark code color
+  codeLabel       the small language label above a code block: caption size,
+                  accent color, letterSpacing, uppercase
+
+  tipBox          callout box: tinted accent background, left accent border,
+                  padding, borderRadius, marginBottom
+  tipLabel        callout label row text: typography.h4 + accent color
+
+  listContent     flex: 1 text cell for a bullet row (body typography)
+
+  tableContainer  rounded, clipped table wrapper with a thin neutral border
+  tableHeader     navy header row: primary background, flexDirection 'row', padding
+  tableHeaderText typography.h4-ish, white, semibold
+  tableRow        white data row: flexDirection 'row', padding, thin bottom border
+  tableRowAlt     same as tableRow with a light neutral background (zebra striping)
+  tableCell       typography.bodySmall + neutral text color
+
+Rules: every value comes from ./theme; no raw hex, no magic numbers. Export as
+`export const styles = StyleSheet.create({ ... })`.
+```
+
+Keep `shared.ts` limited to styles that are genuinely reused. A style used by one
+component belongs in that component's own local `StyleSheet.create()`.
+
+## Step 3: TypeScript config — `tsconfig.json`
+
+The dependency list above installs TypeScript, so the project needs a config at the
+repo root. This one matches the `tsx`-based build (transpile-only at build time,
+`tsc --noEmit` for checking):
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "jsx": "react-jsx",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "noEmit": true
+  },
+  "include": ["src/**/*", "scripts/**/*"],
+  "exclude": ["node_modules"]
+}
+```
+
+Add a matching script so type errors are catchable — `tsx` transpiles without
+type-checking, so nothing catches them otherwise:
+
+```json
+{ "typecheck": "tsc --noEmit" }
+```
+
 ### Rules
 - `as const` on every export for TypeScript type safety
 - `fontWeight` is always a weight your `Font.register` call includes, written `as const` (`700 as const`, `600 as const`, `500 as const`, or `400 as const`) — never a plain number

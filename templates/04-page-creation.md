@@ -109,7 +109,7 @@ pnpm pipeline
 
 ## Common Mistakes
 - Forgetting `wrap={false}` on card-style Views (causes split fragments across pages)
-- Using inline style objects instead of `StyleSheet.create()`
+- Repeating the same inline style object instead of naming it in `StyleSheet.create()` (a one-off structural override inline is fine)
 - Hardcoding colors/spacing instead of importing tokens
 - Forgetting `fontWeight` alongside `fontFamily`
 - Using emoji instead of SVG icons
