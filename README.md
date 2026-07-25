@@ -74,16 +74,4 @@ output/                  generated PDF, toc-positions.json, and PNGs (gitignored
 
 ## License
 
-This repository is dual-licensed:
-
-- **Source code** — MIT, see [LICENSE](LICENSE). The build system, component
-  library, design tokens, scripts, and `docs/`. Use it commercially, no
-  attribution required.
-- **Book content and starter pack** — all rights reserved, see
-  [LICENSE-CONTENT](LICENSE-CONTENT). The built PDF, the prose in `src/pages/`,
-  `content/`, and `templates/`. Readers may use the patterns and prompts in
-  their own projects; redistributing or reselling the book or pack is not
-  permitted.
-
-Bundled third-party assets (Inter font, react-icons, Lucide, upstream-derived
-react-pdf notes) retain their own licenses — see [NOTICE](NOTICE).
+MIT — see [LICENSE](LICENSE). Bundled third-party assets (Inter font, react-icons, Lucide, upstream-derived react-pdf notes) retain their own licenses — see [NOTICE](NOTICE).
