@@ -1,6 +1,6 @@
 {
   "name": "react-pdf-gen",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "private": true,
   "description": "React-PDF + AI: The Builder's Guide to Premium PDF Generation",
   "main": "src/build.tsx",
