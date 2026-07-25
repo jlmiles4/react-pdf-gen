@@ -1,7 +1,5 @@
-import { sync } from './sync-project';
-
 async function run(): Promise<void> {
-  sync();
+  // buildPdf() syncs the registry itself before loading it.
   const { buildPdf } = await import('../src/build');
   await buildPdf();
 }

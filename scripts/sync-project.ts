@@ -102,6 +102,26 @@ function validateInputs(allFiles: string[]): void {
     errors.push(`generated component identifier collision(s): ${identifierCollisions.join('; ')}`);
   }
 
+  // Page order inside a chapter comes from the NN- prefix. Two files sharing a
+  // prefix silently fall through to an alphabetical tie-break on the topic
+  // slug, so the number no longer decides book order — rename one of them.
+  const prefixesByDir = new Map<string, Map<string, string[]>>();
+  for (const relPath of allFiles) {
+    const dir = path.dirname(relPath);
+    const prefix = path.basename(relPath).match(/^(\d+)-/)?.[1];
+    if (!prefix) continue;
+    if (!prefixesByDir.has(dir)) prefixesByDir.set(dir, new Map());
+    const byPrefix = prefixesByDir.get(dir)!;
+    byPrefix.set(prefix, [...(byPrefix.get(prefix) ?? []), relPath]);
+  }
+  const duplicatePrefixes = [...prefixesByDir.values()]
+    .flatMap((byPrefix) => [...byPrefix.values()])
+    .filter((relPaths) => relPaths.length > 1)
+    .map((relPaths) => relPaths.join(', '));
+  if (duplicatePrefixes.length > 0) {
+    errors.push(`page file(s) sharing a numeric prefix in one directory — book order would fall back to an alphabetical tie-break: ${duplicatePrefixes.join('; ')}`);
+  }
+
   // Chrome folders are load-bearing (cover/TOC open the book, conclusion closes
   // it); a rename must not silently degrade them to manifest leftovers.
   const missingChrome = [...CHROME_START, ...CHROME_END].filter(

@@ -11,16 +11,18 @@
  * across passes and pass-1 positions remain valid for pass-2 — and the build
  * re-extracts after pass 2 to verify that invariant rather than assume it.
  *
- * Run: pnpm build (tsx src/build.tsx, sync runs first to refresh registry)
+ * buildPdf() calls sync() itself and only then imports the registry, so a
+ * direct `tsx src/build.tsx` can never render a stale page list.
+ *
+ * Run: pnpm build
  */
 import React from 'react';
 import ReactPDF from '@react-pdf/renderer';
 import path from 'path';
 import fs from 'fs';
 import { execFileSync } from 'child_process';
-import EbookDocument from './Document';
+import { sync } from '../scripts/sync-project';
 import { MANIFEST } from './manifest';
-import { allPages } from './registry';
 
 const OUTPUT_DIR = path.resolve(__dirname, '../output');
 const OUTPUT_FILE = path.join(OUTPUT_DIR, 'react-pdf-ai-builders-guide.pdf');
@@ -30,7 +32,20 @@ if (!fs.existsSync(OUTPUT_DIR)) {
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 }
 
-async function renderPdf(): Promise<void> {
+/**
+ * Imported only after sync() has regenerated the registry — a static import
+ * would be hoisted above it, so a direct `tsx src/build.tsx` would render a
+ * stale page list while every downstream guard still passed.
+ */
+async function loadDocument(): Promise<{ EbookDocument: React.FC; pageCount: number }> {
+  const [{ default: EbookDocument }, { allPages }] = await Promise.all([
+    import('./Document'),
+    import('./registry'),
+  ]);
+  return { EbookDocument, pageCount: allPages.length };
+}
+
+async function renderPdf(EbookDocument: React.FC): Promise<void> {
   await ReactPDF.render(<EbookDocument />, OUTPUT_FILE);
 }
 
@@ -98,7 +113,7 @@ const LETTER_HEIGHT = 792;
 
 // A wrap={false} page whose content overflows silently grows the page box instead
 // of erroring, so this must be checked after render rather than relying on react-pdf.
-function checkPageSizes(): void {
+function checkPageSizes(registryPageCount: number): void {
   const info = execFileSync('pdfinfo', [OUTPUT_FILE], { encoding: 'utf8' });
   const pagesMatch = info.match(/^Pages:\s+(\d+)$/m);
   if (!pagesMatch) {
@@ -106,9 +121,9 @@ function checkPageSizes(): void {
     process.exit(1);
   }
   const pageCount = Number(pagesMatch[1]);
-  if (pageCount !== allPages.length) {
+  if (pageCount !== registryPageCount) {
     console.error(
-      `Error: rendered ${pageCount} PDF page(s), but the registry contains ${allPages.length} page component(s). Each page file must render exactly one PDF page.`,
+      `Error: rendered ${pageCount} PDF page(s), but the registry contains ${registryPageCount} page component(s). Each page file must render exactly one PDF page.`,
     );
     process.exit(1);
   }
@@ -144,10 +159,17 @@ function checkPageSizes(): void {
 export async function buildPdf(): Promise<void> {
   checkPopplerTools();
 
+  // Regenerate the registry before anything imports it. `pnpm build` also
+  // chains `pnpm sync`, but running `tsx src/build.tsx` directly must not be
+  // able to render a stale page list.
+  sync();
+
   console.log('Building PDF...');
   const start = Date.now();
 
-  await renderPdf();
+  const { EbookDocument, pageCount: registryPageCount } = await loadDocument();
+
+  await renderPdf(EbookDocument);
 
   const { positions, ambiguous } = extractTocPositions();
   console.log(`TOC positions: ${Object.keys(positions).length} chapters mapped`);
@@ -178,7 +200,7 @@ export async function buildPdf(): Promise<void> {
   // Written only after validation so a failed build can't leave a partial map.
   fs.writeFileSync(POSITIONS_FILE, JSON.stringify(positions, null, 2) + '\n');
 
-  await renderPdf();
+  await renderPdf(EbookDocument);
 
   // The pass-1 positions are only valid for pass 2 if the TOC's layout doesn't
   // depend on the page-number text (fixed-width column, wrap={false}). Verify
@@ -192,7 +214,7 @@ export async function buildPdf(): Promise<void> {
     process.exit(1);
   }
 
-  checkPageSizes();
+  checkPageSizes(registryPageCount);
 
   const elapsed = Date.now() - start;
   const stats = fs.statSync(OUTPUT_FILE);
