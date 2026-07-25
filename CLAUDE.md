@@ -42,7 +42,7 @@
 <CheckIcon size={iconSize.sm} color={colors.success} /> — SVG icon (also: XIcon, InfoIcon, etc.)
 <RecipeCard title="..." icon={<...>}>…</RecipeCard>  — bordered titled card (Ch07/Ch10 recipe pattern)
 <ChecklistItem>text</ChecklistItem>      — check-icon checklist row; pair with <ChecklistCategory>Heading</ChecklistCategory> (Ch10 checklists)
-<IconList items={[...]} icon={CheckIcon} color={colors.success} />  — icon + text row list; optional size, variant="feature" for body-size rows (Ch09/Ch10)
+<IconList items={[...]} icon={CheckIcon} color={colors.success} />  — icon + text row list; optional size, variant="feature" for body-size rows (Ch08/Ch09)
 ```
 
 ## When Adding a New Page
@@ -74,7 +74,7 @@ Model APIs hard-cap images per conversation (the Claude API fails at **100** wit
 - **pnpm `Unsupported engine` warnings are benign.** `package.json` requires Node >=22; on older Nodes every pnpm command prints engine warnings but builds still work. Don't mistake them for the cause of an unrelated failure.
 
 ## Reference Docs
-- `docs/` — Project docs: `architecture/`, `guides/`, `reference/` (start at `docs/README.md`)
+- `docs/` — Project docs: `architecture/`, `build/`, `guides/`, `reference/` (start at `docs/README.md`)
 - `reference/` — upstream react-pdf API docs (`react-pdf-api/`) + author research notes (`ai-patterns/`, `design/`); **not** loaded by the build. The canonical quality checklist is the one above, not `reference/design/quality-checklist.md`.
 - `TASK.md` — Project roadmap and chapter status
 - `content/chapters/` — author Markdown drafts; **not** loaded by the build except `12-markdown-demo.md` (split on its `<!-- page-break -->` marker and rendered by `14-markdown-automation/01-…` and `03-supported-elements`). Editing the others does not change the PDF.

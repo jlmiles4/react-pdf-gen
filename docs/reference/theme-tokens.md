@@ -213,8 +213,8 @@ Catch-all for layout constants that don't fit any other token bucket.
 | `bulletDotSize` | 6 | `BulletList` SVG circle width/height |
 | `tocEntryNumWidth` | 28 | TOC chapter-number column |
 | `tocPageColWidth` | 28 | TOC page-number column (right-aligned) |
-| `cardShadowOffset` | 2 | Faux-shadow border offset (recipe) |
-| `flowStepWidth` | 100 | Ch11 troubleshooting flow-diagram step width |
+| `cardShadowOffset` | 2 | Faux-shadow border offset — defined for the recipe pattern, no current consumer |
+| `flowStepWidth` | 100 | Ch09 AI Visual Analysis flow-diagram step width |
 | `dividerHeight` | 2 | Conclusion accent divider |
 | `decorMarkSize` | 160 | `CoverDecor` concentric-mark size |
 | `decorRingsSize` | 240 | `ChapterTitle` decorative-rings size |

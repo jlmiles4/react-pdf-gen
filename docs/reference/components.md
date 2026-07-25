@@ -159,7 +159,7 @@ Both live in [`src/components/ChecklistItem.tsx`](../../src/components/Checklist
 
 ### `IconList`
 
-[`src/components/IconList.tsx`](../../src/components/IconList.tsx) — vertical list of icon + text rows. Pass an icon *component* (not an element); each row is `wrap={false}` so an icon can't get stranded from its label. Two variants: `'checklist'` (default — tight `bodySmall` rows, `xs` icons; the Ch09 "what AI can/can't spot" lists) and `'feature'` (`body`-size text, `md` icons, relaxed indented rows; the Ch10 adapter-benefits list). `size` overrides the variant's icon default.
+[`src/components/IconList.tsx`](../../src/components/IconList.tsx) — vertical list of icon + text rows. Pass an icon *component* (not an element); each row is `wrap={false}` so an icon can't get stranded from its label. Two variants: `'checklist'` (default — tight `bodySmall` rows, `xs` icons; the Ch09 "what AI can/can't spot" lists) and `'feature'` (`body`-size text, `md` icons, relaxed indented rows; the Ch08 icon-adapter benefits list). `size` overrides the variant's icon default.
 
 ```tsx
 <IconList items={['Spacing drift', 'Orphaned headings']} icon={CheckIcon} color={colors.success} />
@@ -198,12 +198,15 @@ Both live in [`src/components/ChecklistItem.tsx`](../../src/components/Checklist
 
 [`src/components/MarkdownRenderer.tsx`](../../src/components/MarkdownRenderer.tsx) — parses a markdown string via `src/utils/markdownParser.ts` and renders each node as the matching project component (`SectionHeading` for `##`, `BulletList` for lists, `CodeBlock` for fenced blocks, `TipBox`/`WarningBox`/`InfoBox` for callouts). Inline `**bold**` and `` `code` `` runs are supported inside headings, paragraphs, list items, and callout bodies. The two pages in `src/pages/14-markdown-automation/` split `content/chapters/12-markdown-demo.md` at its authored page-break marker and render one half each. See [markdown-content guide](../guides/markdown-content.md) for full syntax.
 
+Both pages load their half through the shared loader in
+[`src/utils/markdownDemo.ts`](../../src/utils/markdownDemo.ts), which owns the
+path, the frontmatter strip, and the page-break assertion:
+
 ```tsx
-import { readFileSync } from 'fs';
-const source = readFileSync('content/chapters/12-markdown-demo.md', 'utf8');
-const body = source.replace(/^---[\s\S]*?---/, '').trim();
-const [partOne, partTwo] = body.split('\n<!-- page-break -->\n');
-<MarkdownRenderer content={partOne.trim()} /> // second page uses partTwo
+import { loadMarkdownDemoParts } from '../../utils/markdownDemo';
+
+const [partOne] = loadMarkdownDemoParts();   // 03-supported-elements uses [, partTwo]
+<MarkdownRenderer content={partOne} />
 ```
 
 | Prop | Type | Required |

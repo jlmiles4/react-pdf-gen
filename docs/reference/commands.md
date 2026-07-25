@@ -4,7 +4,8 @@ All commands run from the project root. Package manager: `pnpm` (declared in `pa
 
 ## `pnpm build`
 
-Chains `pnpm sync && tsx src/build.tsx`:
+Runs `tsx src/build.tsx`, which calls `sync()` itself before importing the
+registry (so running the script directly can never render a stale page list):
 
 1. `pnpm sync` regenerates `src/registry.ts` from `src/manifest.ts` + the `src/pages/` tree.
 2. `tsx src/build.tsx` does a **two-pass render**: render → `pdftotext -layout` extracts each `CHAPTER NN` title page position into `output/toc-positions.json` → render again so the TOC reflects the positions → re-extract to verify no position shifted between passes.
@@ -24,7 +25,7 @@ Exits 1 on render failure, an incomplete or ambiguous TOC map (a chapter marker 
 
 Runs `tsx scripts/sync-project.ts`. Reads `src/manifest.ts` (chapter structure) plus the `src/pages/` tree, then writes `src/registry.ts` (auto-generated, gitignored). The registry exports `allPages` (the ordered page array `Document.tsx` renders, with chrome at the ends and manifest chapters in between) — its only export. The TOC page reads `MANIFEST` directly.
 
-Sync validates its inputs before writing (duplicate chapter numbers or entryPages, entryPages without files, generated-identifier collisions, empty chrome folders, two chapters sharing one directory — all exit 1), and only rewrites `registry.ts` when the generated content actually changed. That idempotence is what keeps `pnpm dev` from looping: the watcher excludes `src/registry.ts`, and an unchanged registry means no spurious file event either way.
+Sync validates its inputs before writing (duplicate chapter numbers or entryPages, chapter `num`s that are not zero-padded two-digit strings, entryPages without files, generated-identifier collisions, two page files sharing a numeric prefix in one directory, empty chrome folders, two chapters sharing one directory — all exit 1), and only rewrites `registry.ts` when the generated content actually changed. That idempotence is what keeps `pnpm dev` from looping: the watcher excludes `src/registry.ts`, and an unchanged registry means no spurious file event either way.
 
 You don't normally run sync directly — `pnpm build` runs it first, and `pnpm dev` runs it before every watched rebuild.
 
