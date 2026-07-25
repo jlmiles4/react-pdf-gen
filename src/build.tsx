@@ -11,6 +11,11 @@
  * across passes and pass-1 positions remain valid for pass-2 — and the build
  * re-extracts after pass 2 to verify that invariant rather than assume it.
  *
+ * Both passes render to a temp file and every guard inspects that file. Only a
+ * fully validated PDF is renamed onto the tracked deliverable, so a failed or
+ * interrupted build leaves the last good book in place instead of a
+ * half-written or wrong-TOC one.
+ *
  * buildPdf() calls sync() itself and only then imports the registry, so a
  * direct `tsx src/build.tsx` can never render a stale page list.
  *
@@ -27,10 +32,25 @@ import { MANIFEST } from './manifest';
 const OUTPUT_DIR = path.resolve(__dirname, '../output');
 const OUTPUT_FILE = path.join(OUTPUT_DIR, 'react-pdf-ai-builders-guide.pdf');
 const POSITIONS_FILE = path.join(OUTPUT_DIR, 'toc-positions.json');
+// Same directory as OUTPUT_FILE so the final promotion is a rename within one
+// filesystem, which is atomic — the deliverable is either the previous good
+// build or the new validated one, never an intermediate.
+const BUILD_FILE = path.join(OUTPUT_DIR, '.build.tmp.pdf');
 
 if (!fs.existsSync(OUTPUT_DIR)) {
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 }
+
+// Every guard exits the process directly, so clean up on the way out rather
+// than threading try/finally through each one. After a successful promotion
+// the temp file is already gone and this is a no-op.
+process.on('exit', () => {
+  try {
+    fs.rmSync(BUILD_FILE, { force: true });
+  } catch {
+    // Best effort — a leftover temp file is ignored by git and overwritten next build.
+  }
+});
 
 /**
  * Imported only after sync() has regenerated the registry — a static import
@@ -46,7 +66,7 @@ async function loadDocument(): Promise<{ EbookDocument: React.FC; pageCount: num
 }
 
 async function renderPdf(EbookDocument: React.FC): Promise<void> {
-  await ReactPDF.render(<EbookDocument />, OUTPUT_FILE);
+  await ReactPDF.render(<EbookDocument />, BUILD_FILE);
 }
 
 // Both tools ship with poppler-utils. Don't auto-install (sudo/network/OS vary) —
@@ -78,7 +98,7 @@ interface TocExtraction {
 }
 
 function extractTocPositions(): TocExtraction {
-  const text = execFileSync('pdftotext', ['-layout', OUTPUT_FILE, '-'], {
+  const text = execFileSync('pdftotext', ['-layout', BUILD_FILE, '-'], {
     encoding: 'utf8',
     maxBuffer: 64 * 1024 * 1024, // whole-book text is ~90 KB today; leave room for growth
   });
@@ -114,7 +134,7 @@ const LETTER_HEIGHT = 792;
 // A wrap={false} page whose content overflows silently grows the page box instead
 // of erroring, so this must be checked after render rather than relying on react-pdf.
 function checkPageSizes(registryPageCount: number): void {
-  const info = execFileSync('pdfinfo', [OUTPUT_FILE], { encoding: 'utf8' });
+  const info = execFileSync('pdfinfo', [BUILD_FILE], { encoding: 'utf8' });
   const pagesMatch = info.match(/^Pages:\s+(\d+)$/m);
   if (!pagesMatch) {
     console.error('Error: could not determine page count from pdfinfo output.');
@@ -128,7 +148,7 @@ function checkPageSizes(registryPageCount: number): void {
     process.exit(1);
   }
 
-  const perPage = execFileSync('pdfinfo', ['-f', '1', '-l', String(pageCount), OUTPUT_FILE], {
+  const perPage = execFileSync('pdfinfo', ['-f', '1', '-l', String(pageCount), BUILD_FILE], {
     encoding: 'utf8',
   });
   const sizedPages = new Set<number>();
@@ -215,6 +235,10 @@ export async function buildPdf(): Promise<void> {
   }
 
   checkPageSizes(registryPageCount);
+
+  // Every guard has passed, so this build is safe to ship. Promote it in one
+  // atomic rename; until this line the tracked deliverable is untouched.
+  fs.renameSync(BUILD_FILE, OUTPUT_FILE);
 
   const elapsed = Date.now() - start;
   const stats = fs.statSync(OUTPUT_FILE);
