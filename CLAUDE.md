@@ -5,6 +5,7 @@
 - **Sync Registry:** `pnpm sync` (regenerates `src/registry.ts` from `src/manifest.ts` + `src/pages/`)
 - **Export PNGs:** `pnpm export` (runs `scripts/export-pages.sh`, outputs to `output/pages/`)
 - **Full pipeline:** `pnpm pipeline` (build + export)
+- **Tests:** `pnpm test` (focused parser and manifest invariants)
 - **Typecheck:** `pnpm typecheck` (sync, then `tsc --noEmit`)
 - **Dev watch:** `pnpm dev`
 
@@ -61,7 +62,7 @@ Model APIs impose per-request image and payload limits that vary by model and pr
 - If you hit the limit, start a fresh session with `/clear`.
 
 ## Quality Checks After Any Change
-- Run `pnpm pipeline` and check PNG output for:
+- Run `pnpm test`, then `pnpm pipeline` and check PNG output for:
   - No orphaned headings (gold bar without text at page bottom)
   - No split callout boxes (empty colored boxes)
   - No orphaned bullet dots

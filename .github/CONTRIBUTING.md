@@ -15,10 +15,11 @@ pnpm install --frozen-lockfile
 
 1. Keep the change focused and update source content rather than editing the
    generated PDF directly.
-2. Run `pnpm typecheck`.
-3. Run `pnpm pipeline`.
-4. Inspect the PNGs for every page affected by the change.
-5. Include the rebuilt tracked PDF only when its visible content changed.
+2. Run `pnpm test`.
+3. Run `pnpm typecheck`.
+4. Run `pnpm pipeline`.
+5. Inspect the PNGs for every page affected by the change.
+6. Include the rebuilt tracked PDF only when its visible content changed.
 
 For vulnerabilities, follow the private process in
 [SECURITY.md](SECURITY.md) instead of opening a public issue.

@@ -6,22 +6,66 @@ on:
       - "v*"
 
 permissions:
-  contents: write
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   upload:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    permissions:
+      contents: write
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Verify release source and signed tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          package_version=$(jq -r ".version" package.json)
+          test "v${package_version}" = "${GITHUB_REF_NAME}"
+
+          release_commit=$(git rev-list -n 1 "${GITHUB_REF_NAME}")
+          test "$(git rev-parse HEAD)" = "${release_commit}"
+          if ! git merge-base --is-ancestor "${release_commit}" origin/main; then
+            echo "::error::Release tag ${GITHUB_REF_NAME} does not point to a commit on main."
+            exit 1
+          fi
+
+          if test "$(git cat-file -t "${GITHUB_REF_NAME}")" != "tag"; then
+            echo "::error::Release tag ${GITHUB_REF_NAME} must be an annotated, signed tag."
+            exit 1
+          fi
+
+          local_tag_object=$(git rev-parse "${GITHUB_REF_NAME}^{tag}")
+          remote_tag_object=$(gh api \
+            "repos/${GITHUB_REPOSITORY}/git/ref/tags/${GITHUB_REF_NAME}" \
+            --jq ".object.sha")
+          test "${local_tag_object}" = "${remote_tag_object}"
+
+          verification=$(gh api \
+            "repos/${GITHUB_REPOSITORY}/git/tags/${remote_tag_object}" \
+            --jq "[.verification.verified, .verification.reason] | @tsv")
+          if test "${verification%%	*}" != "true"; then
+            echo "::error::GitHub did not verify the release tag signature (${verification#*	})."
+            exit 1
+          fi
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v6
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
 
       - name: Set up Node
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: "24"
           cache: pnpm
@@ -32,24 +76,120 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Verify tag matches package version
-        run: |
-          package_version=$(node -p "require('./package.json').version")
-          test "v${package_version}" = "${GITHUB_REF_NAME}"
+      - name: Test
+        run: pnpm test
 
-      - name: Build PDF
-        run: pnpm build
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Verify and stage tagged PDF
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          pdf_name="react-pdf-ai-builders-guide.pdf"
+          pdf_path="output/${pdf_name}"
+          release_dir="${RUNNER_TEMP}/release"
+          tagged_pdf="${RUNNER_TEMP}/${pdf_name}"
+          tagged_text="${RUNNER_TEMP}/tagged.txt"
+          rebuilt_text="${RUNNER_TEMP}/rebuilt.txt"
+
+          test -f "${pdf_path}"
+          test -f NOTICE
+          test -f LICENSE
+
+          # Preserve the exact blob committed at the tag before the build writes
+          # new PDF metadata. The rebuilt file is verification input only.
+          git show "HEAD:${pdf_path}" > "${tagged_pdf}"
+          pdftotext "${tagged_pdf}" "${tagged_text}"
+
+          pnpm build
+          pdftotext "${pdf_path}" "${rebuilt_text}"
+
+          if ! cmp -s "${tagged_text}" "${rebuilt_text}"; then
+            echo "::error::The freshly built PDF text differs from the PDF committed at ${GITHUB_REF_NAME}."
+            diff -u "${tagged_text}" "${rebuilt_text}" || true
+            exit 1
+          fi
+
+          mkdir -p "${release_dir}"
+          cp "${tagged_pdf}" "${release_dir}/${pdf_name}"
+          git show HEAD:NOTICE > "${release_dir}/NOTICE"
+          git show HEAD:LICENSE > "${release_dir}/LICENSE"
+          (
+            cd "${release_dir}"
+            sha256sum "${pdf_name}" NOTICE LICENSE > SHA256SUMS
+          )
 
       - name: Publish PDF release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          pdf_path="output/react-pdf-ai-builders-guide.pdf"
+          set -euo pipefail
+
+          release_dir="${RUNNER_TEMP}/release"
+          expected_assets=(
+            "react-pdf-ai-builders-guide.pdf"
+            "NOTICE"
+            "LICENSE"
+            "SHA256SUMS"
+          )
+
           if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
-            gh release upload "$GITHUB_REF_NAME" "$pdf_path" --clobber
+            if test "$(gh release view "$GITHUB_REF_NAME" --json isDraft --jq ".isDraft")" != "true"; then
+              echo "::error::Published release ${GITHUB_REF_NAME} already exists; refusing to replace it."
+              exit 1
+            fi
+
+            # A failed publish can leave a draft behind. Resume only when every
+            # existing asset is byte-identical to the staged release.
+            existing_dir="${RUNNER_TEMP}/existing-release"
+            mkdir -p "${existing_dir}"
+            declare -A existing_assets=()
+            while IFS= read -r asset; do
+              test -n "${asset}" || continue
+              case "${asset}" in
+                "react-pdf-ai-builders-guide.pdf"|"NOTICE"|"LICENSE"|"SHA256SUMS") ;;
+                *)
+                  echo "::error::Draft ${GITHUB_REF_NAME} contains unexpected asset ${asset}."
+                  exit 1
+                  ;;
+              esac
+              existing_assets["${asset}"]=1
+              gh release download "$GITHUB_REF_NAME" \
+                --pattern "${asset}" \
+                --dir "${existing_dir}"
+              if ! cmp -s "${existing_dir}/${asset}" "${release_dir}/${asset}"; then
+                echo "::error::Draft asset ${asset} differs from the staged release."
+                exit 1
+              fi
+            done < <(gh release view "$GITHUB_REF_NAME" --json assets --jq ".assets[].name")
+
+            for asset in "${expected_assets[@]}"; do
+              if test -z "${existing_assets[${asset}]+present}"; then
+                gh release upload "$GITHUB_REF_NAME" "${release_dir}/${asset}"
+              fi
+            done
           else
-            gh release create "$GITHUB_REF_NAME" "$pdf_path" \
+            gh release create "$GITHUB_REF_NAME" \
+              "${release_dir}/react-pdf-ai-builders-guide.pdf" \
+              "${release_dir}/NOTICE" \
+              "${release_dir}/LICENSE" \
+              "${release_dir}/SHA256SUMS" \
+              --draft \
               --verify-tag \
               --generate-notes \
               --title "$GITHUB_REF_NAME"
           fi
+
+          actual_assets=$(
+            gh release view "$GITHUB_REF_NAME" --json assets --jq ".assets[].name" |
+              sort |
+              paste -sd, -
+          )
+          expected_asset_list=$(printf "%s\n" "${expected_assets[@]}" | sort | paste -sd, -)
+          test "${actual_assets}" = "${expected_asset_list}"
+
+          # Publish only after every asset was attached to the draft. There are
+          # no release mutations after this point, so immutable releases work.
+          gh release edit "$GITHUB_REF_NAME" --draft=false --latest
