@@ -6,7 +6,7 @@ This chapter is about the math behind AI-assisted PDF generation. Understanding 
 
 LLMs don't read characters. They read **tokens** – subword units that the model learned during training. Before your code reaches the model's neural network, a tokenizer breaks it into these chunks.
 
-Here's how the sentence "Create a PDF page" tokenizes (using GPT-4 / Claude's tokenizer, approximately):
+Here's an illustrative way the sentence "Create a PDF page" might tokenize:
 
 ```
 "Create" → [Create]
@@ -15,7 +15,7 @@ Here's how the sentence "Create a PDF page" tokenizes (using GPT-4 / Claude's to
 " page"  → [ page]
 ```
 
-That's 4 tokens for 4 words. Simple English tokenizes efficiently.
+The exact boundaries depend on the selected model's tokenizer. Simple English generally tokenizes more efficiently than code punctuation and identifiers.
 
 Now here's how a react-pdf JSX snippet tokenizes:
 
@@ -374,16 +374,17 @@ Each iteration costs ~1,450 tokens. That's 10x cheaper per iteration. And becaus
 
 You can measure tokens using any of these methods:
 
-### OpenAI's tokenizer (online)
+### Provider tokenizer
 
-Go to [platform.openai.com/tokenizer](https://platform.openai.com/tokenizer), paste your code, and see the token count. This uses GPT-4's tokenizer (cl100k_base). Claude uses a different tokenizer, but the counts are within 10–15% of each other.
+Use the tokenizer published for the model you actually call. Token counts are model-specific; do not assume that one provider's count stays within a fixed percentage of another provider's count.
 
 ### tiktoken (Python)
 
 ```python
 import tiktoken
+import os
 
-enc = tiktoken.encoding_for_model("gpt-4")
+enc = tiktoken.encoding_for_model(os.environ["OPENAI_MODEL"])
 
 with open("src/styles/theme.ts") as f:
     code = f.read()

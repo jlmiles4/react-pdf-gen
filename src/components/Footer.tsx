@@ -10,7 +10,7 @@
  * baseline regardless of their (slightly different) font sizes.
  */
 import React from 'react';
-import { View, Text, StyleSheet } from '@react-pdf/renderer';
+import { View, Text, Link, StyleSheet } from '@react-pdf/renderer';
 import { colors, fonts, page, borders, fontScale, fontWeight } from '../styles/theme';
 
 const borderTop = page.height - page.footerHeight;
@@ -34,6 +34,7 @@ const footerStyles = StyleSheet.create({
     fontFamily: fonts.body,
     fontWeight: fontWeight.regular,
     color: colors.neutral[400],
+    textDecoration: 'none',
   },
   pageNumber: {
     position: 'absolute',
@@ -51,7 +52,9 @@ const footerStyles = StyleSheet.create({
 const Footer: React.FC = () => (
   <>
     <View style={footerStyles.border} fixed />
-    <Text style={footerStyles.brand} fixed>landonmiles.com</Text>
+    <Link src="https://landonmiles.com" style={footerStyles.brand} fixed>
+      landonmiles.com
+    </Link>
     <Text
       style={footerStyles.pageNumber}
       fixed

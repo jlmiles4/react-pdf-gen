@@ -8,7 +8,7 @@
  * Renders: 1 page
  */
 import React from 'react';
-import { Page, View, Text, StyleSheet } from '@react-pdf/renderer';
+import { Page, View, Text, Link, StyleSheet } from '@react-pdf/renderer';
 import { colors, fonts, spacing, page, fontScale, typography, letterSpacing, layout, fontWeight, lineHeight } from '../../styles/theme';
 import { AccentBar, CoverDecor } from '../../components';
 
@@ -81,6 +81,7 @@ const s = StyleSheet.create({
     fontFamily: fonts.body,
     fontWeight: fontWeight.regular,
     color: colors.neutral[500],
+    textDecoration: 'none',
   },
 });
 
@@ -95,7 +96,7 @@ const Page01Cover: React.FC = () => (
     <Text style={s.author}>Landon Miles</Text>
     <CoverDecor />
     <View style={s.bottomInfo}>
-      <Text style={s.bottomText}>landonmiles.com</Text>
+      <Link src="https://landonmiles.com" style={s.bottomText}>landonmiles.com</Link>
       <Text style={s.bottomText}>2026</Text>
     </View>
   </Page>

@@ -234,35 +234,35 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
         with:
-          node-version: '20'
+          node-version: '24'
+          cache: pnpm
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Install poppler-utils
         run: sudo apt-get install -y poppler-utils
 
-      - name: Build PDF
-        run: npm run build:pdf
-
-      - name: Export pages to PNG
-        run: npm run export:png
+      - name: Build and export
+        run: pnpm pipeline
 
       - name: Upload PDF artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: pdf-output
-          path: output.pdf
+          path: output/react-pdf-ai-builders-guide.pdf
 
       - name: Upload page images
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: page-images
-          path: pages/page-*.png
+          path: output/pages/page-*.png
 ```
 
 This pipeline builds the PDF on every push, exports the pages to PNGs, and uploads both as artifacts. You can download the PNGs from the CI run and feed them to your AI for review.
@@ -284,7 +284,7 @@ async function reviewPage(imagePath: string, pageNum: number): Promise<string> {
   const base64 = imageData.toString("base64");
 
   const response = await client.messages.create({
-    model: "claude-sonnet-4-20250514",
+    model: "claude-sonnet-5",
     max_tokens: 1024,
     messages: [
       {

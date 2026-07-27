@@ -1,12 +1,4 @@
-# Canonical identity for this repository's history.
-#
-# Early commits were made under two other identities, one of which
-# (<landon>) is not a valid email address. Those commits are already
-# published, so rewriting them is not an option — this maps them to the
-# canonical identity for `git log`, `git shortlog -sne`, and `git blame`.
-#
-# Note: GitHub's web UI does not read .mailmap. To have GitHub attribute the
-# <landonmiles@me.com> commits, add that address to your GitHub account.
-
-jlm <josephlandonmiles@gmail.com> JLM <landonmiles@me.com>
-jlm <josephlandonmiles@gmail.com> jlm <landon>
+# Normalize historical author aliases for local Git tooling.
+Landon Miles <josephlandonmiles@gmail.com> JLM <landonmiles@me.com>
+Landon Miles <josephlandonmiles@gmail.com> jlm <landon>
+Landon Miles <josephlandonmiles@gmail.com> jlm <josephlandonmiles@gmail.com>

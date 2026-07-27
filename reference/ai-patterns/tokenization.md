@@ -22,13 +22,7 @@ These are averages. Code tends to tokenize less efficiently than prose because o
 
 ## Why Token Count Matters
 
-Every AI model has a **context window** – the maximum number of tokens it can process in a single conversation turn (input + output combined).
-
-| Model | Context Window |
-|-------|---------------|
-| Claude (Anthropic) | 200,000 tokens |
-| GPT-4 Turbo (OpenAI) | 128,000 tokens |
-| GPT-4o (OpenAI) | 128,000 tokens |
+Every AI model has a **context window** – the maximum number of tokens it can process in a single request. Limits and accounting rules vary by model and provider and change frequently, so use the active provider's model documentation as the source of truth instead of copying a fixed comparison table into project guidance.
 
 These numbers sound large, but they fill up fast when you're working with code. If you paste an entire 50-page PDF's source code into a prompt, you may be using 10,000-15,000 tokens just on input – and that's before the AI generates any output, before you add instructions, and before you include reference materials.
 

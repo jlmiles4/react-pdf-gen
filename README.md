@@ -6,7 +6,7 @@ A `@react-pdf/renderer` project that builds a 78-page ebook ("React-PDF + AI: Th
 
 ## Quick start
 
-Prerequisites: Node 22+, pnpm (`corepack enable`), and poppler-utils (`pdftotext` for the TOC pass, `pdfinfo` for page validation, and `pdftoppm` for PNG export).
+Prerequisites: Node 22+, pnpm 10.29.1, and poppler-utils (`pdftotext` for the TOC pass, `pdfinfo` for page validation, and `pdftoppm` for PNG export). Node 22–24 users can enable the bundled pnpm shim with `corepack enable`; Node 25+ users must install pnpm separately because Node no longer bundles Corepack.
 
 ```bash
 pnpm install
@@ -17,6 +17,10 @@ pnpm dev         # watch inputs; sync + rebuild after each relevant change
 ```
 
 `pnpm export` uses `pdftoppm` to rasterize and `pdfinfo` to verify that PNG and PDF page counts match. If either is missing, the script prints platform-specific install instructions for `poppler-utils` and exits (see `scripts/export-pages.sh`). The build also needs `pdftotext` for the TOC pass and `pdfinfo` for the uniform-LETTER page-size check.
+
+## Accessibility
+
+The shipped PDF is not currently tagged for screen readers or PDF/UA compliance. Treat accessibility support as future work rather than claiming compliance for this artifact.
 
 ## Documentation
 

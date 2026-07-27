@@ -9,7 +9,7 @@
  * Renders: 1 page
  */
 import React from 'react';
-import { Page, View, Text, StyleSheet } from '@react-pdf/renderer';
+import { Page, View, Text, Link, StyleSheet } from '@react-pdf/renderer';
 import { colors, fonts, spacing, page, borders, fontScale, typography, layout, accentBar, fontWeight, lineHeight, opacity } from '../../styles/theme';
 import { AccentBar, BulletList, CoverDecor } from '../../components';
 
@@ -129,6 +129,7 @@ const s = StyleSheet.create({
     fontFamily: fonts.body,
     fontWeight: fontWeight.regular,
     color: colors.neutral[500],
+    textDecoration: 'none',
   },
 });
 
@@ -177,7 +178,7 @@ const Conclusion: React.FC = () => (
 
     <CoverDecor opacity={opacity.decorSubtle} />
     <View style={s.bottomInfo}>
-      <Text style={s.bottomText}>landonmiles.com</Text>
+      <Link src="https://landonmiles.com" style={s.bottomText}>landonmiles.com</Link>
       <Text
         style={s.bottomText}
         render={({ pageNumber, totalPages }) => `Page ${pageNumber} of ${totalPages}`}

@@ -15,7 +15,7 @@ const Page: React.FC = () => (
 
     <SectionHeading>What AI Can Spot</SectionHeading>
     <Text style={styles.body}>
-      Be specific in your prompts: "Check if the heading alignment is consistent across pages 3-7" works better than "review this PDF." And review in small batches – assistants cap images per conversation (the Claude API allows 100), so open only the pages you changed. Here's what vision models reliably detect:
+      Be specific in your prompts: "Check if the heading alignment is consistent across pages 3-7" works better than "review this PDF." Review in small batches – assistants enforce image and request-size limits, so open only the pages you changed. Here's what vision models reliably detect:
     </Text>
     <IconList
       icon={CheckIcon}

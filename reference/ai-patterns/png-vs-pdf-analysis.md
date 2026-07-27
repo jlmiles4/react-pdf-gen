@@ -13,11 +13,16 @@ Option 2 is dramatically better. Here's why.
 
 ---
 
-## AI Vision Models Are Trained on Images
+## Rendered Images Make Visual Review Predictable
 
-AI vision models – Claude, GPT-4V, and others – are trained on billions of images. They understand visual composition: alignment, whitespace, balance, hierarchy, color relationships, typography weight. When you show them a PNG of a page, they **see** what a human reader would see.
+Vision-capable AI models can assess composition, alignment, whitespace,
+hierarchy, color relationships, and typography. A PNG gives the model an
+explicit rendering of the exact page you want reviewed.
 
-They are not trained on PDF binary format. A PDF file is a complex binary container with streams, font subsetting data, coordinate transformations, cross-reference tables, and encoded content streams. Even a "simple" PDF is thousands of bytes of structured binary data that has no visual meaning until rendered.
+Many AI tools also accept PDFs, but their processing varies: a tool may extract
+text, render pages, or use both. Converting the page yourself removes that
+ambiguity and lets you control the page, resolution, and crop used for visual
+QA.
 
 ---
 
@@ -25,19 +30,14 @@ They are not trained on PDF binary format. A PDF file is a complex binary contai
 
 ### When you give AI a PDF file:
 
-The AI receives raw binary content. Depending on the tool, it might:
-- See the text content extracted from the PDF (losing all layout information)
-- See metadata (author, title, creation date)
-- See nothing useful at all
+Depending on the tool, the AI might:
 
-It **cannot** see:
-- Where elements are positioned on the page
-- How much whitespace exists between sections
-- Whether text is properly aligned
-- The visual weight and balance of the layout
-- Color relationships between elements
-- Font size ratios
-- Whether content is clipped or overflowing
+- Extract text and metadata
+- Render some or all pages as images
+- Combine extracted text with rendered pages
+- Apply provider-specific page, file-size, or resolution limits
+
+That makes the result less predictable for a narrowly scoped visual review.
 
 ### When you give AI a PNG image:
 

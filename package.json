@@ -1,6 +1,6 @@
 {
   "name": "react-pdf-gen",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "private": true,
   "description": "React-PDF + AI: The Builder's Guide to Premium PDF Generation",
   "main": "src/build.tsx",
@@ -20,6 +20,14 @@
   ],
   "author": "Landon Miles",
   "license": "MIT",
+  "homepage": "https://github.com/jlmiles4/react-pdf-gen#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jlmiles4/react-pdf-gen.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jlmiles4/react-pdf-gen/issues"
+  },
   "packageManager": "pnpm@10.29.1",
   "engines": {
     "node": ">=22"

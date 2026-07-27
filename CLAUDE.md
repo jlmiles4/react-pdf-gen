@@ -53,7 +53,7 @@
 See `docs/guides/add-a-page.md` for full skeletons.
 
 ## Image Viewing Limit
-Model APIs hard-cap images per conversation (the Claude API fails at **100** with an `invalid_request_error`; other providers have similar caps). This project exports 78 page PNGs — close to that limit — so batch-reading them will break the session.
+Model APIs impose per-request image and payload limits that vary by model and provider. This project exports 78 page PNGs, so batch-reading them wastes context and may exceed the active platform's limits.
 
 - **Only open one PNG at a time.** Never batch-read all pages from `output/pages/`.
 - When verifying visual output, open only the specific page(s) you changed.
@@ -71,7 +71,7 @@ Model APIs hard-cap images per conversation (the Claude API fails at **100** wit
 
 ## Gotchas
 - **Rebuilds dirty the tracked PDF even when nothing changed.** `output/react-pdf-ai-builders-guide.pdf` is tracked (the shipped deliverable), and every render embeds fresh metadata (timestamps, object IDs), so `pnpm build` always leaves it modified in git. Before committing it, diff extracted text against HEAD (`git show HEAD:output/react-pdf-ai-builders-guide.pdf | pdftotext - -` vs `pdftotext output/react-pdf-ai-builders-guide.pdf -`); if identical, `git restore` it instead of committing binary noise.
-- **pnpm `Unsupported engine` warnings are benign.** `package.json` requires Node >=22; on older Nodes every pnpm command prints engine warnings but builds still work. Don't mistake them for the cause of an unrelated failure.
+- **Use a supported Node runtime.** `package.json` requires Node >=22. An `Unsupported engine` warning means the active runtime is unsupported; switch to Node 22+ before diagnosing build failures.
 
 ## Reference Docs
 - `docs/` — Project docs: `architecture/`, `build/`, `guides/`, `reference/` (start at `docs/README.md`)
