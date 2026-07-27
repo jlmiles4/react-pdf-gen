@@ -19,8 +19,8 @@ importers:
         version: 5.7.0(react@19.2.8)
     devDependencies:
       '@types/node':
-        specifier: ^22.20.1
-        version: 22.20.1
+        specifier: ^26.1.1
+        version: 26.1.1
       '@types/react':
         specifier: ^19.2.17
         version: 19.2.17
@@ -247,8 +247,8 @@ packages:
   '@swc/helpers@0.5.18':
     resolution: {integrity: sha512-TXTnIcNJQEKwThMMqBXsZ4VGAza6bvN4pa41Rkqoio6QBKMvo+5lexeTMScGCIxtzgQJzElcvIltani+adC5PQ==}
 
-  '@types/node@22.20.1':
-    resolution: {integrity: sha512-EANqOCF9QFyra+4pfxUcX9STKJpCLjMbObVzljIJomAWSnuSIEAvyzEU53GaajbXJEgdh0iEcPL+DGvpUd4k1Q==}
+  '@types/node@26.1.1':
+    resolution: {integrity: sha512-nxAkRSVkN1Y0JC1W8ky/fTfkGsMmcrRsbx+3XoZE+rMOX71kLYTV7fLXpqud1GpbpP5TuffXFqfX7fH2GgZREw==}
 
   '@types/react@19.2.17':
     resolution: {integrity: sha512-MXfmqaVPEVgkBT/aY0aGCkRWWtByiYQXo3xdQ8r5RzuFrPiRn8Gar2tQdXSUQ2GKV3bkXckek89V8wQBY2Q/Aw==}
@@ -425,8 +425,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  undici-types@6.21.0:
-    resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
+  undici-types@8.3.0:
+    resolution: {integrity: sha512-j375ScV60dom+YkPFIfTLcOiPxkN/buHz5GobjLhixFuANaNs3C9l4GmrWqejgXWJ7BbJcFYpTEUkS1Ge8bpZQ==}
 
   unicode-properties@1.4.1:
     resolution: {integrity: sha512-CLjCCLQ6UuMxWnbIylkisbRj31qxHPAurvena/0iwSVbQ2G1VY5/HjV0IRabOEbDHlzZlRdCrD4NhB0JtU40Pg==}
@@ -638,9 +638,9 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  '@types/node@22.20.1':
+  '@types/node@26.1.1':
     dependencies:
-      undici-types: 6.21.0
+      undici-types: 8.3.0
 
   '@types/react@19.2.17':
     dependencies:
@@ -821,7 +821,7 @@ snapshots:
 
   typescript@5.9.3: {}
 
-  undici-types@6.21.0: {}
+  undici-types@8.3.0: {}
 
   unicode-properties@1.4.1:
     dependencies:
