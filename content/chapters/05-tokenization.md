@@ -1,6 +1,6 @@
 # Chapter 5: Tokenization and Context Windows
 
-This chapter is about the math behind AI-assisted PDF generation. Understanding how LLMs process your code – and how much of it they can hold in focus at once – directly affects how you structure your projects and your prompts.
+This chapter is about the math behind AI-assisted PDF generation. Understanding how LLMs tokenize your code – and how much input a request can contain – helps you structure projects and prompts without confusing context capacity with guaranteed attention or reasoning quality.
 
 ## What Tokenization Is
 
@@ -65,7 +65,7 @@ These numbers matter because they determine how much code you can feed an AI in 
 
 ## Context Window Sizes
 
-Every LLM has a maximum context window – the total number of tokens it can process in a single request (prompt + response combined).
+Every LLM has a maximum context window. Providers account for input, cached context, and output differently, so verify what the published limit includes for the model you use.
 
 | Category | Max context | Approximate lines of code |
 |----------|------------|--------------------------|
@@ -73,23 +73,23 @@ Every LLM has a maximum context window – the total number of tokens it can pro
 | Large-context models | 128K-200K+ tokens | ~25,000-40,000 lines |
 | Extended-context models | 500K-1M+ tokens | ~100,000-200,000 lines |
 
-Specific models change frequently, but these categories remain stable. The numbers look huge. You might think: "200k tokens – I can dump my entire project in there and let the AI figure it out."
+These categories are illustrative rather than a durable model comparison; current limits and accounting rules belong in the provider's model documentation. The numbers can still look huge. You might think: "200k tokens – I can dump my entire project in there and let the AI figure it out."
 
 You can. But you shouldn't.
 
 ## The "Lost in the Middle" Problem
 
-In 2023, researchers at Stanford, UC Berkeley, and Samaya AI published a paper titled "Lost in the Middle: How Language Models Use Long Contexts." The key finding:
+In 2023, researchers at Stanford, UC Berkeley, and Samaya AI published ["Lost in the Middle: How Language Models Use Long Contexts"](https://arxiv.org/abs/2307.03172). They evaluated models on synthetic key-value retrieval and multi-document question answering. Several tested models showed a U-shaped pattern: performance was often higher when relevant information appeared near the beginning or end than when it appeared in the middle.
 
-**LLMs are most accurate when relevant information is at the very beginning or very end of the context. Performance degrades significantly when the relevant information is in the middle.**
+That result is a task-specific warning, not a universal attention map. It does not show that every model ignores middle content, and it does not define a fixed "high-attention" token range. Model behavior can differ by task, prompt, and version.
 
-In practical terms: if you give Claude a 50,000-token prompt with your question at the end and the relevant code buried at token 25,000, the model's ability to use that code drops measurably compared to when the same code is at the beginning.
+In practical terms, burying the only relevant file among many unrelated files can make retrieval harder and makes the request more difficult for a human to audit. Keep task instructions and relevant sources easy to locate, then test representative tasks with the model you plan to use.
 
 This means:
 
-- A 200k context window doesn't give you 200k tokens of "high attention" space.
-- The effective "focused" context is much smaller – roughly the first few thousand tokens and the last few thousand tokens get the best treatment.
-- Information in the middle of a large context is more likely to be missed, misinterpreted, or ignored.
+- A large context window is a capacity limit, not a guarantee of equal performance at every position.
+- Focused inputs reduce irrelevant material, request cost, and the surface area for unintended edits.
+- Long-context behavior should be measured on your own retrieval and editing tasks.
 
 For PDF generation, this has a direct implication: **don't dump all your pages into one prompt.** Give the AI the specific page you're working on, the relevant shared resources, and nothing else.
 
@@ -109,7 +109,7 @@ Here's how to structure a prompt for editing a single page component:
 └── TOTAL                              ~1,650 tokens
 ```
 
-That's 1,650 tokens of context. The AI has full visibility on the design system, the reusable components, and the specific page. All of it fits comfortably in the "high attention" zone. The model can reason about every detail.
+That's 1,650 tokens of context. The request includes the design system, reusable components, and specific page without unrelated chapters. This is a compact project heuristic, not a guaranteed quality threshold.
 
 Compare that to the monolith approach:
 
@@ -120,9 +120,9 @@ Compare that to the monolith approach:
 └── TOTAL                              ~7,200 tokens
 ```
 
-The page you want to edit (page 4) is buried somewhere around token 2,800. The AI might edit page 4 correctly. It might also accidentally modify a style it saw on page 2, or miss a shared pattern from page 8.
+The page you want to edit (page 4) is buried somewhere around token 2,800. The model may still edit it correctly, but the request includes more irrelevant code and allows a broader accidental edit surface.
 
-The small-context approach isn't just more token-efficient – it produces better results.
+The focused-context approach is cheaper and easier to review. Validate whether it improves results on the tasks and models that matter to your project.
 
 ## Token Budget Planning
 
@@ -158,7 +158,7 @@ Before you prompt an AI to work on a page, do a rough token budget:
 | Response (rewritten page) | ~600 |
 | **Grand total** | **~2,670** |
 
-2,670 tokens out of a 200,000 token context window. You're using 1.3% of the available space. Everything is in the high-attention zone. The AI has full context on every design decision and every component it might use.
+2,670 tokens out of a 200,000-token context window is about 1.3% of the nominal capacity. More importantly, the supplied material is task-specific and leaves room under the request limit. That unused capacity is not reserved reasoning space, and response limits may be accounted for separately.
 
 ## Reducing Token Waste
 
@@ -347,7 +347,7 @@ The page you're editing is somewhere in the middle. The AI must parse 6,500 toke
 | Instructions | 300 |
 | **Total prompt** | **2,020** |
 
-You've provided 70% less context, but the AI has 100% of the information it needs for this specific task. Every token is relevant. Nothing is filler.
+You've provided about 70% less context while retaining the dependencies identified for this task. Review the task first: if another source controls the page's behavior, include it even when that exceeds the example budget.
 
 ### Adding a new page to the monolith
 
@@ -368,7 +368,7 @@ The AI has to:
 1. Read theme.ts (450 tokens) + 1 example page (400 tokens) + component docs (200 tokens).
 2. Write the new page file (~400 tokens).
 
-Each iteration costs ~1,450 tokens. That's 10x cheaper per iteration. And because the context is focused, the first attempt is more likely to be correct – meaning fewer iterations.
+Each iteration costs ~1,450 tokens, about one tenth of the illustrative monolith iteration. Focused context also makes the requested scope clearer, but correctness still needs tests and review.
 
 ## Measuring Tokens in Your Own Files
 
@@ -408,8 +408,8 @@ wc -c src/styles/theme.ts
 Theory is useful. Numbers you've measured yourself are better. Here's a quick exercise to make token budgets concrete for your project:
 
 1. **Find your largest source file.** Run `wc -c` on it and divide by 3.3 to estimate tokens. If it's over 1,000 tokens, that's a candidate for splitting.
-2. **Count the context files.** How many files does an AI need to edit one page? theme.ts + shared components + the page itself + your instructions. Add up the estimated tokens. Is the total under 2,000?
+2. **Count the context files.** How many files does an AI need to edit one page? theme.ts + shared components + the page itself + your instructions. Add up the estimated tokens, then remove irrelevant material without omitting required dependencies.
 3. **Try the prompt sizing template** with your actual project files. Paste the context into your AI tool and ask it to generate a new page. Did it use the right design tokens?
 4. **Check the gaps.** If the AI used wrong colors or spacing, check what was missing from the context. That gap is what causes slop in practice.
 
-The compound effect is significant: a project where each page file is 400 tokens means the AI can read the complete context for any edit in under 1,500 tokens. That's less than 1% of most model context windows. The remaining 99% is available for reasoning, generating code that matches your patterns, and iterating.
+The compound effect is significant: a project where each page file is 400 tokens may need under 1,500 input tokens for a focused edit. Compare that input with the active model's documented request and output limits. Unused context capacity is simply unused capacity; it does not map directly to reasoning quality.

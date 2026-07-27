@@ -10,6 +10,7 @@ Prerequisites: Node 22+, pnpm 10.29.1, and poppler-utils (`pdftotext` for the TO
 
 ```bash
 pnpm install
+pnpm test        # run focused parser and manifest regression tests
 pnpm build       # sync registry + render PDF -> output/react-pdf-ai-builders-guide.pdf (two passes)
 pnpm export      # rasterize PDF -> output/pages/page-NN.png (needs poppler-utils)
 pnpm pipeline    # build + export

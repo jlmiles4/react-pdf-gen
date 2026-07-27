@@ -36,7 +36,7 @@ Body text should be 10-12pt. Below 10pt, extended reading becomes uncomfortable.
 
 ### Appropriate line height
 
-Body text needs 1.4-1.7 line height. The default of 1.0 creates dense, hard-to-read blocks. 1.5-1.6 is the sweet spot for most body text.
+Body text commonly needs a 1.4-1.7 line height; the default of 1.0 can create dense, hard-to-read blocks. Start around 1.5-1.6, then test with the chosen typeface, size, and column width.
 
 ```tsx
 body: {
@@ -141,7 +141,7 @@ Every page after the cover should show its page number. Common placements: botto
 
 ### Table of contents with accurate page references
 
-If your document has more than 10 pages, include a table of contents. Page numbers in the TOC must match the actual pages where sections begin.
+For a document with 10 or more pages and multiple sections, include a table of contents. Page numbers in the TOC must match the actual pages where sections begin.
 
 For react-pdf, you typically build the TOC as a static component with manually-set page numbers, updated after the final page count is known:
 
@@ -161,7 +161,7 @@ const TOC = () => (
       <View key={i} style={styles.tocRow}>
         <Text style={styles.tocTitle}>{entry.title}</Text>
         <Text style={styles.tocDots}>
-          {'.' .repeat(60)}
+          {'.'.repeat(60)}
         </Text>
         <Text style={styles.tocPage}>{entry.page}</Text>
       </View>
@@ -331,7 +331,7 @@ Color
 Page Structure
   [ ] Headers on every content page
   [ ] Page numbers on every page after cover
-  [ ] Table of contents (if 10+ pages) with correct page numbers
+  [ ] Table of contents (if 10+ pages with multiple sections) with correct page numbers
   [ ] Cover page with title, author, and date/version
 
 Content

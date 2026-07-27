@@ -26,13 +26,13 @@ Every AI model has a **context window** – the maximum number of tokens it can 
 
 These numbers sound large, but they fill up fast when you're working with code. If you paste an entire 50-page PDF's source code into a prompt, you may be using 10,000-15,000 tokens just on input – and that's before the AI generates any output, before you add instructions, and before you include reference materials.
 
-More importantly, **AI performance degrades with longer contexts**. A model working with 2,000 tokens of focused code will produce better output than the same model working with 15,000 tokens of mixed code. You want the AI to focus on exactly what it needs – nothing more.
+More context is not automatically better. Long-context retrieval and question-answering research has found that some models use relevant information less reliably when it appears in the middle of a long input, but the effect varies by model and task. A focused set of files is easier to inspect, costs less to process, and reduces irrelevant material. Treat that as a project heuristic and test important workflows with the model you actually use.
 
 ---
 
 ## Token Costs of React-PDF Components
 
-Here are realistic token counts for common react-pdf patterns:
+These are illustrative planning estimates for common react-pdf patterns. Exact counts depend on the selected model's tokenizer:
 
 | Component | Typical Token Count |
 |-----------|-------------------|
@@ -203,21 +203,18 @@ Now if you want the AI to adjust the layout, you give it the page component (~10
 
 ---
 
-## Practical Limits
+## Project Starting Points
 
-These are guidelines based on how current AI models perform with code:
+These are maintainability heuristics for this project, not model limits or universal quality thresholds:
 
-| Metric | Recommended Limit |
+| Metric | Starting Point |
 |--------|-------------------|
 | Lines per file | Under 500 |
 | Tokens per file | Under 2,000 |
 | Files in AI context at once | 3-5 focused files |
 | Total context for one edit task | Under 3,000 tokens of code |
 
-These limits are not hard rules – they are the zone where AI agents produce the most reliable results. Beyond these limits, you start seeing:
-- Omitted code sections (the AI "summarizes" instead of reproducing)
-- Unintended changes to code the AI wasn't asked to modify
-- Inconsistencies between the beginning and end of a long file
+Exceeding one of these values is a prompt to review cohesion, not an automatic reason to split a file. Include every dependency required for correctness, measure counts with the selected model's tokenizer, and compare results on representative tasks before adopting a tighter budget.
 
 ---
 

@@ -1,6 +1,6 @@
 # Rendering markdown content
 
-`<MarkdownRenderer content={body}>` parses a markdown string and emits the same components a hand-built page would use (`SectionHeading`, `BulletList`, `CodeBlock`, `TipBox`/`WarningBox`/`InfoBox`, body `<Text>`). It's the bridge for content authored in `.md` rather than TSX.
+`<MarkdownRenderer content={body} />` parses a markdown string and emits the same components a hand-built page would use (`SectionHeading`, `BulletList`, `CodeBlock`, `TipBox`/`WarningBox`/`InfoBox`, body `<Text>`). It's the bridge for content authored in `.md` rather than TSX.
 
 Source: [`src/components/MarkdownRenderer.tsx`](../../src/components/MarkdownRenderer.tsx). Parser: [`src/utils/markdownParser.ts`](../../src/utils/markdownParser.ts).
 

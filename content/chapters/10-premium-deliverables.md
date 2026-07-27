@@ -1,6 +1,6 @@
 # Chapter 10: Premium Deliverables & Recipes
 
-There's a gap between "this PDF has the right content" and "this PDF is worth paying for." The content might be identical. The difference is entirely in execution – fonts, spacing, hierarchy, consistency, and the small details that signal quality.
+There's a gap between "this PDF has the right content" and "this PDF is ready to publish." The content might be identical. The difference is entirely in execution – fonts, spacing, hierarchy, consistency, and the small details that signal quality.
 
 This chapter gives you the checklist, the reusable components, and the testing methods to cross that gap.
 
@@ -32,7 +32,7 @@ Print this out. Tape it next to your monitor. Check every item before you ship a
 - [ ] **Header on every page** – with section title, document title, or branding. Not just a decorative line – something that identifies the document and the section.
 - [ ] **Footer on every page** – with page numbers at minimum. Company name, date, or confidentiality notice are good additions.
 - [ ] **Page numbers** – sequential, formatted consistently (e.g., "Page 3 of 12" or just "3").
-- [ ] **Table of contents** – for any document over 5 pages.
+- [ ] **Table of contents** – for documents with 10 or more pages and multiple sections.
 - [ ] **Cover page** – with document title, author/organization, date, and a visual element that sets the tone.
 
 ### Visual Elements
@@ -360,7 +360,7 @@ The checklist tells you what premium looks like. These recipes show you how to b
 
 ### Recipe: Invoice Component
 
-The most-requested PDF use case. This invoice component takes a typed data object and renders a header, line items table, and totals. Swap the InvoiceData interface for any typed shape (receipts, purchase orders, quotes) and the structure stays the same.
+A common PDF use case. This invoice component takes a typed data object and renders a header, line items table, and totals. Swap the InvoiceData interface for any typed shape (receipts, purchase orders, quotes) and the structure stays the same.
 
 ```tsx
 interface InvoiceData {

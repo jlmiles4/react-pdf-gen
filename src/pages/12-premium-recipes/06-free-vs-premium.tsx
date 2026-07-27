@@ -23,7 +23,7 @@ const Page: React.FC = () => (
       These recipes turn the checklist into code. They use Chapter 4's tokens and Chapter 3's shared components; the invoice also reuses Chapter 7's Table. Review those chapters or clone the source if you're starting here.
     </Text>
     <Text style={styles.body}>
-      Three recipes follow: an invoice component (the most-requested PDF use case), a data-driven page generator, and a layout patterns cheat sheet. Each is a self-contained pattern you can copy into your project and customize.
+      Three recipes follow: an invoice component (a common PDF use case), a data-driven page generator, and a layout patterns cheat sheet. Each is a self-contained pattern you can copy into your project and customize.
     </Text>
   </ContentPage>
 );
