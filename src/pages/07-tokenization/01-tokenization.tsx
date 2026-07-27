@@ -15,20 +15,20 @@ const Page: React.FC = () => (
 
     <SectionHeading>Context Window Math</SectionHeading>
     <Text style={styles.body}>
-      Every AI model has a context window – the total amount of text it can process in a single conversation turn. Specific models change frequently, but the categories remain stable:
+      Every AI model has a context window – the maximum request budget for instructions, conversation history, supplied files, and, depending on the provider, output. Limits and accounting rules vary, so check the active model's documentation instead of treating window size as a quality score.
     </Text>
     <Table
-      headers={['Category', 'Context Window', 'Effective Working Memory']}
+      headers={['Planning Factor', 'Verify', 'Project Heuristic']}
       rows={[
-        ['Standard models', '32K-128K tokens', '~4,000-12,000 tokens (sweet spot)'],
-        ['Large-context models', '128K-200K+ tokens', '~10,000-20,000 tokens (sweet spot)'],
-        ['Extended-context models', '500K-1M+ tokens', '~20,000-40,000 tokens (sweet spot)'],
+        ['Request limit', 'Provider model docs', 'Stay below the documented limit'],
+        ['Input selection', 'Files needed for the task', 'Send only relevant sources'],
+        ['Output allowance', 'Provider accounting rules', 'Leave room for the response'],
       ]}
       columnWidths={['30%', '30%', '40%']}
     />
 
     <WarningBox label="The 'Lost in the Middle' Problem">
-      Research shows LLMs pay most attention to the beginning and end of their context. Content in the middle gets less attention. A 15,000-token monolithic PDF file means your AI is likely ignoring the pages in the middle – exactly where bugs hide.
+      In specific retrieval and question-answering tests, some models used relevant information less reliably when it appeared in the middle of a long context than at the beginning or end. That does not mean a model ignores every middle page. Focused inputs are a practical risk-reduction heuristic; test important workflows with your chosen model.
     </WarningBox>
   </ContentPage>
 );

@@ -45,19 +45,18 @@ The `src` property accepts:
 - **URL**: `'https://example.com/fonts/Inter-Regular.ttf'`
 - **Relative path** (bundler-resolved): `'./fonts/Inter-Regular.ttf'`
 
-```tsx
-// From a URL
-Font.register({
-  family: 'Inter',
-  src: 'https://fonts.gstatic.com/s/inter/v13/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa2JL7W0Q5nw.woff',
-});
+For reproducible builds, keep a licensed static font file in the project and resolve its path explicitly:
 
-// From local file
+```tsx
+import path from 'node:path';
+
 Font.register({
   family: 'Inter',
-  src: path.resolve(__dirname, '../fonts/Inter-Regular.ttf'),
+  src: path.resolve(process.cwd(), 'fonts/Inter-Regular.ttf'),
 });
 ```
+
+Remote URLs are supported, but pin a static asset you control and expect the render to depend on network availability.
 
 ---
 

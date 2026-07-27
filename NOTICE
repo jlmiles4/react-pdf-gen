@@ -1,53 +1,146 @@
 Third-Party Notices
 
-This repository bundles or depends on the following third-party assets and
-software. Their licenses apply independently of the repository's LICENSE.
+This file records notices for third-party material redistributed in this
+repository or embedded in its generated PDF. The repository's LICENSE applies
+to the project's original material; the licenses below apply independently to
+the identified third-party material.
 
-------------------------------------------------------------------------
+==============================================================================
 Inter font family
-------------------------------------------------------------------------
-Files:    fonts/Inter-Regular.ttf
-          fonts/Inter-Italic.ttf
-          fonts/Inter-Medium.ttf
-          fonts/Inter-SemiBold.ttf
-          fonts/Inter-SemiBoldItalic.ttf
-          fonts/Inter-Bold.ttf
-          fonts/Inter-BoldItalic.ttf
-Source:   https://github.com/rsms/inter
-Version:  4.001;git-9221beed3
-License:  SIL Open Font License, Version 1.1
-          See fonts/LICENSE.txt
+==============================================================================
 
-Copyright 2016 The Inter Project Authors.
-Inter UI and Inter is a trademark of rsms.
+Files:
+  fonts/Inter-Regular.ttf
+  fonts/Inter-Italic.ttf
+  fonts/Inter-Medium.ttf
+  fonts/Inter-SemiBold.ttf
+  fonts/Inter-SemiBoldItalic.ttf
+  fonts/Inter-Bold.ttf
+  fonts/Inter-BoldItalic.ttf
 
-The Inter font files in fonts/ are redistributed under OFL 1.1. The OFL
-permits embedding in documents (the rendered PDF) without restriction. It
-forbids selling the fonts on their own.
+Source:  https://github.com/rsms/inter
+Version: 4.001;git-9221beed3
+License: SIL Open Font License, Version 1.1
 
-------------------------------------------------------------------------
-@react-pdf/renderer
-------------------------------------------------------------------------
+Copyright (c) 2016 The Inter Project Authors
+(https://github.com/rsms/inter)
+
+The complete SIL Open Font License, Version 1.1 is distributed with the font
+files at fonts/LICENSE.txt. The generated PDF embeds subsets of these fonts.
+As stated by the OFL, its requirement for fonts to remain under the OFL does
+not apply to a document created using the fonts.
+
+==============================================================================
+@react-pdf/renderer and react-pdf-derived reference notes
+==============================================================================
+
+Package:  @react-pdf/renderer 4.5.1
 Source:   https://github.com/diegomura/react-pdf
 License:  MIT
-Used as a runtime dependency to render TSX components to PDF.
+Material: The runtime dependency used to render the PDF, and the notes in
+          reference/react-pdf-api/ that are derived from the documentation at
+          https://react-pdf.org/
 
-The files under reference/react-pdf-api/ (components.md, fonts.md,
-limitations.md, page-sizes.md, styling.md) are notes derived from the
-upstream react-pdf documentation at https://react-pdf.org/ and are
-redistributed under the same MIT terms.
+MIT License
 
-------------------------------------------------------------------------
-react-icons
-------------------------------------------------------------------------
+Copyright (c) 2017-present Diego Muracciole <diegomuracciole@gmail.com>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+==============================================================================
+react-icons runtime and generated icon modules
+==============================================================================
+
+Package:  react-icons 5.7.0
 Source:   https://github.com/react-icons/react-icons
 License:  MIT
-Used to source SVG icon definitions; rendered through the in-repo adapter
-src/components/Icon.tsx.
+Material: The react-icons runtime and generated Lucide module consumed by
+          src/components/Icon.tsx and src/components/Icons.tsx.
 
-------------------------------------------------------------------------
-Lucide icon set (consumed via react-icons/lu)
-------------------------------------------------------------------------
+Copyright 2018 kamijin_fanta <kamijin@live.jp>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+==============================================================================
+Lucide icons, including Feather-derived portions
+==============================================================================
+
 Source:   https://github.com/lucide-icons/lucide
-License:  ISC
-Specific icons in use: Check, TriangleAlert, Info, X, ArrowRight, Zap.
+Version:  lucide-static 0.462.0, used to generate react-icons 5.7.0
+License:  ISC, with Feather-derived portions under the MIT License below
+Material: Check, TriangleAlert (formerly alert-triangle), Info, X, ArrowRight,
+          and Zap icon geometry, embedded in the generated PDF through
+          react-icons/lu. Check, TriangleAlert, Info, X, and ArrowRight are
+          Feather-derived icons; Zap is covered by Lucide's ISC license.
+
+ISC License
+
+Copyright (c) for portions of Lucide are held by Cole Bemis 2013-2022 as part
+of Feather (MIT). All other copyright (c) for Lucide are held by Lucide
+Contributors 2022.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+The MIT License (MIT) (for the Feather-derived icons identified above)
+
+Copyright (c) 2013-2023 Cole Bemis
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

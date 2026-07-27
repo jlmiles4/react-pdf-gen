@@ -13,12 +13,12 @@ Set up a new React-PDF project with the following structure and configuration.
 {
   "dependencies": {
     "@react-pdf/renderer": "^4.5.1",
-    "react": "^19.2.4"
+    "react": "^19.2.8"
   },
   "devDependencies": {
     "@types/node": "^22.20.1",
-    "@types/react": "^19.2.13",
-    "tsx": "^4.23.0",
+    "@types/react": "^19.2.17",
+    "tsx": "^4.23.1",
     "typescript": "^5.9.3"
   }
 }

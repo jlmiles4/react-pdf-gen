@@ -168,7 +168,7 @@ const MixedDocument = () => (
 
 **International audience:** Use `A4` (595.28 x 841.89 pt). This is the ISO standard used in most of the world outside the US and Canada.
 
-**Both audiences:** A4 is slightly narrower and taller than LETTER. If you design for A4, the content will fit on LETTER with slightly different margins. If you design for LETTER, the content may get clipped on A4 at the sides. Designing for A4 is the safer default for a mixed audience.
+**Both audiences:** A4 is narrower and taller than LETTER, so neither portrait size safely contains the other. Moving A4 content to LETTER reduces the available height; moving LETTER content to A4 reduces the available width. Choose one canonical size and test or render a separate layout for the other instead of assuming the content will fit unchanged.
 
 **Ebooks and digital-only:** You're free to choose any size. A4 or LETTER works, but you could also use a custom size optimized for screen reading – for instance, a 7 x 10 inch page (504 x 720 pt) is a common book trim size that reads well on screens.
 

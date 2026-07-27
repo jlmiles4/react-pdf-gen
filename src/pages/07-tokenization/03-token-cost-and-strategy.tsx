@@ -7,7 +7,7 @@ const Page: React.FC = () => (
   <ContentPage sectionTitle="Tokenization" wrap={false}>
     <SectionHeading>Token Cost of React-PDF Code</SectionHeading>
     <Text style={styles.body}>
-      JSX is token-expensive compared to plain text. Here's what typical react-pdf structures cost:
+      JSX often uses more tokens than plain text. These are planning estimates for common react-pdf structures; exact counts depend on the selected model's tokenizer:
     </Text>
     <Table
       headers={['Structure', 'Approximate Tokens']}
@@ -24,14 +24,14 @@ const Page: React.FC = () => (
 
     <SectionHeading>Practical Strategy</SectionHeading>
     <Text style={styles.body}>
-      When you ask AI to edit a page, it needs context. Here's the optimal context budget:
+      When you ask AI to edit a page, it needs context. This project's files suggest a compact starting budget; measure your own files and include any dependencies the task actually needs:
     </Text>
     <BulletList items={[
       'theme.ts (design tokens): ~1,800 tokens',
       'Relevant shared components: ~300-500 tokens',
       'The page file being edited: ~200-600 tokens',
       'Your instructions: ~100-300 tokens',
-      'Total: 2,400-3,200 tokens of context – well within any model\'s sweet spot',
+      'Total: roughly 2,400-3,200 tokens – a project heuristic, not a model limit',
     ]} />
   </ContentPage>
 );

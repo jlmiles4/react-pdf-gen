@@ -259,7 +259,7 @@ const [partOne] = loadMarkdownDemoParts();   // 03-supported-elements uses [, pa
 <CheckIcon size={iconSize.sm} color={colors.success} />
 ```
 
-Pass sizes through the `iconSize` token (`xs`/`sm`/`callout`/`md`/`lg`/`xl`) — see [theme tokens reference](theme-tokens.md#icon-sizes). Never use emoji in this project — Inter doesn't ship emoji glyphs and the PDF will fall back to system fonts inconsistently.
+Pass sizes through the `iconSize` token (`xs`/`sm`/`callout`/`md`/`lg`/`xl`) — see [theme tokens reference](theme-tokens.md#icon-sizes). Use SVG icons rather than emoji in this project: the registered Inter files do not provide emoji glyphs, and `src/fonts.ts` does not register an emoji image source.
 
 ### `Icon`
 
