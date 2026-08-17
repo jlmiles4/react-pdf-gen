@@ -34,7 +34,7 @@
     "node": ">=22"
   },
   "dependencies": {
-    "@react-pdf/renderer": "^4.5.1",
+    "@react-pdf/renderer": "^4.6.1",
     "react": "^19.2.8",
     "react-icons": "^5.7.0"
   },
